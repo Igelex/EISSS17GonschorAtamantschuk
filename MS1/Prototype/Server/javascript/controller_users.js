@@ -4,7 +4,8 @@
 var Users = require('../models_mongoose/users');
 
 module.exports.addUser = function (req, res) {
-    var newUser = new Users({
+    console.log(req);
+    /*ar newUser = new Users({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         gender: req.body.gender,
@@ -22,5 +23,5 @@ module.exports.addUser = function (req, res) {
             console.log('user saved');
             res.status(200).type('text').send('User saved');
         }
-    })
-}
+    });*/
+};
