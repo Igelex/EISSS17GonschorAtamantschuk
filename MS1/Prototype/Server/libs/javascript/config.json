@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "port" : 3000,
+  "mongoose": {
+    "uri": "mongodb://localhost/db"
+  }
+}
