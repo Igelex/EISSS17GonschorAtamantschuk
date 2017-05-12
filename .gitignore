@@ -75,4 +75,4 @@ node_modules
 .node_repl_history
 
 # Mongodb Directory
-MS1/Prototype/Server/db
+MS1/Prototype/Server/db/*
