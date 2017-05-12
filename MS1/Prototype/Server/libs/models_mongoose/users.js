@@ -3,9 +3,10 @@
  */
 var mongoose = require('mongoose');
 
-var userSchema = mongoose.Schema({
-    first_name: String,
-    last_name: String
+var entrySchema = mongoose.Schema({
+    entry_name: String,
+    art_id: Number,
+    ph_value: Number
     /*gender: String,
     birth_year: String,
     email: String,
@@ -14,4 +15,4 @@ var userSchema = mongoose.Schema({
     type: Number*/
 });
 
-module.exports = mongoose.model('users', userSchema);
+module.exports = mongoose.model('users', entrySchema);
