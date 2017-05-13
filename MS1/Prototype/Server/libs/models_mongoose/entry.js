@@ -6,7 +6,10 @@ var mongoose = require('mongoose');
 var entrySchema = mongoose.Schema({
     entry_name: String,
     art_id: Number,
-    ph_value: Number
+    collaborators:[{collab_id: String}],
+    ph_value: Number,
+    water: Number,
+    minerals: Number
     /*gender: String,
     birth_year: String,
     email: String,
@@ -15,4 +18,4 @@ var entrySchema = mongoose.Schema({
     type: Number*/
 });
 
-module.exports = mongoose.model('users', entrySchema);
+module.exports = mongoose.model('entry', entrySchema);

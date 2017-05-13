@@ -1,7 +1,7 @@
 /**
  * Created by Pastuh on 02.05.2017.
  */
-var Users = require('../models_mongoose/users');
+var Users = require('../models_mongoose/entry');
 
 module.exports.addUser = function(req, res) {
     var newUser = new Users({
