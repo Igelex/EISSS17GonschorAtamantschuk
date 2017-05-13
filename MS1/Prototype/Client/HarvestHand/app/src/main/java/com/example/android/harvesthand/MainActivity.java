@@ -26,11 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity /*implements LoaderManager.LoaderCallbacks <List<Entry>>*/ {
 
     public static final String LOG_TAG = MainActivity.class.getName();
-    ArrayList <Entry> entryArrayList = new ArrayList<>();
+    ArrayList<Entry> entryArrayList = new ArrayList<>();
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+            recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setHasFixedSize(true);
@@ -67,17 +69,21 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
                 for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
-                            String name = jsonObject.getString("entry_name");
-                            int ph = jsonObject.getInt("ph_value");
-                            String id = jsonObject.getString("_id");
-                            int water = jsonObject.getInt("water");
-                            int minerals = jsonObject.getInt("minerals");
+                        JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
+                        Toast.makeText(MainActivity.this, collaboratorsArray.toString(), Toast.LENGTH_LONG).show();
+                        String name = jsonObject.getString("entry_name");
+                        int ph = jsonObject.getInt("ph_value");
+                        String id = jsonObject.getString("_id");
+                        int water = jsonObject.getInt("water");
+                        int minerals = jsonObject.getInt("minerals");
                         entryArrayList.add(new Entry(id, name, 2, ph, water, minerals, null));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                 }
+                RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
+                recyclerView.setAdapter(adapter);
             }
         }, new Response.ErrorListener() {
 
