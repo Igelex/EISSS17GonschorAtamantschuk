@@ -2,13 +2,13 @@
  * Created by Pastuh on 02.05.2017.
  */
 var Tutorial = require('../models_mongoose/tutorial');
-module.exports.addTutorial = function (entry_id, entry_name, ph, water, menirals) {
+module.exports.addTutorial = function (entry_id, entry_name, ph, water, minerals) {
     var newTutorial = new Tutorial({
         entry_id: entry_id,
         entry_name: entry_name,
         ph: ph,
         water: water,
-        minerals: menirals
+        minerals: minerals
     });
     newTutorial.save(function (err, result) {
         if (err) {
