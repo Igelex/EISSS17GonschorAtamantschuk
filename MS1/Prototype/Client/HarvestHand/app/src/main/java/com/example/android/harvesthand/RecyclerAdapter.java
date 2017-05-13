@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryViewHolder> {
 
-    ArrayList<Entry> arrayList = new ArrayList<>();
+    ArrayList<Entry> arrayList = new ArrayList<Entry>();
 
     public RecyclerAdapter(ArrayList<Entry> arrayList) {
 
@@ -31,10 +31,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
     @Override
     public void onBindViewHolder(EntryViewHolder holder, int position) {
         holder.entryName.setText(arrayList.get(position).getEntryName());
-        holder.entryId.setText(arrayList.get(position).getEntryId().toString());
-        //holder.entryPhValue.setText(arrayList.get(position).getEntryPhValue());
-        //holder.entryWater.setText(arrayList.get(position).getEntryWater());
-        //holder.entryMinerals.setText(arrayList.get(position).getEntryMinerals());
+        holder.entryId.setText(arrayList.get(position).getEntryId());
+        holder.entryPhValue.setText(String.valueOf(arrayList.get(position).getEntryPhValue()));
+        holder.entryWater.setText(String.valueOf(arrayList.get(position).getEntryWater()));
+        holder.entryMinerals.setText(String.valueOf(arrayList.get(position).getEntryMinerals()));
     }
 
     @Override

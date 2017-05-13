@@ -75,4 +75,8 @@ public class Entry {
     public void setEntryCollaborators(int[] entryCollaborators) {
         this.entryCollaborators = entryCollaborators;
     }
+
+    public CharSequence convertToString(CharSequence c){
+        return c.toString();
+    }
 }

@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
                         JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
-                        Toast.makeText(MainActivity.this, collaboratorsArray.toString(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(MainActivity.this, collaboratorsArray.toString(), Toast.LENGTH_LONG).show();
                         String name = jsonObject.getString("entry_name");
                         int ph = jsonObject.getInt("ph_value");
                         String id = jsonObject.getString("_id");
