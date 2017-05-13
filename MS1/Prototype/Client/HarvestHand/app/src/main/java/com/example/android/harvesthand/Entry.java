@@ -5,73 +5,74 @@ package com.example.android.harvesthand;
  */
 
 public class Entry {
-    private String entry_id, entry_name;
-    private int entry_art_id, entry_ph_value, entry_water, entry_minerals;
-    private int [] entry_collaborators;
+    private String entryId, entryName;
+    private int entryArtId, entryPhValue, entryWater, entryMinerals;
+    private int [] entryCollaborators;
 
-    public Entry(String entry_id, String entry_name, int entry_art_id, int entry_ph_value, int entry_water, int entry_minerals, int[] entry_collaborators) {
-        this.entry_id = entry_id;
-        this.entry_name = entry_name;
-        this.entry_art_id = entry_art_id;
-        this.entry_ph_value = entry_ph_value;
-        this.entry_water = entry_water;
-        this.entry_minerals = entry_minerals;
-        this.entry_collaborators = entry_collaborators;
+    public Entry(String entryId, String entryName, int entryArtId, int entryPhValue,
+                        int entryWater, int entryMinerals, int[] entryCollaborators) {
+        this.entryId = entryId;
+        this.entryName = entryName;
+        this.entryArtId = entryArtId;
+        this.entryPhValue = entryPhValue;
+        this.entryWater = entryWater;
+        this.entryMinerals = entryMinerals;
+        this.entryCollaborators = entryCollaborators;
     }
 
-    public String getEntry_id() {
-        return entry_id;
+    public String getEntryId() {
+        return entryId;
     }
 
-    public void setEntry_id(String entry_id) {
-        this.entry_id = entry_id;
+    public void setEntryId(String entryId) {
+        this.entryId = entryId;
     }
 
-    public String getEntry_name() {
-        return entry_name;
+    public String getEntryName() {
+        return entryName;
     }
 
-    public void setEntry_name(String entry_name) {
-        this.entry_name = entry_name;
+    public void setEntryName(String entryName) {
+        this.entryName = entryName;
     }
 
-    public int getEntry_art_id() {
-        return entry_art_id;
+    public int getEntryArtId() {
+        return entryArtId;
     }
 
-    public void setEntry_art_id(int entry_art_id) {
-        this.entry_art_id = entry_art_id;
+    public void setEntryArtId(int entryArtId) {
+        this.entryArtId = entryArtId;
     }
 
-    public int getEntry_ph_value() {
-        return entry_ph_value;
+    public int getEntryPhValue() {
+        return entryPhValue;
     }
 
-    public void setEntry_ph_value(int entry_ph_value) {
-        this.entry_ph_value = entry_ph_value;
+    public void setEntryPhValue(int entryPhValue) {
+        this.entryPhValue = entryPhValue;
     }
 
-    public int getEntry_water() {
-        return entry_water;
+    public int getEntryWater() {
+        return entryWater;
     }
 
-    public void setEntry_water(int entry_water) {
-        this.entry_water = entry_water;
+    public void setEntryWater(int entryWater) {
+        this.entryWater = entryWater;
     }
 
-    public int getEntry_minerals() {
-        return entry_minerals;
+    public int getEntryMinerals() {
+        return entryMinerals;
     }
 
-    public void setEntry_minerals(int entry_minerals) {
-        this.entry_minerals = entry_minerals;
+    public void setEntryMinerals(int entryMinerals) {
+        this.entryMinerals = entryMinerals;
     }
 
-    public int[] getEntry_collaborators() {
-        return entry_collaborators;
+    public int[] getEntryCollaborators() {
+        return entryCollaborators;
     }
 
-    public void setEntry_collaborators(int[] entry_collaborators) {
-        this.entry_collaborators = entry_collaborators;
+    public void setEntryCollaborators(int[] entryCollaborators) {
+        this.entryCollaborators = entryCollaborators;
     }
 }
