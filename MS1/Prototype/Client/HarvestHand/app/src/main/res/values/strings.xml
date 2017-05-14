@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HarvestHand</string>
+    <string name="title_activity_entry_tutorial">EntryTutorialActivity</string>
 </resources>

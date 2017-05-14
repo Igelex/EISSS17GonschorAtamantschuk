@@ -28,7 +28,7 @@ import java.util.List;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static java.security.AccessController.getContext;
 
-public class MainActivity extends AppCompatActivity /*implements LoaderManager.LoaderCallbacks <List<Entry>>*/ {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks <List<Entry>> {
 
     public static final String LOG_TAG = MainActivity.class.getName();
     ArrayList<Entry> entryArrayList = new ArrayList<>();
@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
             RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
             recyclerView.setAdapter(adapter);
 
-            /*LoaderManager loaderManager = getLoaderManager();
-            loaderManager.initLoader(1, null, this);*/
+            LoaderManager loaderManager = getLoaderManager();
+            loaderManager.initLoader(1, null, this);
 
         }
 
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
 
-    /*@Override
+    @Override
     public Loader<List<Entry>> onCreateLoader(int i, Bundle bundle) {
         return null;
     }
@@ -109,5 +109,5 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
     @Override
     public void onLoaderReset(Loader<List<Entry>> loader) {
 
-    }*/
+    }
 }
