@@ -29,26 +29,25 @@ module.exports.analyseData = function (entry) {
     };
 
 function analyseValues(entry, norm) {
-    if ((Math.abs(entry.ph_value - norm.ph_norm)) > 2) {
+
+    if ((entry.ph_value - norm.ph_norm) > 2) {
         ph = GREATER;
     } else if ((Math.abs(entry.ph_value - norm.ph_norm)) < -2) {
         ph = LESS;
     } else {
         ph = NORM;
     }
-    console.log('PH in analyseValues : ' + ph);
-
-    if ((Math.abs(entry.water - norm.water_norm)) >= 15) {
+    if ((entry.water - norm.water_norm) >= 15) {
         water = GREATER;
-    } else if ((Math.abs(entry.water - norm.water_norm)) <= -15) {
+    } else if ((entry.water - norm.water_norm) <= -15) {
         water = LESS;
     } else {
         water = NORM;
     }
 
-    if ((Math.abs(entry.minerals - norm.minerals_norm)) >= 10) {
+    if ((entry.minerals - norm.minerals_norm) >= 10) {
         minerals = GREATER;
-    } else if ((Math.abs(entry.minerals - norm.minerals_norm)) <= -10) {
+    } else if ((entry.minerals - norm.minerals_norm) <= -10) {
         minerals = LESS;
     } else {
         minerals = NORM;
