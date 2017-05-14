@@ -20,9 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.os.Build.VERSION_CODES.N;
-import static com.example.android.harvesthand.SendRequest.entryArrayList;
-
 public class EntryTutorialActivity extends AppCompatActivity {
 
     ImageView phImg, waterImg, mineralsImg;
@@ -63,9 +60,9 @@ public class EntryTutorialActivity extends AppCompatActivity {
             }
 
 
-            phImg = (ImageView) findViewById(R.id.ph_icon);
-            waterImg = (ImageView) findViewById(R.id.water_icon);
-            mineralsImg = (ImageView) findViewById(R.id.minerals_icon);
+            phImg = (ImageView) findViewById(R.id.ph_emotion);
+            waterImg = (ImageView) findViewById(R.id.water_emotion);
+            mineralsImg = (ImageView) findViewById(R.id.minerals_emotion);
             getTutorial(tutorialURL);
         }
 
@@ -84,9 +81,14 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         tutorial_minerals = response.getInt("minerals");
 
                         setPhIcon(tutorial_ph);
+                        setWaterIcon(tutorial_water);
+                        setMineralsIcon(tutorial_minerals);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                } else{
+                    Toast.makeText(EntryTutorialActivity.this, "No data found", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
             }
@@ -118,18 +120,34 @@ public class EntryTutorialActivity extends AppCompatActivity {
     }
 
     public void setWaterIcon(int water){
-        switch (ph){
+        switch (water){
             case 0:
-                phImg.setImageResource(R.drawable.emoticon);
+                waterImg.setImageResource(R.drawable.emoticon);
                 break;
             case 1:
-                phImg.setImageResource(R.drawable.emoticon_sad);
+                waterImg.setImageResource(R.drawable.emoticon_sad);
                 break;
             case 2:
-                phImg.setImageResource(R.drawable.emoticon_neutral);
+                waterImg.setImageResource(R.drawable.emoticon_neutral);
                 break;
             default:
-                phImg.setImageResource(R.drawable.emoticon_neutral);
+                waterImg.setImageResource(R.drawable.emoticon_neutral);
+        }
+    }
+
+    public void setMineralsIcon(int minerals){
+        switch (minerals){
+            case 0:
+                mineralsImg.setImageResource(R.drawable.emoticon);
+                break;
+            case 1:
+                mineralsImg.setImageResource(R.drawable.emoticon_sad);
+                break;
+            case 2:
+                mineralsImg.setImageResource(R.drawable.emoticon_neutral);
+                break;
+            default:
+                mineralsImg.setImageResource(R.drawable.emoticon_neutral);
         }
     }
 

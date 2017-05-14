@@ -5,13 +5,17 @@ package com.example.android.harvesthand;
  */
 
 public class Entry {
-    private String entryId, entryName;
+    private String entryId;
+    private String entryName;
+
+    private String tutorialId;
     private int entryArtId, entryPhValue, entryWater, entryMinerals;
     private int [] entryCollaborators;
 
-    public Entry(String entryId, String entryName, int entryArtId, int entryPhValue,
+    public Entry(String entryId, String tutorialId, String entryName, int entryArtId, int entryPhValue,
                         int entryWater, int entryMinerals, int[] entryCollaborators) {
         this.entryId = entryId;
+        this.tutorialId = tutorialId;
         this.entryName = entryName;
         this.entryArtId = entryArtId;
         this.entryPhValue = entryPhValue;
@@ -26,6 +30,14 @@ public class Entry {
 
     public void setEntryId(String entryId) {
         this.entryId = entryId;
+    }
+
+    public String getTutorialId() {
+        return tutorialId;
+    }
+
+    public void setTutorialId(String tutorialId) {
+        this.tutorialId = tutorialId;
     }
 
     public String getEntryName() {

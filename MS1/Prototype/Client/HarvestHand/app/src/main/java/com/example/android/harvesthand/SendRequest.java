@@ -1,3 +1,4 @@
+/*
 package com.example.android.harvesthand;
 
 import android.content.Context;
@@ -16,9 +17,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+*/
 /**
  * Created by Pastuh on 13.05.2017.
- */
+ *//*
+
 
 public class SendRequest {
     static ArrayList<Entry> entryArrayList = new ArrayList<>();
@@ -56,3 +59,4 @@ public class SendRequest {
         return entryArrayList;
     }
 }
+*/

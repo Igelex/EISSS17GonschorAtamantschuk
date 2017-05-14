@@ -21,7 +21,7 @@ module.exports.addTutorial = function (entry_id, entry_name, ph, water, minerals
     });
 };
 
-//Passendes Tutorial wird mit dem Eintrag geknüpft
+/*//Passendes Tutorial wird mit dem Eintrag geknüpft
 module.exports.getTutorialById = function (req, res, result_entry) {
     Tutorial.find({}).where('entry_id').equals(result_entry._id).exec(function (err, result) {
         if (err) {
@@ -36,17 +36,18 @@ module.exports.getTutorialById = function (req, res, result_entry) {
             }
         }
     });
-};
+};*/
 
 module.exports.getTutorialById = function (req, res) {
-    Tutorial.find({}).where('entry_id').equals(req.param.id).exec(function (err, result) {
+    Tutorial.findById(req.params.id, function (err, result) {
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
-            if (result != 0) {
-                res.status(200).type('text').send(result);
-            } else {
-                res.status(200).type('text').send('No tutorials found');
+            if (result != null) {
+                res.status(200).type('application/json').send(result);
+            }
+            else {
+                res.status(200).type('text').send('No Tutorial found');
             }
         }
     });

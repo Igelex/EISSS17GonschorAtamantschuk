@@ -17,7 +17,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
 
     ArrayList<Entry> arrayList = new ArrayList<Entry>();
     private final String URL_BASE = "http://192.168.0.12:3000/entries/";
-    private final String URL_TUTORIAL = "/tutorials";
+    private final String URL_TUTORIAL = "/tutorials/";
 
     public RecyclerAdapter(ArrayList<Entry> arrayList) {
 
@@ -43,7 +43,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
             public void onClick(View view) {
 
                 Intent intent = new Intent(holder.clickView.getContext(), EntryTutorialActivity.class);
-                intent.putExtra("URL", URL_BASE + arrayList.get(position).getEntryId() + URL_TUTORIAL);
+                intent.putExtra("URL", URL_BASE + arrayList.get(position).getEntryId() + URL_TUTORIAL
+                                + arrayList.get(position).getTutorialId());
                 intent.putExtra("ph", arrayList.get(position).getEntryPhValue());
                 intent.putExtra("name", arrayList.get(position).getEntryName());
                 intent.putExtra("water", arrayList.get(position).getEntryWater());

@@ -55,12 +55,12 @@ app.get('/norms/:id', function (req, res) {
     controller_norm.getNormById(req, res);
 });
 
-app.get('/entries/:id/tutorials', function (req, res) {
+/*app.get('/entries/:id/tutorials', function (req, res) {
     controller_entry.getEntryTutorial(req, res);
-});
+});*/
 
-app.get('/entries/:id/tutorials', function (req, res) {
-    controller_entry.getEntryTutorial(req, res);
+app.get('/entries/:id/tutorials/:id', function (req, res) {
+    controller_tutorial.getTutorialById(req, res);
 });
 
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
