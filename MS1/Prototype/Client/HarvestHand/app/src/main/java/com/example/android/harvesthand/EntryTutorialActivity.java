@@ -2,27 +2,29 @@ package com.example.android.harvesthand;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EntryTutorialActivity extends AppCompatActivity {
 
     ImageView phImg, waterImg, mineralsImg;
+    ProgressBar progressBar;
     String tutorialURL;
     int ph, water, minerals, tutorial_ph, tutorial_water, tutorial_minerals;
 
@@ -59,23 +61,26 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 setTitle(intent.getStringExtra("name"));
             }
 
-
             phImg = (ImageView) findViewById(R.id.ph_emotion);
             waterImg = (ImageView) findViewById(R.id.water_emotion);
             mineralsImg = (ImageView) findViewById(R.id.minerals_emotion);
+            progressBar = (ProgressBar) findViewById(R.id.pg);
             getTutorial(tutorialURL);
+        }else {
+            Toast.makeText(EntryTutorialActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
         }
 
     }
 
+    //Request Tutorial
     public void getTutorial(String url) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.length() > 0) {
                     try {
-                        Toast.makeText(EntryTutorialActivity.this, response.toString(), Toast.LENGTH_LONG).show();
                         tutorial_ph = response.getInt("ph");
                         tutorial_water = response.getInt("water");
                         tutorial_minerals = response.getInt("minerals");
@@ -103,6 +108,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
 
+    //Icon setzen
     public void setPhIcon(int ph){
         switch (ph){
             case 0:
@@ -119,6 +125,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         }
     }
 
+    //Icon setzen
     public void setWaterIcon(int water){
         switch (water){
             case 0:
@@ -135,6 +142,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         }
     }
 
+    //Icon setzen
     public void setMineralsIcon(int minerals){
         switch (minerals){
             case 0:

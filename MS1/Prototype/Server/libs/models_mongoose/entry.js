@@ -3,6 +3,8 @@
  */
 var mongoose = require('mongoose');
 
+//Eintrag collection, hier werden Daten des Ackers gespeichert
+
 var entrySchema = mongoose.Schema({
     entry_name: String,
     art_id: Number,

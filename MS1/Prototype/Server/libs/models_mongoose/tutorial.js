@@ -3,6 +3,8 @@
  */
 var mongoose = require('mongoose');
 
+//Tutorial collection zum speichern der Anleitungen
+
 var tutorialSchema = mongoose.Schema({
     entry_name: String,
     ph: Number,

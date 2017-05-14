@@ -1,8 +1,6 @@
 package com.example.android.harvesthand;
 
-import android.app.LoaderManager;
 import android.content.Context;
-import android.content.Loader;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -29,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Entry> entryArrayList = new ArrayList<>();
     RecyclerView recyclerView;
     private static final String URL = "http://192.168.0.12:3000/entries";
-    RecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +43,13 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setHasFixedSize(true);
             getEntries(URL);
-            //Toast.makeText(this, entryArrayList.toString(), Toast.LENGTH_LONG).show();
-
-
+        }else {
+            Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
         }
 
     }
 
+    //Request all Entries
     public void getEntries(String url) {
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -62,8 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int i = 0; i < response.length(); i++) {
                         try {
                             JSONObject jsonObject = response.getJSONObject(i);
-                            JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
-                            //Toast.makeText(MainActivity.this, collaboratorsArray.toString(), Toast.LENGTH_LONG).show();
+                            //JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
                             String name = jsonObject.getString("entry_name");
                             int ph = jsonObject.getInt("ph_value");
                             String id = jsonObject.getString("_id");
@@ -71,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                             String tutorial_id = jsonObject.getString("tutorial_id");
                             int water = jsonObject.getInt("water");
                             int minerals = jsonObject.getInt("minerals");
+
+                            //Die Daten werden der ArrayList hinzugefügt
                             entryArrayList.add(new Entry(id, tutorial_id, name, art_id, ph, water, minerals, null));
                         } catch (JSONException e) {
                             e.printStackTrace();

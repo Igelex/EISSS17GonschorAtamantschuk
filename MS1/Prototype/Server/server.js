@@ -11,18 +11,22 @@ var express = require('express'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
     port = 3000;
 
+/*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
+ *--> update @tutorial_id in Entry */
+
 app.use(bodyParser.json());
 
 //Check DB Connection
 mongoose.connect('mongodb://localhost/db');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.once('open', function () {
     console.log('DB connected');
 });
+
 //Test
 app.get('/', function (req, res) {
-    res.send('Hallo, suchki!!!');
+    res.send('Hallo, World!!!');
 });
 
 //////////////////////////Entries
@@ -55,13 +59,11 @@ app.get('/norms/:id', function (req, res) {
     controller_norm.getNormById(req, res);
 });
 
-/*app.get('/entries/:id/tutorials', function (req, res) {
-    controller_entry.getEntryTutorial(req, res);
-});*/
-
+//Hole Tutorial zum bestimmten Eintrag
 app.get('/entries/:id/tutorials/:id', function (req, res) {
     controller_tutorial.getTutorialById(req, res);
 });
+
 
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get('/norms', function (req, res) {
@@ -76,8 +78,8 @@ app.get('/tutorials', function (req, res) {
 
 
 /*app.post('/users', function (req, res) {
-    controller_users.addUser(req, res);
-});*/
+ controller_users.addUser(req, res);
+ });*/
 
 app.listen(port, function () {
     console.log('Server online');

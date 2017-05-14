@@ -33,6 +33,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
 
     @Override
     public void onBindViewHolder(final EntryViewHolder holder, final int position) {
+
+        //Cardview mit Daten füllen
         holder.entryName.setText(arrayList.get(position).getEntryName());
         holder.entryId.setText(arrayList.get(position).getEntryId());
         holder.entryPhValue.setText(String.valueOf(arrayList.get(position).getEntryPhValue()));
@@ -41,7 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
         holder.clickView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //Starte Tutorial Activity und übergebe die URL
                 Intent intent = new Intent(holder.clickView.getContext(), EntryTutorialActivity.class);
                 intent.putExtra("URL", URL_BASE + arrayList.get(position).getEntryId() + URL_TUTORIAL
                                 + arrayList.get(position).getTutorialId());
