@@ -59,6 +59,10 @@ app.get('/entries/:id/tutorials', function (req, res) {
     controller_entry.getEntryTutorial(req, res);
 });
 
+app.get('/entries/:id/tutorials', function (req, res) {
+    controller_entry.getEntryTutorial(req, res);
+});
+
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 app.get('/norms', function (req, res) {
     controller_norm.getAllNorms(req, res);

@@ -9,6 +9,7 @@ module.exports.addEntry = function (req, res) {
     var newEntry = new Entry({
         entry_name: req.body.entry_name,
         art_id: req.body.art_id,
+        tutorial_id: req.body.tutorial_id,
         collaborators:req.body.collaborators,
         ph_value: req.body.ph_value,
         water: req.body.water,
@@ -69,6 +70,30 @@ module.exports.updateEntry = function (req, res) {
             } else {
                 res.status(200).type('text').send('Entry with id: ' + req.params.id + ' not found');
             }
+        }
+
+    });
+};
+
+module.exports.updateEntryTutorialId = function (id, tutorial_id) {
+    Entry.findById(id, function (err, result) {
+        console.info(result);
+        if (err) {
+            res.status(500).type('text').write("DB error: " + err);
+        } else {
+            if (result != null) {
+                result.tutorial_id = tutorial_id;
+            } else {
+                res.status(200).type('text').send('Entry with id: ' + id + ' not found');
+            }
+
+            result.save(function (err) {
+                if (err){
+                    console.error('Entry not updated :' + err);
+                }else{
+                    console.log('Entry updated with tutorial_id: ' + tutorial_id);
+                }
+            });
         }
 
     });

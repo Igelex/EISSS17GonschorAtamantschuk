@@ -4,7 +4,6 @@
 var mongoose = require('mongoose');
 
 var tutorialSchema = mongoose.Schema({
-    entry_id: String,
     entry_name: String,
     ph: Number,
     water: Number,

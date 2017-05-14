@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var entrySchema = mongoose.Schema({
     entry_name: String,
     art_id: Number,
+    tutorial_id: String,
     collaborators:[{collab_id: String}],
     ph_value: Number,
     water: Number,

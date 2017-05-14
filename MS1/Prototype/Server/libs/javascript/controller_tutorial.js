@@ -1,7 +1,8 @@
 /**
  * Created by Pastuh on 02.05.2017.
  */
-var Tutorial = require('../models_mongoose/tutorial');
+var Tutorial = require('../models_mongoose/tutorial'),
+    controller_entry = require('./controller_entry');
 module.exports.addTutorial = function (entry_id, entry_name, ph, water, minerals) {
     var newTutorial = new Tutorial({
         entry_id: entry_id,
@@ -15,6 +16,7 @@ module.exports.addTutorial = function (entry_id, entry_name, ph, water, minerals
             console.log(err);
         } else {
             console.log('Tutorial saved ' + result);
+            controller_entry.updateEntryTutorialId(entry_id, result._id);
         }
     });
 };
@@ -25,12 +27,26 @@ module.exports.getTutorialById = function (req, res, result_entry) {
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
-            if (result != 0){
+            if (result != 0) {
                 var summary = result_entry + result;
                 res.status(200).type('text').send(summary);
-            }else {
+            } else {
                 console.log('In Tutorial :' + result);
                 res.status(200).type('text').send(result_entry + 'No tutorials found');
+            }
+        }
+    });
+};
+
+module.exports.getTutorialById = function (req, res) {
+    Tutorial.find({}).where('entry_id').equals(req.param.id).exec(function (err, result) {
+        if (err) {
+            res.status(500).type('text').write("DB error: " + err);
+        } else {
+            if (result != 0) {
+                res.status(200).type('text').send(result);
+            } else {
+                res.status(200).type('text').send('No tutorials found');
             }
         }
     });
