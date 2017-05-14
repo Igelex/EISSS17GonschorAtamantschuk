@@ -1,6 +1,8 @@
 package com.example.android.harvesthand;
 
 import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -12,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -20,25 +21,27 @@ import java.util.ArrayList;
  */
 
 public class SendRequest {
-    Context mContext;
-    ArrayList<Entry> jsonResponse;
+    static ArrayList<Entry> entryArrayList = new ArrayList<>();
 
-    public SendRequest(Context mContext, ArrayList<Entry> jsonResponse) {
-        this.mContext = mContext;
-        this.jsonResponse = jsonResponse;
-    }
-
-    public void getEntries(URL url){
+    public static ArrayList<Entry> getEntries(String url, final Context mContext) {
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
-                Request.Method.GET, url.toString(), null, new Response.Listener<JSONArray>() {
+                Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for(int i = 0; i < response.length(); i++ ){
+                for (int i = 0; i < response.length(); i++) {
                     try {
                         JSONObject jsonObject = response.getJSONObject(i);
+                        JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
+                        String name = jsonObject.getString("entry_name");
+                        int ph = jsonObject.getInt("ph_value");
+                        String id = jsonObject.getString("_id");
+                        int water = jsonObject.getInt("water");
+                        int minerals = jsonObject.getInt("minerals");
+                        entryArrayList.add(new Entry(id, name, 2, ph, water, minerals, null));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -50,5 +53,6 @@ public class SendRequest {
         });
 
         Volley.newRequestQueue(mContext.getApplicationContext()).add(jsonRequest);
+        return entryArrayList;
     }
 }

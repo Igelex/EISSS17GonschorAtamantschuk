@@ -21,25 +21,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-import static java.security.AccessController.getContext;
+import static com.example.android.harvesthand.SendRequest.entryArrayList;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks <List<Entry>> {
+public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
     ArrayList<Entry> entryArrayList = new ArrayList<>();
     RecyclerView recyclerView;
+    private static final String URL = "http://192.168.0.12:3000/entries";
+    RecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Toast.makeText(this, "Hallo", Toast.LENGTH_LONG).show();
 
         /*Check Internetconnection*/
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -50,12 +47,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setHasFixedSize(true);
-            getEntries("http://192.168.0.12:3000/entries");
-            RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
-            recyclerView.setAdapter(adapter);
+            getEntries(URL);
+            //Toast.makeText(this, entryArrayList.toString(), Toast.LENGTH_LONG).show();
 
-            LoaderManager loaderManager = getLoaderManager();
-            loaderManager.initLoader(1, null, this);
 
         }
 
@@ -95,19 +89,5 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
-
-    @Override
-    public Loader<List<Entry>> onCreateLoader(int i, Bundle bundle) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Entry>> loader, List<Entry> entries) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Entry>> loader) {
-
-    }
 }
+
