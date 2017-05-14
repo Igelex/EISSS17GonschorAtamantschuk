@@ -23,8 +23,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static com.example.android.harvesthand.SendRequest.entryArrayList;
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
@@ -60,30 +58,36 @@ public class MainActivity extends AppCompatActivity {
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
-                for (int i = 0; i < response.length(); i++) {
-                    try {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
-                        //Toast.makeText(MainActivity.this, collaboratorsArray.toString(), Toast.LENGTH_LONG).show();
-                        String name = jsonObject.getString("entry_name");
-                        int ph = jsonObject.getInt("ph_value");
-                        String id = jsonObject.getString("_id");
-                        int water = jsonObject.getInt("water");
-                        int minerals = jsonObject.getInt("minerals");
-                        entryArrayList.add(new Entry(id, name, 2, ph, water, minerals, null));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                if (response.length() > 0) {
+                    for (int i = 0; i < response.length(); i++) {
+                        try {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            JSONArray collaboratorsArray = jsonObject.getJSONArray("collaborators");
+                            //Toast.makeText(MainActivity.this, collaboratorsArray.toString(), Toast.LENGTH_LONG).show();
+                            String name = jsonObject.getString("entry_name");
+                            int ph = jsonObject.getInt("ph_value");
+                            String id = jsonObject.getString("_id");
+                            int water = jsonObject.getInt("water");
+                            int minerals = jsonObject.getInt("minerals");
+                            entryArrayList.add(new Entry(id, name, 2, ph, water, minerals, null));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
+                    }
+                    RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    Toast.makeText(MainActivity.this,"No Data found", Toast.LENGTH_LONG).show();
+                    return;
                 }
-                RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
-                recyclerView.setAdapter(adapter);
             }
         }, new Response.ErrorListener() {
 
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
             }
         });
 

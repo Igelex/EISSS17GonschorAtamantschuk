@@ -1,5 +1,6 @@
 package com.example.android.harvesthand;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryViewHolder> {
 
     ArrayList<Entry> arrayList = new ArrayList<Entry>();
+    private final String URL_BASE = "http://192.168.0.12:3000/entries/";
+    private final String URL_TUTORIAL = "/tutorials";
 
     public RecyclerAdapter(ArrayList<Entry> arrayList) {
 
@@ -29,12 +32,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
     }
 
     @Override
-    public void onBindViewHolder(EntryViewHolder holder, int position) {
+    public void onBindViewHolder(final EntryViewHolder holder, final int position) {
         holder.entryName.setText(arrayList.get(position).getEntryName());
         holder.entryId.setText(arrayList.get(position).getEntryId());
         holder.entryPhValue.setText(String.valueOf(arrayList.get(position).getEntryPhValue()));
         holder.entryWater.setText(String.valueOf(arrayList.get(position).getEntryWater()));
         holder.entryMinerals.setText(String.valueOf(arrayList.get(position).getEntryMinerals()));
+        holder.clickView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(holder.clickView.getContext(), EntryTutorialActivity.class);
+                intent.putExtra("URL", URL_BASE + arrayList.get(position).getEntryId() + URL_TUTORIAL);
+                intent.putExtra("ph", arrayList.get(position).getEntryPhValue());
+                intent.putExtra("name", arrayList.get(position).getEntryName());
+                intent.putExtra("water", arrayList.get(position).getEntryWater());
+                intent.putExtra("minerals", arrayList.get(position).getEntryMinerals());
+                holder.clickView.getContext().startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -42,11 +59,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
         return arrayList.size();
     }
 
-    public class EntryViewHolder extends RecyclerView.ViewHolder{
+    public class EntryViewHolder extends RecyclerView.ViewHolder {
         TextView entryName, entryId, entryPhValue, entryWater, entryMinerals;
+        View clickView;
 
-        public EntryViewHolder(View itemView) {
+        public EntryViewHolder(final View itemView) {
             super(itemView);
+            clickView = itemView;
             entryName = (TextView) itemView.findViewById(R.id.name);
             entryId = (TextView) itemView.findViewById(R.id.entry_id);
             entryPhValue = (TextView) itemView.findViewById(R.id.entry_ph);
@@ -54,4 +73,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
             entryMinerals = (TextView) itemView.findViewById(R.id.entry_minerals);
         }
     }
+
 }
