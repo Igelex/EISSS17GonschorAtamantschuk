@@ -2,6 +2,7 @@ ENTRY:
 {
     "entry_name": "Tomato 2",
     "art_id": 2,
+    "tutorial_id": ,
     "collaborators": [{"collab_id": 1}],
     "ph_value": 3,
     "water": 40,
