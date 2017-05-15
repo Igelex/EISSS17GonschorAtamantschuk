@@ -23,10 +23,10 @@ import org.json.JSONObject;
 
 public class EntryTutorialActivity extends AppCompatActivity {
 
-    ImageView phImg, waterImg, mineralsImg;
-    ProgressBar progressBar;
-    String tutorialURL;
-    int ph, water, minerals, tutorial_ph, tutorial_water, tutorial_minerals;
+    private ImageView phImg, waterImg, mineralsImg;
+    private ProgressBar progressBar;
+    private String tutorialURL;
+    private int ph, water, minerals, tutorial_ph, tutorial_water, tutorial_minerals;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 Toast.makeText(this, "URL : " + tutorialURL, Toast.LENGTH_LONG).show();
             }
 
+            //werden erstmal nicht benutzt
             if (intent.hasExtra("ph")) {
                 ph = intent.getIntExtra("ph", 0);
             }
@@ -55,6 +56,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
             if (intent.hasExtra("URL")) {
                 minerals = intent.getIntExtra("minerals", 0);
             }
+            //werden erstmal nicht benutzt
 
             if (intent.hasExtra("name")) {
 
@@ -85,6 +87,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         tutorial_water = response.getInt("water");
                         tutorial_minerals = response.getInt("minerals");
 
+                        //Anhand der Tutorial-Daten Visual Feedback geben
                         setPhIcon(tutorial_ph);
                         setWaterIcon(tutorial_water);
                         setMineralsIcon(tutorial_minerals);

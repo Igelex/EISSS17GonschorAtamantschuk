@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryViewHolder> {
 
     ArrayList<Entry> arrayList = new ArrayList<Entry>();
-    private final String URL_BASE = "http://192.168.0.12:3000/entries/";
+    private final String URL_BASE = "http://192.168.2.102:3000/entries/"; // muss am jeweiligen rechner angepasst werden
     private final String URL_TUTORIAL = "/tutorials/";
 
     public RecyclerAdapter(ArrayList<Entry> arrayList) {
@@ -43,7 +43,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
         holder.clickView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Starte Tutorial Activity und übergebe die URL
+                //Starte Tutorial Activity und übergebe die URL und weitere Daten
                 Intent intent = new Intent(holder.clickView.getContext(), EntryTutorialActivity.class);
                 intent.putExtra("URL", URL_BASE + arrayList.get(position).getEntryId() + URL_TUTORIAL
                                 + arrayList.get(position).getTutorialId());

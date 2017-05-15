@@ -24,9 +24,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
-    ArrayList<Entry> entryArrayList = new ArrayList<>();
-    RecyclerView recyclerView;
-    private static final String URL = "http://192.168.0.12:3000/entries";
+    private ArrayList<Entry> entryArrayList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private static final String URL = "http://192.168.2.102:3000/entries"; // muss am jeweiligen rechner angepasst werden
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,12 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
+            //Liste mit Card zum Anzeigen der Daten
             recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setHasFixedSize(true);
+            //Helper methode
             getEntries(URL);
         }else {
             Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                     }
+                    //Liste wird mit den Daten gefüllt
                     RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
                     recyclerView.setAdapter(adapter);
                 } else {

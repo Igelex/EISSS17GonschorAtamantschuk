@@ -30,6 +30,7 @@ app.get('/', function (req, res) {
 });
 
 //////////////////////////Entries
+
 app.get('/entries', function (req, res) {
     controller_entry.getAllEntries(req, res);
 });
@@ -49,6 +50,7 @@ app.put('/entries/:id', function (req, res) {
 app.delete('/entries/:id', function (req, res) {
     controller_entry.deleteEntry(req, res);
 });
+
 //////////////////////////Entries
 
 app.post('/norms', function (req, res) {
@@ -66,6 +68,7 @@ app.get('/entries/:id/tutorials/:id', function (req, res) {
 
 
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 app.get('/norms', function (req, res) {
     controller_norm.getAllNorms(req, res);
 });
