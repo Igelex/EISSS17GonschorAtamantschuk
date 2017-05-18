@@ -1,0 +1,23 @@
+{
+  "name": "harvesthand",
+  "version": "1.0.0",
+  "description": "HarvestHand EISSS17 Projekt",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Igelex/EISSS17GonschorAtamantschuk.git"
+  },
+  "author": "Sergej Atamantschuk, Franziska Gonschor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Igelex/EISSS17GonschorAtamantschuk/issues"
+  },
+  "homepage": "https://github.com/Igelex/EISSS17GonschorAtamantschuk#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongoose": "^4.9.10"
+  }
+}
