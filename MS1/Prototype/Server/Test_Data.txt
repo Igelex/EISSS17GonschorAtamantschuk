@@ -22,3 +22,13 @@ Norm
     "minerals_norm": 50
   
 }
+
+User
+{
+	"first_name": "Test User",
+    "last_name": "User test",
+    "gender": "man",
+    "email": "example@email.com",
+    "pass": "123",
+    "user_type": 0
+}

@@ -3,18 +3,22 @@
  */
 var express = require('express'),
     app = express(),
+    cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     mongoose = require('mongoose'),
-    controller_users = require('./libs/javascript/controller_users'),
+    session = require('express-session'),
+    MongoStore = require('connect-mongo')(session),
+    passport = require('passport'),
+    flash = require('connect-flash'),
     controller_entry = require('./libs/javascript/controller_entry'),
     controller_norm = require('./libs/javascript/controller_norms'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
+    controller_user = require('./libs/javascript/controller_user'),
+    //auth_route = require('./libs/javascript/authentication'),
     port = 3000;
 
 /*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
  *--> update @tutorial_id in Entry */
-
-app.use(bodyParser.json());
 
 //Check DB Connection
 mongoose.connect('mongodb://localhost/db');
@@ -24,16 +28,54 @@ db.once('open', function () {
     console.log('DB connected');
 });
 
+require('./libs/javascript/passport');
+
+//all environments
+app.set('port', process.env.PORT || port);
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(session({
+    secret: 'my secret',
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({mongooseConnection: db})
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use(function (req, res, next) {
+    res.set('X-Powered-By', 'HarvestHand');
+    next();
+});
+
 //Test
 app.get('/', function (req, res) {
     res.send('Hallo, World!!!');
 });
 
+//////////////////////////Users
+
+app.post('/register', controller_user.registerUser);
+
+app.post('/users/login',
+    passport.authenticate('local', {
+        successRedirect: '/',
+        failureRedirect: '/norms',
+        failureFlash: true
+    }),
+    function (req, res) {
+        console.log('User_id: ' + req);
+        res.status(200).send(res.user.id);
+    });
+
+//////////////////////////Users
+
+
 //////////////////////////Entries
 
-app.get('/entries', function (req, res) {
-    controller_entry.getAllEntries(req, res);
-});
+app.get('/entries', controller_entry.getAllEntries);
 
 app.get('/entries/:id', function (req, res) {
     controller_entry.getEntryById(req, res);
@@ -79,11 +121,6 @@ app.get('/tutorials', function (req, res) {
 
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
-/*app.post('/users', function (req, res) {
- controller_users.addUser(req, res);
- });*/
-
-app.listen(port, function () {
+app.listen(app.get('port'), function () {
     console.log('Server online');
 });
