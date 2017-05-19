@@ -4,8 +4,7 @@
 var passport = require('passport'),
     express = require('express'),
     LocalStrategy = require('passport-local').Strategy,
-    User = require('../models_mongoose/user'),
-    controller_user = require('./controller_user');
+    User = require('../models_mongoose/user');
 
 passport.use(new LocalStrategy({
         usernameField: 'email',
