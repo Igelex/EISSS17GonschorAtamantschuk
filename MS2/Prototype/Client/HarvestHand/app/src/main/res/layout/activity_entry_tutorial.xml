@@ -29,17 +29,16 @@
 
             <ImageView
                 android:id="@+id/water_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:scaleType="center"
                 app:srcCompat="@drawable/water_percent" />
 
             <ImageView
                 android:id="@+id/water_emotion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="16dp"
                 android:scaleType="fitCenter" />
         </LinearLayout>
@@ -59,17 +58,17 @@
 
             <ImageView
                 android:id="@+id/ph_icon"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:scaleType="fitCenter"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ph_balance" />
 
             <ImageView
                 android:id="@+id/ph_emotion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="16dp"
                 android:scaleType="fitCenter" />
         </LinearLayout>
@@ -89,8 +88,8 @@
 
             <ImageView
                 android:id="@+id/minerals_icon"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:scaleType="fitCenter"
@@ -98,8 +97,8 @@
 
             <ImageView
                 android:id="@+id/minerals_emotion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginRight="16dp"
                 android:scaleType="fitCenter" />
         </LinearLayout>

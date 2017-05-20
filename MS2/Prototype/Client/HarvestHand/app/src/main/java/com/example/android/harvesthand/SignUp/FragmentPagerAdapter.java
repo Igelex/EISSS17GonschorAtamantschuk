@@ -12,7 +12,7 @@ import com.example.android.harvesthand.R;
 
 public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
-    private static final int COUNT_PAGES = 2;
+    private static final int COUNT_PAGES = 3;
     private Context mContext;
 
     public FragmentPagerAdapter(Context context, FragmentManager fm) {
@@ -27,6 +27,8 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
                 return mContext.getString(R.string.signin);
             case 1:
                 return mContext.getString(R.string.signup);
+            case 2:
+                return mContext.getString(R.string.about);
             default:
                 return null;
         }
@@ -34,10 +36,15 @@ public class FragmentPagerAdapter extends android.support.v4.app.FragmentPagerAd
 
     @Override
     public Fragment getItem(int position) {
-        if (position == 0) {
-            return new SignInFragment();
-        } else {
-            return new SignUpFragment();
+        switch (position) {
+            case 0:
+                return new SignInFragment();
+            case 1:
+                return new SignUpFragment();
+            case 2:
+                return new AboutFragment();
+            default:
+                return null;
         }
     }
 

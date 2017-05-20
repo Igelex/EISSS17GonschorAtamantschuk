@@ -9,4 +9,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="input_your_email">Your Email</string>
     <string name="input_your_password">Your Password</string>
+    <string name="welcome_to_harvesthand">Welcome to HarvestHand</string>
+    <string name="about">About us</string>
+    <string name="input_your_name">Your Name</string>
+    <string name="profi">Profi</string>
+    <string name="user">User</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
 </resources>

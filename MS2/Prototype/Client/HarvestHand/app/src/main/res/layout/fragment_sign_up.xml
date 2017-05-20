@@ -1,56 +1,124 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/colorPrimary"
+    android:orientation="vertical"
     tools:context="com.example.android.harvesthand.SignUp.SignInFragment"
-    android:paddingTop="50dp">
+    android:paddingTop="16dp">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputlayout_email"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/TextInputLayout">
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/signin_input_email"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputlayout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/input_your_email"
-            android:inputType="textEmailAddress"
-            style="@style/inputsStyle"/>
+            android:theme="@style/TextInputLayout">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/signup_input_name"
+                style="@style/inputsStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/input_your_name" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputlayout_pass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/TextInputLayout">
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/signin_input_pass"
-            style="@style/inputsStyle"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputlayout_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/input_your_password"
-            android:inputType="textPassword" />
+            android:theme="@style/TextInputLayout">
+
+            <EditText
+                android:id="@+id/signup_input_email"
+                style="@style/inputsStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/input_your_email"
+                android:inputType="textEmailAddress" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/inputlayout_pass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/TextInputLayout">
+
+            <EditText
+                android:id="@+id/signup_input_pass"
+                style="@style/inputsStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/input_your_password"
+                android:inputType="textPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RadioGroup
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_profi"
+                style="@style/rbSignUpStyle"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/profi" />
+
+            <RadioButton
+                android:id="@+id/rb_user"
+                style="@style/rbSignUpStyle"
+                android:layout_height="wrap_content"
+                android:text="@string/user" />
+        </RadioGroup>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_male"
+                style="@style/rbSignUpStyle"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/rb_female"
+                style="@style/rbSignUpStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/female" />
+
+            <RadioButton
+                android:id="@+id/db_other"
+                style="@style/rbSignUpStyle"
+                android:layout_height="wrap_content"
+                android:text="@string/other" />
+
+        </RadioGroup>
 
         <Button
             android:id="@+id/button"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="36dp"
-            android:layout_weight="1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/signup"
             android:textColor="@android:color/white"
-            />
+            android:layout_marginTop="16dp"/>
 
-    </android.support.design.widget.TextInputLayout>
+    </LinearLayout>
 
-
-</LinearLayout>
+</ScrollView>
