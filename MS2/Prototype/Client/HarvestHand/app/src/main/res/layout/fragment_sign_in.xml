@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context="com.example.android.harvesthand.SignUp.SignInFragment"
+    android:paddingTop="50dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputlayout_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextInputLayout">
+
+        <EditText
+            android:id="@+id/signin_input_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/input_your_email"
+            android:inputType="textEmailAddress"
+            style="@style/inputsStyle"/>
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputlayout_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/TextInputLayout">
+
+        <EditText
+            android:id="@+id/signin_input_pass"
+            style="@style/inputsStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/input_your_password"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="36dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/signin"
+            android:textColor="@android:color/white"
+            />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+</LinearLayout>

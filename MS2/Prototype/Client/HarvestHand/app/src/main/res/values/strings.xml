@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">HarvestHand</string>
+    <string name="title_activity_entry_tutorial">EntryTutorialActivity</string>
+    <string name="title_activity_sign_up">Welcome</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="signin">Sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="input_your_email">Your Email</string>
+    <string name="input_your_password">Your Password</string>
+</resources>
