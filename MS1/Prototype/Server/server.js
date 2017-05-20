@@ -14,7 +14,7 @@ var express = require('express'),
     controller_norm = require('./libs/javascript/controller_norms'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
     controller_user = require('./libs/javascript/controller_user'),
-    //auth_route = require('./libs/javascript/authentication'),
+    routes = require('./libs/routes/index'),
     port = 3000;
 
 /*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(session({
     secret: 'my secret',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: new MongoStore({mongooseConnection: db})
 }));
 app.use(flash());
@@ -57,19 +57,26 @@ app.get('/', function (req, res) {
 
 //////////////////////////Users
 
-app.post('/register', controller_user.registerUser);
+//app.use('/users/signinerror', routes);
 
-app.post('/users/login',
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/norms',
+app.get('/users/signinerror', function(req, res){
+    var errmsg = req.flash('error');
+    res.status(200).type('application/json').send({error_msg: errmsg });
+});
+
+app.post('/signup', controller_user.registerUser);
+
+app.post('/users/signin',
+    passport.authenticate('local',{
+        failureRedirect: '/users/signinerror',
         failureFlash: true
     }),
     function (req, res) {
-        console.log('User_id: ' + req);
-        res.status(200).send(res.user.id);
+        //console.log('User_id: ' + req.session.lastNumber);
+        res.status(200).send(req.user._id);
     });
 
+app.get('/users/:id', controller_user.getUserById);
 //////////////////////////Users
 
 

@@ -17,7 +17,7 @@ module.exports.registerUser = function (req, res) {
         if (result) {
             //Es existiert bereits ein user mit der angegeben Email existiert
             console.log('User already exists');
-            res.status(409).send({error_msg: 'User already exists'});
+            res.status(409).type('application/json').send({error_msg: 'User already exists'});
 
         } else {
             //Es existiert kein user mit der angegeben Email
@@ -40,121 +40,57 @@ module.exports.registerUser = function (req, res) {
                     return;
                 }
                 console.error(result);
-                res.status(200).send({success_msg: 'Registration sucessfull'});
+                res.status(200).type('application/json').send({success_msg: 'Registration sucessfull'});
             });
         }
     });
 };
 
-module.exports.validPassword = function (pass, user_id) {
-    console.log('pass: ' + pass);
-    console.log('In valid id: ' + user_id);
-    User.findById(user_id, function (err, result) {
+//Bestimmten User anzeigen
+module.exports.getUserById = function (req, res) {
+    console.info(req.params.id);
+    User.findById(req.params.id, function (err, result) {
         if (err) {
-            console.log(err);
+            res.status(500).type('text').write("DB error: " + err);
         } else {
             if (result) {
-                console.log('In valid: ' + result.pass);
-                if (pass == result.pass) {
-                    return true;
-                } else {
-                    return false;
-                }
+                res.status(200).type('application/json').send(result);
             }
             else {
-                return false;
+                res.status(204).type('application/json').send({error_msg: 'No User found'});
             }
         }
     });
 };
 
-/*//Alle Entries anzeigen
- module.exports.getAllEntries = function (req, res) {
- Entry.find().exec(function (err, result) {
- if (err) {
- console.log(err);
- res.status(500).type('text').send('DB error :' + err);
- } else {
- if (Object.keys(result).length > 0) {
- res.status(200).type('application/json').send(result);
- }
- else {
- res.status(200).type('text').send('No Entries found');
- }
- }
- })
- };
+//Daten aktualisieren
+module.exports.updateUser = function (req, res) {
+    User.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
+        console.info(result);
+        if (err) {
+            res.status(500).type('text').write("DB error: " + err);
+        } else {
+            if (result) {
+                res.status(200).type('application/json').send({success_msg: 'User with id: ' + result._id + ' successfully updated'});
+            } else {
+                res.status(204).type('application/json').send({error_msg: 'User with id: ' + req.params.id + ' not found'});
+            }
+        }
 
- //Bestimmten Entry anzeigen
- module.exports.getEntryById = function (req, res) {
- console.info(req.params.id);
- Entry.findById(req.params.id, function (err, result) {
- if (err) {
- res.status(500).type('text').write("DB error: " + err);
- } else {
- if (result != null) {
- res.status(200).type('application/json').send(result);
- }
- else {
- res.status(200).type('text').send('No Entry found');
- }
- }
- });
- };
+    });
+};
 
- //Daten aktualisieren
- module.exports.updateEntry = function (req, res) {
- Entry.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
- console.info(result);
- if (err) {
- res.status(500).type('text').write("DB error: " + err);
- } else {
- if (result != null) {
- res.status(200).type('text').send('Entry with id: ' + result._id + ' successfully updated');
- } else {
- res.status(200).type('text').send('Entry with id: ' + req.params.id + ' not found');
- }
- }
-
- });
- };
-
- //Wenn daten analysiert und Tutorial erstellt, wird die @tutorial_id im Entry aktualisiert
- module.exports.updateEntryTutorialId = function (id, tutorial_id) {
- Entry.findById(id, function (err, result) {
- console.info(result);
- if (err) {
- res.status(500).type('text').write("DB error: " + err);
- } else {
- if (result != null) {
- result.tutorial_id = tutorial_id;
- } else {
- res.status(200).type('text').send('Entry with id: ' + id + ' not found');
- }
- result.save(function (err) {
- if (err) {
- console.error('Entry not updated :' + err);
- } else {
- console.log('Entry updated with tutorial_id: ' + tutorial_id);
- }
- });
- }
-
- });
- };
-
- module.exports.deleteEntry = function (req, res) {
- Entry.findByIdAndRemove(req.params.id, function (err, result) {
- console.info(result);
- if (err) {
- res.status(500).type('text').write("DB error: " + err);
- } else {
- if (result != null) {
- res.status(200).type('text').send('Entry with id: ' + result._id + ' succesfully deleted');
- } else {
- res.status(200).type('text').send('Entry with id: ' + req.params.id + ' not found');
- }
- }
-
- });
- };*/
+module.exports.deleteUser = function (req, res) {
+    User.findByIdAndRemove(req.params.id, function (err, result) {
+        console.info(result);
+        if (err) {
+            res.status(500).type('text').write("DB error: " + err);
+        } else {
+            if (result != null) {
+                res.status(200).type('application/json').send({success_msg: 'User with id: ' + result._id + ' succesfully deleted'});
+            } else {
+                res.status(204).type('text').send({error_msg: 'User with id: ' + req.params.id + ' not found'});
+            }
+        }
+    });
+};

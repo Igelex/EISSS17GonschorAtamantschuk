@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryViewHolder> {
 
     ArrayList<Entry> arrayList = new ArrayList<Entry>();
-    private final String URL_BASE = "http://192.168.2.102:3000/entries/"; // muss am jeweiligen rechner angepasst werden
+    private final String URL_BASE = "http://192.168.0.11:3000/entries/"; // muss am jeweiligen rechner angepasst werden
     private final String URL_TUTORIAL = "/tutorials/";
 
     public RecyclerAdapter(ArrayList<Entry> arrayList) {
