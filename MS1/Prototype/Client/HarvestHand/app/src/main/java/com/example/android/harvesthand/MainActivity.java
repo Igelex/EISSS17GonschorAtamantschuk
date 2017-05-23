@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String LOG_TAG = MainActivity.class.getName();
     private ArrayList<Entry> entryArrayList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private static final String URL = "http://192.168.0.11:3000/entries"; // muss am jeweiligen rechner angepasst werden
+    private static final String URL = "http://10.3.119.134:3000/entries"; // muss am jeweiligen rechner angepasst werden
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
