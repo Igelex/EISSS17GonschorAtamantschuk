@@ -51,7 +51,7 @@ app.use(function (req, res, next) {
 });
 
 //Test
-app.get('/', function (req, res) {
+app. get('/', function (req, res) {
     res.send('Hallo, World!!!');
 });
 
