@@ -18,7 +18,7 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="server.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="server.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="656">
@@ -40,10 +40,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="controller_user.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="controller_user.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/libs/javascript/controller_user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="924">
+            <state relative-caret-position="858">
               <caret line="42" column="104" lean-forward="false" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="104" />
               <folding />
             </state>
@@ -138,6 +138,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -202,7 +203,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -355,11 +355,12 @@
       <workItem from="1495208639862" duration="6130000" />
       <workItem from="1495301293667" duration="609000" />
       <workItem from="1495608044726" duration="1406000" />
+      <workItem from="1495619336624" duration="601000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="95742000" />
+    <option name="totallyTimeSpent" value="96343000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -633,14 +634,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/javascript/controller_user.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="924">
-          <caret line="42" column="104" lean-forward="false" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="104" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/models_mongoose/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="352">
@@ -653,6 +646,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="656">
           <caret line="53" column="5" lean-forward="false" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/javascript/controller_user.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="858">
+          <caret line="42" column="104" lean-forward="false" selection-start-line="42" selection-start-column="16" selection-end-line="42" selection-end-column="104" />
           <folding />
         </state>
       </provider>
