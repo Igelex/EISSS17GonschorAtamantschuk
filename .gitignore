@@ -74,5 +74,12 @@ node_modules
 # Optional REPL history
 .node_repl_history
 
-# Mongodb Directory
+# Mongodb Directorys
 MS1/Prototype/Server/db
+MS2/Prototype/Server/db
+MS3/Prototype/Server/db
+
+#idea
+MS1/Prototype/Server/.idea
+MS2/Prototype/Server/.idea
+MS3/Prototype/Server/.idea

@@ -15,7 +15,8 @@ var express = require('express'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
     controller_user = require('./libs/javascript/controller_user'),
     routes = require('./libs/routes/index'),
-    port = 3000;
+    wetter = require('./libs/javascript/weather'),
+    port = 3001;
 
 /*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
  *--> update @tutorial_id in Entry */
@@ -29,6 +30,8 @@ db.once('open', function () {
 });
 
 require('./libs/javascript/passport');
+
+app.get("/wetter")
 
 //all environments
 app.set('port', process.env.PORT || port);
@@ -58,6 +61,8 @@ app. get('/', function (req, res) {
 //////////////////////////Users
 
 //app.use('/users/signinerror', routes);
+
+app.get("/wetter", wetter.wetter);
 
 app.get('/users/signinerror', function(req, res){
     var errmsg = req.flash('error');
