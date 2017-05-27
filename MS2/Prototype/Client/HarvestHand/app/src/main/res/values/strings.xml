@@ -12,9 +12,17 @@
     <string name="welcome_to_harvesthand">Welcome to HarvestHand</string>
     <string name="about">About us</string>
     <string name="input_your_name">Your Name</string>
-    <string name="profi">Profi</string>
+    <string name="profi">Advanced</string>
     <string name="user">User</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
+    <string name="errmsg_email_required">Please enter you Email</string>
+    <string name="errmsg_valid_input_required">Valid input required!</string>
+    <string name="errmsg_name_required">Please enter Name</string>
+    <string name="errmsg_pass_required">Please enter Password</string>
+    <string name="msg_choice_typeandgender">Please select Usertype and Gender!</string>
+    <string name="msg_internal_error">Internal Error! Please try again</string>
+    <string name="msg_email_exist">This Email already in use!</string>
+    <string name="msg_signup_success">Registration successful!</string>
 </resources>

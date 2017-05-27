@@ -54,7 +54,7 @@ app.use(function (req, res, next) {
 });
 
 //Test
-app. get('/', function (req, res) {
+app.get('/', function (req, res) {
     res.send('Hallo, World!!!');
 });
 
@@ -64,21 +64,18 @@ app. get('/', function (req, res) {
 
 app.get("/wetter", wetter.wetter);
 
-app.get('/users/signinerror', function(req, res){
+app.get('/users/signinerror', function (req, res) {
     var errmsg = req.flash('error');
-    res.status(200).type('application/json').send({error_msg: errmsg });
+    console.log(errmsg);
+    res.status(200).type('application/json').send({msg: 'No User found'});
 });
 
 app.post('/signup', controller_user.registerUser);
 
-app.post('/users/signin',
-    passport.authenticate('local',{
-        failureRedirect: '/users/signinerror',
-        failureFlash: true
-    }),
+app.post('/signin',
+    passport.authenticate('local'),
     function (req, res) {
-        //console.log('User_id: ' + req.session.lastNumber);
-        res.status(200).send(req.user._id);
+        res.status(200).send({_id: req.user._id});
     });
 
 app.get('/users/:id', controller_user.getUserById);

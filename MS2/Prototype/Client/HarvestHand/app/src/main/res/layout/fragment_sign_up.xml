@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/inputlayout_name"
+            android:id="@+id/signup_inputlayout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/TextInputLayout">
@@ -29,7 +29,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/inputlayout_email"
+            android:id="@+id/signup_inputlayout_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/TextInputLayout">
@@ -46,7 +46,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/inputlayout_pass"
+            android:id="@+id/signup_inputlayout_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/TextInputLayout">
@@ -63,6 +63,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <RadioGroup
+            android:id="@+id/rg_usertype"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -82,6 +83,7 @@
         </RadioGroup>
 
         <RadioGroup
+            android:id="@+id/rg_gender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -101,7 +103,7 @@
                 android:text="@string/female" />
 
             <RadioButton
-                android:id="@+id/db_other"
+                android:id="@+id/rb_other"
                 style="@style/rbSignUpStyle"
                 android:layout_height="wrap_content"
                 android:text="@string/other" />
@@ -109,7 +111,7 @@
         </RadioGroup>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/bt_signup"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"

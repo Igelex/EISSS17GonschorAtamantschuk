@@ -18,7 +18,7 @@ passport.use(new LocalStrategy({
             }
             if (!user) {
                 console.log('Incorrect username');
-                return done(null, false, {message: 'Incorrect username'});
+                return done(null, false, {msg: 'Incorrect username'});
             }
             User.findById(user._id, function (err, result) {
                 if (err) {
@@ -28,15 +28,15 @@ passport.use(new LocalStrategy({
                         console.log('In valid:------');
                         if (pass == result.pass) {
                             console.log('Pass correct, Welcome');
-                            return done(null, user);
+                            return done(null, user, {msg: 'Pass correct, Welcome'});
                         } else {
                             console.log('Incorrect password');
-                            return done(null, false, {message: 'Incorrect password'});
+                            return done(null, false, {msg: 'Incorrect password'});
                         }
                     }
                     else {
                         console.log('User not found');
-                        return done(null, false, {message: 'User not found'});
+                        return done(null, false, {msg: 'User not found'});
                     }
                 }
             });

@@ -41,7 +41,7 @@ module.exports.deleteNorm = function (req, res) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
             if (result != null) {
-                res.status(200).type('text').send('Norm with id: ' + result._id + ' succesfully deleted');
+                res.status(200).type('text').send('Norm with id: ' + result._id + ' successfully deleted');
             } else {
                 res.status(200).type('text').send('Norm with id: ' + req.params.id + ' not found');
             }

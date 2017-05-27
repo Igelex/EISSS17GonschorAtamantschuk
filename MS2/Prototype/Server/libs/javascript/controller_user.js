@@ -9,7 +9,7 @@ module.exports.registerUser = function (req, res) {
     //Überprüfen ob User bereits existiert
     User.findOne({email: req.body.email}, function (err, result) {
         if (err) {
-            res.status(500).type('application/json').send({error_msg: 'DB Error'});
+            res.status(500).type('application/json').send({msg: 'DB Error'});
             console.error(err);
             return;
         }
@@ -17,13 +17,12 @@ module.exports.registerUser = function (req, res) {
         if (result) {
             //Es existiert bereits ein user mit der angegeben Email existiert
             console.log('User already exists');
-            res.status(409).type('application/json').send({error_msg: 'User already exists'});
+            res.status(409).type('application/json').send({msg: 'User already exists', res: false});
 
         } else {
             //Es existiert kein user mit der angegeben Email
             var newUser = new User({
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
+                name: req.body.name,
                 gender: req.body.gender,
                 email: req.body.email,
                 pass: req.body.pass,
@@ -35,12 +34,12 @@ module.exports.registerUser = function (req, res) {
 
                 if (err) {
                     //Fehler bei der Datenbankabfrage
-                    res.status(500).send({error_msg: 'DB Error'});
+                    res.status(500).send({msg: 'DB Error'});
                     console.error(err);
                     return;
                 }
                 console.error(result);
-                res.status(200).type('application/json').send({success_msg: 'Registration sucessfull'});
+                res.status(200).type('application/json').send(result._id);
             });
         }
     });
@@ -54,10 +53,12 @@ module.exports.getUserById = function (req, res) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
             if (result) {
+                console.log('In get User by Id: ' + result);
                 res.status(200).type('application/json').send(result);
             }
             else {
-                res.status(204).type('application/json').send({error_msg: 'No User found'});
+                console.log('In get User by , result 0: ' + result);
+                res.status(204).type('application/json').send({msg: 'No User found', res: false});
             }
         }
     });
@@ -71,9 +72,9 @@ module.exports.updateUser = function (req, res) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
             if (result) {
-                res.status(200).type('application/json').send({success_msg: 'User with id: ' + result._id + ' successfully updated'});
+                res.status(200).type('application/json').send({msg: 'User with id: ' + result._id + ' successfully updated', res: true});
             } else {
-                res.status(204).type('application/json').send({error_msg: 'User with id: ' + req.params.id + ' not found'});
+                res.status(204).type('application/json').send({msg: 'User with id: ' + req.params.id + ' not found', res: false});
             }
         }
 
@@ -87,9 +88,9 @@ module.exports.deleteUser = function (req, res) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
             if (result != null) {
-                res.status(200).type('application/json').send({success_msg: 'User with id: ' + result._id + ' succesfully deleted'});
+                res.status(200).type('application/json').send({msg: 'User with id: ' + result._id + ' successfully deleted', res: true});
             } else {
-                res.status(204).type('text').send({error_msg: 'User with id: ' + req.params.id + ' not found'});
+                res.status(204).type('text').send({msg: 'User with id: ' + req.params.id + ' not found', res: false});
             }
         }
     });

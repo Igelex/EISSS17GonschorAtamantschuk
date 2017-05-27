@@ -4,7 +4,7 @@
 var mongoose = require('mongoose');
 
 //Norms collection zum speichern der Standartwerten der Bodendaten abhängig von dem,
-// was eingepflanzt wird
+//was eingepflanzt wird
 
 var normsSchema = mongoose.Schema({
     norm_name: String,
