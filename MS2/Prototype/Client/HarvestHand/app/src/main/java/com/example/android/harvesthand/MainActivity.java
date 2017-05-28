@@ -1,12 +1,22 @@
 package com.example.android.harvesthand;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.LabeledIntent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -21,12 +31,19 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.R.attr.entries;
+import static android.R.attr.port;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
     private ArrayList<Entry> entryArrayList = new ArrayList<>();
     private RecyclerView recyclerView;
-    private static final String URL = "http://192.168.0.11:3000/entries"; // muss am jeweiligen rechner angepasst werden
+    private static final int PORT = 3001;
+    private static final String IP_ADRESS = "";
+    private static final String URL = "http://192.168.0.19:" + PORT + "/entries"; // muss am jeweiligen rechner angepasst werden
+    private SharedPreferences sPref;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +60,34 @@ public class MainActivity extends AppCompatActivity {
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setHasFixedSize(true);
+            progressBar = (ProgressBar) findViewById(R.id.progressBar_main);
+            /*
+            *Holl user_id aus SharedPreferences
+            */
+            sPref = getSharedPreferences("User_id Pref",MODE_PRIVATE);
+            /*
+            * Bilde Uri für Request
+            */
+            Uri baseUri = Uri.parse(URL);
+            Uri.Builder uriBuilder = baseUri.buildUpon();
+            uriBuilder.appendQueryParameter("owner_id", sPref.getString("user_id", ""));
+            Log.i("URI: ", uriBuilder.toString());
+
             //Helper methode
-            getEntries(URL);
+            getEntries(uriBuilder.toString());
         }else {
-            Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, getString(R.string.msg_no_internet_connection), Toast.LENGTH_LONG).show();
         }
 
     }
 
-    //Request all Entries
+    //Request all Entries for user
     public void getEntries(String url) {
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.length() > 0) {
                     for (int i = 0; i < response.length(); i++) {
                         try {
@@ -89,6 +120,39 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressBar.setVisibility(View.GONE);
+                if (error.networkResponse != null) {
+                    switch (error.networkResponse.statusCode) {
+                        case 500:
+                            Snackbar snackbarIE = Snackbar.make(recyclerView, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
+                            View sbie = snackbarIE.getView();
+                            TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
+                            snackbarIE.show();
+                            break;
+                        case 404:
+                            Snackbar snackbar404 = Snackbar.make(recyclerView, getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
+                            View snackbarView404 = snackbar404.getView();
+                            TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText404.setTextColor(Color.rgb(253, 86, 86));
+                            snackbar404.show();
+                            break;
+                        case 204:
+                            Snackbar snackbar = Snackbar.make(recyclerView, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
+                            View text = snackbar.getView();
+                            TextView snackBarText2 = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText2.setTextColor(Color.rgb(253, 86, 86));
+                            snackbar.show();
+                            break;
+                    }
+                } else {
+                    Snackbar snackbar = Snackbar.make(recyclerView, getString(R.string.connection_err), Snackbar.LENGTH_LONG);
+                    View text = snackbar.getView();
+                    TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
+                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
+                    snackbar.show();
+                }
+
                 error.printStackTrace();
                 Toast.makeText(MainActivity.this,"Error", Toast.LENGTH_LONG).show();
             }

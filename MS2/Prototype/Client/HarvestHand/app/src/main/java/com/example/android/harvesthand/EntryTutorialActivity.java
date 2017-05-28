@@ -2,14 +2,18 @@ package com.example.android.harvesthand;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -27,6 +31,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private String tutorialURL;
     private int ph, water, minerals, tutorial_ph, tutorial_water, tutorial_minerals;
+    private RelativeLayout view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
                 setTitle(intent.getStringExtra("name"));
             }
-
+            view = (RelativeLayout) findViewById(R.id.entry_tutorial_root);
             phImg = (ImageView) findViewById(R.id.ph_emotion);
             waterImg = (ImageView) findViewById(R.id.water_emotion);
             mineralsImg = (ImageView) findViewById(R.id.minerals_emotion);
@@ -101,10 +106,36 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
             }
         }, new Response.ErrorListener() {
-
             @Override
             public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+                progressBar.setVisibility(View.GONE);
+                if (error.networkResponse != null) {
+                    switch (error.networkResponse.statusCode) {
+                        case 500:
+                            Snackbar snackbarIE = Snackbar.make(view, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
+                            View sbie = snackbarIE.getView();
+                            TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
+                            snackbarIE.show();
+                            break;
+                        case 404:
+                            Snackbar snackbar404 = Snackbar.make(view, getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
+                            View snackbarView404 = snackbar404.getView();
+                            TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText404.setTextColor(Color.rgb(253, 86, 86));
+                            snackbar404.show();
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    Snackbar snackbar = Snackbar.make(view, getString(R.string.connection_err), Snackbar.LENGTH_LONG);
+                    View snackbarView = snackbar.getView();
+                    TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
+                    snackbar.show();
+                    error.printStackTrace();
+                }
             }
         });
 

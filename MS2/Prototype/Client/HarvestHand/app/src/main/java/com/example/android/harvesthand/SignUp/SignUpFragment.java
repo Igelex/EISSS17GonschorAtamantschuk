@@ -58,7 +58,6 @@ public class SignUpFragment extends Fragment {
     private TextInputLayout mNameTextInput;
     private TextInputLayout mPassTextInput;
     private ProgressBar progressBar;
-    View a;
 
 
     public SignUpFragment() {
@@ -186,7 +185,7 @@ public class SignUpFragment extends Fragment {
             Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.msg_choice_typeandgender), Snackbar.LENGTH_LONG);
             View snackbarView = snackbar.getView();
             TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-            snackBarText.setTextColor(Color.rgb(253,86,86));
+            snackBarText.setTextColor(Color.rgb(253, 86, 86));
             snackbar.show();
             return false;
         }
@@ -210,15 +209,16 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         progressBar.setVisibility(View.INVISIBLE);
-                        /*Snackbar snackbarIE = Snackbar.make(getView(), getActivity().getString(R.string.msg_signup_success), Snackbar.LENGTH_LONG);
-                        View sbie = snackbarIE.getView();
-                        TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                        snackBarText.setTextColor(Color.rgb(71,171,75));
-                        snackbarIE.show();*/
+
                         try {
                             String user_id = response.getString("_id");
                             Log.i("User_id: ", user_id);
-                            Toast.makeText(getContext(), user_id, Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.msg_signup_success), Snackbar.LENGTH_LONG);
+                            View text = snackbar.getView();
+                            TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText.setTextColor(Color.rgb(71, 171, 75));
+                            snackbar.show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -234,19 +234,32 @@ public class SignUpFragment extends Fragment {
                                     Snackbar snackbarIE = Snackbar.make(getView(), getActivity().getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
                                     View sbie = snackbarIE.getView();
                                     TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarText.setTextColor(Color.RED);
+                                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
                                     snackbarIE.show();
+                                    break;
+                                case 404:
+                                    Snackbar snackbar404 = Snackbar.make(getView(), getActivity().getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
+                                    View snackbarView404 = snackbar404.getView();
+                                    TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
+                                    snackBarText404.setTextColor(Color.rgb(253, 86, 86));
+                                    snackbar404.show();
                                     break;
                                 case 409:
                                     Snackbar snackbarEmail = Snackbar.make(getView(), getActivity().getString(R.string.msg_email_exist), Snackbar.LENGTH_LONG);
                                     View snackbarView = snackbarEmail.getView();
                                     TextView snackBarTextEmail = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarTextEmail.setTextColor(Color.rgb(253,86,86));
+                                    snackBarTextEmail.setTextColor(Color.rgb(253, 86, 86));
                                     snackbarEmail.show();
                                     break;
                                 default:
                                     break;
                             }
+                        } else {
+                            Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.connection_err), Snackbar.LENGTH_LONG);
+                            View snackbarView = snackbar.getView();
+                            TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
+                            snackbar.show();
                         }
                     }
                 });

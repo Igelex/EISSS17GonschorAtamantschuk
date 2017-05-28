@@ -84,7 +84,7 @@ app.get('/users/:id', controller_user.getUserById);
 
 //////////////////////////Entries
 
-app.get('/entries', controller_entry.getAllEntries);
+app.get('/entries', controller_entry.getEntries);
 
 app.get('/entries/:id', function (req, res) {
     controller_entry.getEntryById(req, res);

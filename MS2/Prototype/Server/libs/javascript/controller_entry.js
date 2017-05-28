@@ -31,8 +31,9 @@ module.exports.addEntry = function (req, res) {
 };
 
 //Alle Entries anzeigen
-module.exports.getAllEntries = function (req, res) {
-    Entry.find().exec(function (err, result) {
+module.exports.getEntries = function (req, res) {
+    console.log("Get Entries: " + req.query.owner_id);
+    Entry.find({"owner_id": req.query.owner_id}).exec(function (err, result) {
         if (err) {
             console.log(err);
             res.status(500).type('text').send({msg: 'DB Error', res: false});
@@ -42,7 +43,7 @@ module.exports.getAllEntries = function (req, res) {
                 res.status(200).type('application/json').send(result);
             }
             else {
-                res.status(200).type('application/json').send({msg: 'No Entries found', res: false});
+                res.status(204).type('application/json').send({msg: 'No Entries found', res: false});
             }
         }
     })

@@ -25,9 +25,8 @@ Norm
 
 User
 {
-	"first_name": "Test User",
-    "last_name": "User test",
-    "gender": "man",
+	"name": "Test User",
+ "gender": "male",
     "email": "example@email.com",
     "pass": "123",
     "user_type": 0

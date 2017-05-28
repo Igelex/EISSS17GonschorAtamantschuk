@@ -39,7 +39,7 @@ module.exports.registerUser = function (req, res) {
                     return;
                 }
                 console.error(result);
-                res.status(200).type('application/json').send(result._id);
+                res.status(200).type('application/json').send(result);
             });
         }
     });
