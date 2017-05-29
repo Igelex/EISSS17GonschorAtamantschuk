@@ -31,7 +31,7 @@ db.once('open', function () {
 
 require('./libs/javascript/passport');
 
-app.get("/wetter")
+app.get("/wetter", wetter.wetter);
 
 //all environments
 app.set('port', process.env.PORT || port);
