@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private static final int PORT = 3001;
     private static final String IP_ADRESS = "";
-    private static final String URL = "http://192.168.0.19:" + PORT + "/entries"; // muss am jeweiligen rechner angepasst werden
+    private static final String URL = "http://10.3.135.18:" + PORT + "/entries"; // muss am jeweiligen rechner angepasst werden
     private SharedPreferences sPref;
     private ProgressBar progressBar;
 
