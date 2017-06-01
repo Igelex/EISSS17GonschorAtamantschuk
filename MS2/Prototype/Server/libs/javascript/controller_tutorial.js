@@ -34,7 +34,7 @@ module.exports.getTutorialById = function (req, res) {
                 res.status(200).type('application/json').send(result);
             }
             else {
-                res.status(200).type('text').send('No Tutorial found');
+                res.status(204).type('text').send('No Tutorial found');
             }
         }
     });
@@ -49,7 +49,7 @@ module.exports.deleteTutorial = function (req, res) {
             if (result != null) {
                 res.status(200).type('text').send('Tutorial with id: ' + result._id + ' succesfully deleted');
             } else {
-                res.status(200).type('text').send('Tutorial with id: ' + req.params.id + ' not found');
+                res.status(204 ).type('text').send('Tutorial with id: ' + req.params.id + ' not found');
             }
         }
 

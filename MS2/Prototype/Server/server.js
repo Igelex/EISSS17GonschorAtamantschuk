@@ -60,15 +60,7 @@ app.get('/', function (req, res) {
 
 //////////////////////////Users
 
-//app.use('/users/signinerror', routes);
-
 app.get("/wetter", wetter.wetter);
-
-app.get('/users/signinerror', function (req, res) {
-    var errmsg = req.flash('error');
-    console.log(errmsg);
-    res.status(200).type('application/json').send({msg: 'No User found'});
-});
 
 app.post('/signup', controller_user.registerUser);
 

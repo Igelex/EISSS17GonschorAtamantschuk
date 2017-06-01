@@ -1,3 +1,4 @@
+/*
 import android.app.Activity;
 import android.content.Context;
 import android.location.Criteria;
@@ -14,7 +15,9 @@ public class ShowLocationActivity extends Activity implements LocationListener {
     private LocationManager locationManager;
     private String provider;
 
-    /** Called when the activity is first created. */
+    */
+/** Called when the activity is first created. *//*
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,14 +43,18 @@ public class ShowLocationActivity extends Activity implements LocationListener {
         }
     }
     
-    /* Request updates at startup */
+    */
+/* Request updates at startup *//*
+
     @Override
     protected void onResume() {
         super.onResume();
         locationManager.requestLocationUpdates(provider, 400, 1, this);
     }
 
-    /* Remove the locationlistener updates when Activity is paused */
+    */
+/* Remove the locationlistener updates when Activity is paused *//*
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -79,3 +86,4 @@ public class ShowLocationActivity extends Activity implements LocationListener {
                 Toast.LENGTH_SHORT).show();
     }
 }
+*/

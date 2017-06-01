@@ -79,7 +79,7 @@ module.exports.updateEntry = function (req, res) {
                     res: true
                 });
             } else {
-                res.status(200).type('application/json').send({
+                res.status(204).type('application/json').send({
                     msg: 'Entry with id: ' + req.params.id + ' not found',
                     res: false
                 });
