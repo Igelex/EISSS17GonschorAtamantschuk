@@ -1,0 +1,36 @@
+{
+    "pflanze":{
+        "kaffee":{
+            "name": "Kaffee (Coffea)",
+            "ordnung": "Enzianartige",
+            "familie": "Rötegewächse",
+            "gattung": "Kaffee",
+            "anbauhöhe": "0m bis 900m",
+            "temperatur": "26°C",
+            "min. temperatur": "8°C",
+            "niederschlag": "1500mm bis 2000mm pro qm pro Jahr",
+            "luftfeuchtigkeit": "min. 85%",
+            "blütezeit": "nach 9 Monaten",
+            "erntezeit": "nach 11 Monaten",
+            "boden": "Tief/Humusreich",
+            "bodenfeuchtigkeit": "feucht";
+        }
+        
+        "kakao":{
+            "name": "Kakaopflanze (Theobroma cacao)",
+            "ordnung": "Malvenartigen",
+            "familie": "Malvengewächse",
+            "gattung": "Theobroma",
+            "anbauhöhe": "0m bis 1000m",
+            "temperatur": "25°C",
+            "min. temperatur": "20°C",
+            "niederschlag": "2000mm pro qm pro Jahr",
+            "luftfeuchtigkeit": "75% bis 90%",
+            "blütezeit": "ganzjährig",
+            "erntezeit": "ganzjährig",
+            "boden": "Tief/Humusreich",
+            "bodenfeuchtigkeit": "feucht";
+        }
+        
+    }
+}
