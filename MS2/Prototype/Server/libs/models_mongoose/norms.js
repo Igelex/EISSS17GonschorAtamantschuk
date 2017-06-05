@@ -7,11 +7,19 @@ var mongoose = require('mongoose');
 //was eingepflanzt wird
 
 var normsSchema = mongoose.Schema({
-    norm_name: String,
-    art_id: Number,
-    ph_norm: Number,
-    water_norm: Number,
-    minerals_norm: Number
+    crop_id: Number,
+    name: [String],
+    air_temp: {
+        max: Number,
+        min:Number,
+
+    },
+    soil_temp: {
+        max: Number,
+        min:Number,
+    },
+    soil_moisture: Number,
+    ph_value: Number
     /*.
       .
       .
