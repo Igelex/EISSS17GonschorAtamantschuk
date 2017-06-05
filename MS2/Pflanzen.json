@@ -12,8 +12,8 @@
             "luftfeuchtigkeit": "min. 85%",
             "blütezeit": "nach 9 Monaten",
             "erntezeit": "nach 11 Monaten",
-            "boden": "Tief/Humusreich",
-            "bodenfeuchtigkeit": "feucht";
+            "boden": "tief/humusreich",
+            "bodenfeuchtigkeit": "feucht",
         }
         
         "kakao":{
@@ -28,7 +28,54 @@
             "luftfeuchtigkeit": "75% bis 90%",
             "blütezeit": "ganzjährig",
             "erntezeit": "ganzjährig",
-            "boden": "Tief/Humusreich",
+            "boden": "tief/humusreich",
+            "bodenfeuchtigkeit": "feucht",
+        }
+     "hirse":{
+            "name": "Hirse",
+            "ordnung": "Süßgrasartige",
+            "familie": "Süßgräser",
+            "gattung": "Pennisetum, Setaria, Panicum, Eleusine, Brachiaria, Coix, Digitaria, Echinochloa, Eragrostis, Paspalum,Phalaris",
+            "anbauhöhe": "-",
+            "temperatur": ">20°C",
+            "min. temperatur": "8°C",
+            "niederschlag": "200mm bis 700mm pro qm pro Jahr",
+            "luftfeuchtigkeit": "gering",
+            "aussaatzeit": "ganzjährig, wenn Bodentemperatur > 12°C",
+            "blütezeit": "-",
+            "erntezeit": "nach 70 bis 90 Tagen",
+            "boden": "locker/humusreich",
+            "bodenfeuchtigkeit": "trocken",
+        }
+     "bananen":{
+            "name": "Bananen (Musa)",
+            "ordnung": "Ingwerartige",
+            "familie": "Bananengewächse",
+            "gattung": "Bananen",
+            "anbauhöhe": "bis 1000m",
+            "temperatur": "25°C",
+            "min. temperatur": ">0°C",
+            "niederschlag": "1200mm bis 2000mm pro qm pro Jahr",
+            "luftfeuchtigkeit": "90%",
+            "blütezeit": "ganzjährig",
+            "erntezeit": "ganzjährig",
+            "boden": "humusreich",
+            "bodenfeuchtigkeit": "feucht",
+        }
+     "erdnüsse":{
+            "name": "Erdnüsse",
+            "ordnung": "Schmetterlingsblütenartige",
+            "familie": "Hülsenfrüchtler",
+            "gattung": "Erdnüsse",
+            "anbauhöhe": "-",
+            "temperatur": "25°C bis 30°C",
+            "min. temperatur": "25°C",
+            "niederschlag": "500mm bis 1000mm pro qm pro Jahr",
+            "luftfeuchtigkeit": "hoch",
+            "aussaatzeit": "April bis Juni",
+            "blütezeit": "Mai bis August",
+            "erntezeit": "Juli bis September",
+            "boden": "locker/humusreich",
             "bodenfeuchtigkeit": "feucht";
         }
         
