@@ -14,6 +14,9 @@
             "erntezeit": "nach 11 Monaten",
             "boden": "tief/humusreich",
             "bodenfeuchtigkeit": "feucht",
+            "standort": "Halbschatten/Schatten",
+            "ph": "5 bis 7",
+            
         }
         
         "kakao":{
@@ -30,6 +33,8 @@
             "erntezeit": "ganzjährig",
             "boden": "tief/humusreich",
             "bodenfeuchtigkeit": "feucht",
+            "standort": "Schatten",
+            "ph": "5 bis 7",
         }
      "hirse":{
             "name": "Hirse",
@@ -46,6 +51,8 @@
             "erntezeit": "nach 70 bis 90 Tagen",
             "boden": "locker/humusreich",
             "bodenfeuchtigkeit": "trocken",
+            "standort": "Sonne/Halbschatten",
+            "ph" : "<6",
         }
      "bananen":{
             "name": "Bananen (Musa)",
@@ -61,6 +68,8 @@
             "erntezeit": "ganzjährig",
             "boden": "humusreich",
             "bodenfeuchtigkeit": "feucht",
+            "standort":"Sonne",
+            "ph": "5,5 bis 7",
         }
      "erdnüsse":{
             "name": "Erdnüsse",
@@ -76,7 +85,9 @@
             "blütezeit": "Mai bis August",
             "erntezeit": "Juli bis September",
             "boden": "locker/humusreich",
-            "bodenfeuchtigkeit": "feucht";
+            "bodenfeuchtigkeit": "feucht",
+            "standort": "Sonne",
+            "ph": "5,5 bis 7",
         }
         
     }
