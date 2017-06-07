@@ -8,7 +8,8 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.harvesthand.EntryTutorialActivity"
-    tools:showIn="@layout/activity_entry_tutorial">
+    tools:showIn="@layout/activity_entry_tutorial"
+    android:background="@color/colorMainBackgroud">
 
     <LinearLayout
         android:layout_width="match_parent"

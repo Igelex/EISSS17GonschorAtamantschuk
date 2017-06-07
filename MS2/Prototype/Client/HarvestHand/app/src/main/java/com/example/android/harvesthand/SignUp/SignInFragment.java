@@ -42,7 +42,7 @@ import static android.R.id.input;
  */
 public class SignInFragment extends Fragment {
 
-    private String url = "http://192.168.0.11:3001/signin";
+    private String url = "http://192.168.2.102:3001/signin";
     private Button signinButton;
     private EditText inputEmail;
     private EditText inputPass;
