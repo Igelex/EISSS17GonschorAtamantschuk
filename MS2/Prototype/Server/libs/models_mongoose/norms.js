@@ -9,17 +9,26 @@ var mongoose = require('mongoose');
 var normsSchema = mongoose.Schema({
     crop_id: Number,
     name: [String],
+    family: String,
     air_temp: {
         max: Number,
-        min:Number,
-
+        min:Number
     },
+    soil: String,
     soil_temp: {
         max: Number,
-        min:Number,
+        min:Number
     },
-    soil_moisture: Number,
-    ph_value: Number
+    soil_moisture: {
+        max: Number,
+        min: Number
+    },
+    ph_value: Number,
+    height_meter: {
+        max: Number,
+        min: Number
+    },
+    mature_after_month: Number
     /*.
       .
       .

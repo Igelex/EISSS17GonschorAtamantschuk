@@ -16,13 +16,23 @@ var entrySchema = mongoose.Schema({
     owner_id: {type: String, required: true},
     /*Colaborators, die den Zugriff auf den Eintrag haben*/
     collaborators:[String],
+
     /*
     * Properties
     */
+
+    location: String,
+    /*Fläche in ha*/
     surface: Number,
+    /*Art des Bodens*/
+    soil: Number,
+    air_temp: Number,
+    soil_temp: Number,
+    soil_moisture: Number,
     ph_value: Number,
-    water: Number,
-    minerals: Number
+    /*Anbauhöhe über dem Meerspiegel*/
+    height_meter: Number
+
 });
 
 module.exports = mongoose.model('entry', entrySchema);
