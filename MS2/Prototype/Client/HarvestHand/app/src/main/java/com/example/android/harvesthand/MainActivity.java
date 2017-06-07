@@ -1,24 +1,31 @@
 package com.example.android.harvesthand;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.LabeledIntent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +40,7 @@ import java.util.ArrayList;
 
 import static android.R.attr.entries;
 import static android.R.attr.port;
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String URL = "http://192.168.2.102:" + PORT + "/entries"; // muss am jeweiligen rechner angepasst werden
     private SharedPreferences sPref;
     private ProgressBar progressBar;
+    private ListView entryList;
+    private ListAdapter adapter;
+
+    private final String URL_BASE = "http://192.168.2.102:3001/entries/"; // muss am jeweiligen rechner angepasst werden
+    private final String URL_TUTORIAL = "/tutorials/";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,10 +70,19 @@ public class MainActivity extends AppCompatActivity {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             //Liste mit Card zum Anzeigen der Daten
-            recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+            /*recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
-            recyclerView.setHasFixedSize(true);
+            recyclerView.setHasFixedSize(true);*/
+
+            FloatingActionButton fb = (FloatingActionButton) findViewById(R.id.fb_add_new_entry);
+            fb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(MainActivity.this, AddNewEntry.class));
+                }
+            });
+            entryList = (ListView) findViewById(R.id.entry_list);
             progressBar = (ProgressBar) findViewById(R.id.progressBar_main);
             /*
             *Holl user_id aus SharedPreferences
@@ -79,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, getString(R.string.msg_no_internet_connection), Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
     }
 
     //Request all Entries for user
@@ -109,8 +139,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                     //Liste wird mit den Daten gefüllt
-                    RecyclerAdapter adapter = new RecyclerAdapter(entryArrayList);
-                    recyclerView.setAdapter(adapter);
+                    adapter = new ListAdapter(getApplicationContext(), entryArrayList);
+                    //recyclerView.setAdapter(adapter);
+                    //adapter.addAll(entryArrayList);
+                    entryList.setAdapter(adapter);
+                    defineOnItemClickListener();
                 } else {
                     Toast.makeText(MainActivity.this,"No Data found", Toast.LENGTH_LONG).show();
                     return;
@@ -159,6 +192,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
+    }
+
+    private void defineOnItemClickListener (){
+
+        entryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Entry currentEq = adapter.getItem(position);
+
+                Intent intent = new Intent(MainActivity.this, EntryDetails.class);
+
+                /*Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
+                intent.putExtra("URL", URL_BASE + currentEq.getEntryId() + URL_TUTORIAL
+                        + currentEq.getTutorialId());
+                intent.putExtra("ph", currentEq.getEntryPhValue());
+                intent.putExtra("name", currentEq.getEntryName());
+                intent.putExtra("water", currentEq.getEntryWater());
+                //intent.putExtra("minerals", arrayList.get(position).getEntryMinerals());*/
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 }
 

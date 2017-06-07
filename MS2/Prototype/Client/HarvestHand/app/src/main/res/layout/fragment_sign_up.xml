@@ -82,34 +82,6 @@
                 android:text="@string/user" />
         </RadioGroup>
 
-        <RadioGroup
-            android:id="@+id/rg_gender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RadioButton
-                android:id="@+id/rb_male"
-                style="@style/rbSignUpStyle"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="@string/male" />
-
-            <RadioButton
-                android:id="@+id/rb_female"
-                style="@style/rbSignUpStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/female" />
-
-            <RadioButton
-                android:id="@+id/rb_other"
-                style="@style/rbSignUpStyle"
-                android:layout_height="wrap_content"
-                android:text="@string/other" />
-
-        </RadioGroup>
-
         <Button
             android:id="@+id/bt_signup"
             android:layout_width="150dp"

@@ -30,4 +30,21 @@
     <string name="msg_login_successful">Login successful</string>
     <string name="msg_404_error">Error! Resource not found</string>
     <string name="msg_no_internet_connection">No internet connection!</string>
+    <string name="new_entry_hint_name">Name</string>
+    <string name="new_entry_hint_location">Location</string>
+    <string name="new_entry_hint_area">Land area</string>
+    <string name="new_entry_hint_height">Height in Meter</string>
+    <string name="new_entry_hint_airtemp">Air temp</string>
+    <string name="new_entry_hint_ph">PH</string>
+    <string name="label_new_entry">New Entry</string>
+    <string name="delete_menu_item">Delete</string>
+    <string name="done_menu_item">Done</string>
+    <string name="person_menu_item">Person</string>
+    <string name="refresh_menu_item">Refresh</string>
+    <string name="title_activity_entry_details">EntryDetails</string>
+    <string name="show_tutorial">Show Tutorial</string>
+    <string name="text_crop">Crop</string>
+    <string name="text_soil_temp">Soil Temp.</string>
+    <string name="text_soil_moisture">Soil moisture</string>
+    <string name="text_soil">Soil</string>
 </resources>

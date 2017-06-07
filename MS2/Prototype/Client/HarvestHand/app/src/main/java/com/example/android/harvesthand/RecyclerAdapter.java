@@ -26,7 +26,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
 
     @Override
     public EntryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_view, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         EntryViewHolder entryViewHolder = new EntryViewHolder(view);
         return entryViewHolder;
     }
@@ -36,10 +36,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
 
         //Cardview mit Daten füllen
         holder.entryName.setText(arrayList.get(position).getEntryName());
-        holder.entryId.setText(arrayList.get(position).getEntryId());
         holder.entryPhValue.setText(String.valueOf(arrayList.get(position).getEntryPhValue()));
         holder.entryWater.setText(String.valueOf(arrayList.get(position).getEntryWater()));
-        holder.entryMinerals.setText(String.valueOf(arrayList.get(position).getEntryMinerals()));
         holder.clickView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,7 +48,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
                 intent.putExtra("ph", arrayList.get(position).getEntryPhValue());
                 intent.putExtra("name", arrayList.get(position).getEntryName());
                 intent.putExtra("water", arrayList.get(position).getEntryWater());
-                intent.putExtra("minerals", arrayList.get(position).getEntryMinerals());
+                //intent.putExtra("minerals", arrayList.get(position).getEntryMinerals());
                 holder.clickView.getContext().startActivity(intent);
 
             }
@@ -70,10 +68,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.EntryV
             super(itemView);
             clickView = itemView;
             entryName = (TextView) itemView.findViewById(R.id.name);
-            entryId = (TextView) itemView.findViewById(R.id.entry_id);
-            entryPhValue = (TextView) itemView.findViewById(R.id.entry_ph);
-            entryWater = (TextView) itemView.findViewById(R.id.entry_water);
-            entryMinerals = (TextView) itemView.findViewById(R.id.entry_minerals);
+            entryPhValue = (TextView) itemView.findViewById(R.id.surface);
+            entryWater = (TextView) itemView.findViewById(R.id.location);
         }
     }
 

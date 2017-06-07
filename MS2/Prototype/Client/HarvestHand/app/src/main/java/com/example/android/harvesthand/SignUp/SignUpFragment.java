@@ -46,7 +46,6 @@ public class SignUpFragment extends Fragment {
     private EditText inputName;
     private EditText inputEmail;
     private EditText inputPass;
-    private RadioGroup genderRadioGroup;
     private RadioGroup usertypeRadioGroup;
     private String mName;
     private String mEmail;
@@ -73,7 +72,6 @@ public class SignUpFragment extends Fragment {
         inputEmail = (EditText) view.findViewById(R.id.signup_input_email);
         inputPass = (EditText) view.findViewById(R.id.signup_input_pass);
 
-        genderRadioGroup = (RadioGroup) view.findViewById(R.id.rg_gender);
         usertypeRadioGroup = (RadioGroup) view.findViewById(R.id.rg_usertype);
 
         progressBar = (ProgressBar) getActivity().findViewById(R.id.signup_progressbar);
@@ -91,25 +89,6 @@ public class SignUpFragment extends Fragment {
                     sendSignUpRequest();
                 }
 
-            }
-        });
-
-        genderRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int id) {
-                switch (id) {
-                    case R.id.rb_male:
-                        mGender = getString(R.string.male);
-                        break;
-                    case R.id.rb_female:
-                        mGender = getString(R.string.female);
-                        break;
-                    case R.id.rb_other:
-                        mGender = getString(R.string.other);
-                        break;
-                    default:
-                        break;
-                }
             }
         });
 
@@ -181,7 +160,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private boolean checkRadioButtons() {
-        if (genderRadioGroup.getCheckedRadioButtonId() == -1 || usertypeRadioGroup.getCheckedRadioButtonId() == -1) {
+        if (usertypeRadioGroup.getCheckedRadioButtonId() == -1) {
             Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.msg_choice_typeandgender), Snackbar.LENGTH_LONG);
             View snackbarView = snackbar.getView();
             TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
