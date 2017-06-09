@@ -105,7 +105,7 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/details_show_tutorial"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -135,88 +135,88 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_marginRight="8dp"
                     android:layout_weight="1"
-                    android:layout_marginRight="8dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/details_text_crop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_crop"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/text_crop" />
 
                     <TextView
                         android:id="@+id/details_text_soil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_soil"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/text_soil" />
 
                     <TextView
                         android:id="@+id/details_text_soil_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_soil_temp"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginTop="7dp"/>
+                        android:layout_marginTop="7dp"
+                        android:text="@string/text_soil_temp" />
 
                     <TextView
                         android:id="@+id/details_text_soil_moisture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_soil_moisture"
                         android:layout_marginBottom="16dp"
-                        android:layout_marginTop="10dp"/>
+                        android:layout_marginTop="10dp"
+                        android:text="@string/text_soil_moisture" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/details_crop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Coffee"
                         android:layout_marginBottom="16dp"
-                        android:textColor="@android:color/black"/>
+                        android:text="Coffee"
+                        android:textColor="@android:color/black" />
 
                     <TextView
                         android:id="@+id/details_soil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sand"
                         android:layout_marginBottom="16dp"
-                        android:textColor="@android:color/black"/>
+                        android:text="Sand"
+                        android:textColor="@android:color/black" />
 
                     <TextView
                         android:id="@+id/details_soil_temp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:text="22"
-                        android:gravity="center"
                         android:background="@drawable/circle"
-                        android:textColor="@android:color/white"/>
+                        android:gravity="center"
+                        android:text="22"
+                        android:textColor="@android:color/white" />
 
                     <TextView
                         android:id="@+id/details_soil_moisture"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:text="43%"
-                        android:gravity="center"
                         android:background="@drawable/circlebad"
-                        android:textColor="@android:color/white"/>
+                        android:gravity="center"
+                        android:text="43%"
+                        android:textColor="@android:color/white" />
 
                 </LinearLayout>
 

@@ -25,7 +25,7 @@
         </activity>
         <activity
             android:name=".EntryTutorialActivity"
-            android:label="@string/title_activity_entry_tutorial"
+            android:label="@string/entry_tutorial_activity_label"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
 

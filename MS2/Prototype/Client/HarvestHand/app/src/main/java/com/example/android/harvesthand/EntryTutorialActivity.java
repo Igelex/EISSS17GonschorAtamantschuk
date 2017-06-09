@@ -7,8 +7,11 @@ import android.graphics.drawable.Icon;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -25,6 +28,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 public class EntryTutorialActivity extends AppCompatActivity {
 
     private ImageView phImg, waterImg, mineralsImg;
@@ -32,6 +37,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
     private String tutorialURL;
     private int ph, water, minerals, tutorial_ph, tutorial_water, tutorial_minerals;
     private RelativeLayout view;
+    private TextToSpeech speaker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
         if (networkInfo != null && networkInfo.isConnected()) {
 
-            Intent intent = getIntent();
+           /* Intent intent = getIntent();
             if (intent.hasExtra("URL")) {
                 tutorialURL = intent.getStringExtra("URL");
                 Toast.makeText(this, "URL : " + tutorialURL, Toast.LENGTH_LONG).show();
@@ -67,18 +73,24 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
                 setTitle(intent.getStringExtra("name"));
             }
-            view = (RelativeLayout) findViewById(R.id.entry_tutorial_root);
-            phImg = (ImageView) findViewById(R.id.ph_emotion);
-            waterImg = (ImageView) findViewById(R.id.water_emotion);
-            mineralsImg = (ImageView) findViewById(R.id.minerals_emotion);
-            progressBar = (ProgressBar) findViewById(R.id.pg);
-            getTutorial(tutorialURL);
-        }else {
+            view = (RelativeLayout) findViewById(R.id.entry_tutorial_root);*/
+
+            //getTutorial(tutorialURL);
+        } else {
             Toast.makeText(EntryTutorialActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
         }
 
-    }
+        speaker = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    speaker.setLanguage(Locale.ENGLISH);
+                }
+            }
+        });
 
+    }
+/*
     //Request Tutorial
     public void getTutorial(String url) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
@@ -191,6 +203,40 @@ public class EntryTutorialActivity extends AppCompatActivity {
             default:
                 mineralsImg.setImageResource(R.drawable.emoticon_neutral);
         }
+
+    }*/
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.tutorial_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_speak:
+                speaker.speak("I can speak to you", TextToSpeech.QUEUE_FLUSH, null);
+                Toast.makeText(this, "He speak to you", Toast.LENGTH_LONG).show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onPause(){
+        if(speaker !=null){
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onPause();
     }
 
 }

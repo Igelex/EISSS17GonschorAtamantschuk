@@ -47,4 +47,6 @@
     <string name="text_soil_temp">Soil Temp.</string>
     <string name="text_soil_moisture">Soil moisture</string>
     <string name="text_soil">Soil</string>
+    <string name="menu_item_speech">Speech</string>
+    <string name="entry_tutorial_activity_label">Tutorial</string>
 </resources>
