@@ -38,7 +38,7 @@ import static android.R.id.input;
  * A simple {@link Fragment} subclass.
  */
 public class SignUpFragment extends Fragment {
-    private String url = "http://192.168.2.102:3001/signup";
+    private String url = "http://192.168.0.15:3001/signup";
     private final JSONObject jsonBody = null;
 
     private final static int PROFI = 1;

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private static final int PORT = 3001;
     private static final String IP_ADRESS = "";
-    private static final String URL = "http://192.168.2.102:" + PORT + "/entries"; // muss am jeweiligen rechner angepasst werden
+    private static final String URL = "http://192.168.0.15:" + PORT + "/entries"; // muss am jeweiligen rechner angepasst werden
     private SharedPreferences sPref;
     private ProgressBar progressBar;
     private ListView entryList;
@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Entry currentEq = adapter.getItem(position);
 
-                Intent intent = new Intent(MainActivity.this, EntryDetails.class);
+                Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
 
                 /*Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
                 intent.putExtra("URL", URL_BASE + currentEq.getEntryId() + URL_TUTORIAL
