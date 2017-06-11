@@ -12,9 +12,22 @@ var normsSchema = mongoose.Schema({
     family: String,
     air_temp: {
         max: Number,
-        min:Number
+        min: Number
     },
-    soil: String,
+    air_moisture: {
+        max: Number,
+        min: Number
+    },
+    /*Wasserbedarf l/m^2/Woche*/
+    water_requirements: Number,
+    fertilizer: {
+        name: String,
+        id: Number
+    },
+    soil: {
+        name: String,
+        id: Number
+    },
     soil_temp: {
         max: Number,
         min:Number
