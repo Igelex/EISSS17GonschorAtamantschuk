@@ -1,7 +1,10 @@
+/*
 
 public void requestTutorialFromServer(){}
 
-        /*Setze Backgroundfarbe für alle Icons*/
+        */
+/*Setze Backgroundfarbe für alle Icons*//*
+
         for(eigenschaft in tutorial){
             switch(deviation){
             case eigenschaft.deviation<=10%:
@@ -19,26 +22,41 @@ public void requestTutorialFromServer(){}
             }
 
             if(eigenschaft.status = NORM){
-            /*Zeige eine standarisierte Anbauempfehlung zur dieser Eigenschaft*/
+            */
+/*Zeige eine standarisierte Anbauempfehlung zur dieser Eigenschaft*//*
+
             bilder = readFiles(bilder.norm);
-            /*Erstelle empfehlung aus Bildern, Animationen etc.*/
+            */
+/*Erstelle empfehlung aus Bildern, Animationen etc.*//*
+
             empfehlung.setImageResource(bilder);
         } else if (eigenschaft.status = LESS)
-            /*Zeige eine  Anbauempfehlung zur verbesserung der Eigenschaft*/
+            */
+/*Zeige eine  Anbauempfehlung zur verbesserung der Eigenschaft*//*
+
             bilder = readFiles(bilder.less);
-            /*Erstelle empfehlung aus Bildern, Animationen etc.*/
+            */
+/*Erstelle empfehlung aus Bildern, Animationen etc.*//*
+
             empfehlung.setImageResource(bilder);
         } else (eigenschaft.status = GRAETER){
-            /*Zeige eine  Anbauempfehlung zur verbesserung der Eigenschaft*/
+            */
+/*Zeige eine  Anbauempfehlung zur verbesserung der Eigenschaft*//*
+
             bilder = readFiles(bilder.graeter);
-            /*Erstelle empfehlung aus Bildern, Animationen etc.*/
+            */
+/*Erstelle empfehlung aus Bildern, Animationen etc.*//*
+
              empfehlung.setImageResource(bilder);
         }
 
-        /*Vertone Textinhalte*/
+        */
+/*Vertone Textinhalte*//*
+
         uiElement.setOnKlickListener(){
             speaker.speak(uiElement.getText());
         }
 
 
+*/
 

@@ -4,13 +4,38 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.example.android.harvesthand.SignUp.SignInFragment"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    tools:context="com.example.android.harvesthand.SignUp.SignInFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="16dp">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="With email"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="With number"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/signup_inputlayout_name"
@@ -88,10 +113,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/signup"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="16dp"/>
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
