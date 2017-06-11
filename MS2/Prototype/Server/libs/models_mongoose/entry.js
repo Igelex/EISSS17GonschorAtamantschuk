@@ -23,7 +23,7 @@ var entrySchema = mongoose.Schema({
 
     location: String,
     /*Fläche in ha*/
-    surface: Number,
+    area: Number,
     /*Art des Bodens*/
     soil: Number,
     air_temp: Number,
