@@ -8,7 +8,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +16,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -32,13 +29,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.R.id.input;
+import static com.example.android.harvesthand.Contracts.*;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SignUpFragment extends Fragment {
-    private String url = "http://192.168.0.15:3001/signup";
+    private static String URL = BASE_URL + URL_BASE_SIGNUP ;
     private final JSONObject jsonBody = null;
 
     private final static int PROFI = 1;
@@ -51,7 +49,6 @@ public class SignUpFragment extends Fragment {
     private String mEmail;
     private String mPass;
     private int mUserType;
-    private String mGender;
     private Button mSignUpButton;
     private TextInputLayout mEmailTextInput;
     private TextInputLayout mNameTextInput;
@@ -179,11 +176,10 @@ public class SignUpFragment extends Fragment {
         params.put("email", mEmail);
         params.put("pass", mPass);
         params.put("user_type", Integer.toString(mUserType));
-        params.put("gender", mGender);
 
         Log.i("Params: ", params.toString());
 
-        JsonObjectRequest request = new JsonObjectRequest(url, new JSONObject(params),
+        JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

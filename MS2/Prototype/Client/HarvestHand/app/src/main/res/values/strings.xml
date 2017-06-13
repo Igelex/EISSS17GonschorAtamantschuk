@@ -49,4 +49,15 @@
     <string name="text_soil">Soil</string>
     <string name="menu_item_speech">Speech</string>
     <string name="entry_tutorial_activity_label">Tutorial</string>
+    <string name="dialog_enter_ip_address">Enter IP Address</string>
+    <string name="input_ip_address">IP Address</string>
+    <string name="dialog_button_save">save</string>
+    <string name="dialog_ip_saved">IP saved</string>
+    <string name="dialog_please_enter_ip">Please enter IP</string>
+    <string name="dialog_ip_discard">discard</string>
+    <string name="dialog_ip_not_changed">IP not changed</string>
+    <string name="item_menu_edit">Edit</string>
+    <string name="delete_dialog_msg">Delete this Entry?</string>
+    <string name="button_delete">DELETE</string>
+    <string name="dialog_button_cancel">CANCEL</string>
 </resources>

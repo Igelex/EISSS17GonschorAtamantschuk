@@ -35,6 +35,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.android.harvesthand.Contracts.*;
+
 import static android.R.id.input;
 
 /**
@@ -42,8 +44,7 @@ import static android.R.id.input;
  */
 public class SignInFragment extends Fragment {
 
-    private String url = "http://192.168.0.15:3001/signin";
-    private Button signinButton;
+    private static String URL;
     private EditText inputEmail;
     private EditText inputPass;
     private String mEmail;
@@ -67,7 +68,7 @@ public class SignInFragment extends Fragment {
 
         progressBar = (ProgressBar) getActivity().findViewById(R.id.signup_progressbar);
 
-        signinButton = (Button) view.findViewById(R.id.signin_button);
+        Button signinButton = (Button) view.findViewById(R.id.signin_button);
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,10 +87,11 @@ public class SignInFragment extends Fragment {
         Map<String, String> params = new HashMap<>();
         params.put("email", mEmail);
         params.put("pass", mPass);
-
+        URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;
         Log.i("Params: ", params.toString());
+        Log.i("URL: ", URL);
 
-        JsonObjectRequest request = new JsonObjectRequest(url, new JSONObject(params),
+        JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

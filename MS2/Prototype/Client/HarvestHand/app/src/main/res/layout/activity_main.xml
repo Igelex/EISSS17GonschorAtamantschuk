@@ -2,17 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/entries_linearlayout"
+    android:id="@+id/entries_relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.harvesthand.MainActivity">
 
-    <ListView
-        android:id="@+id/entry_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ListView>
 
     <ProgressBar
         android:id="@+id/progressBar_main"
@@ -21,6 +15,13 @@
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="invisible"/>
+
+    <ListView
+        android:id="@+id/entry_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fb_add_new_entry"
@@ -32,6 +33,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"/>
+
 
 
 </RelativeLayout>
