@@ -97,9 +97,11 @@ public class SignInFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         progressBar.setVisibility(View.INVISIBLE);
                         try {
-                            String user_id = response.getString("_id");
-                            Log.i("User_id: ", user_id);
-                            savePreferences(user_id);
+                            String current_user_id = response.getString("_id");
+                            String current_user_type = response.getString("user_type");
+                            Log.i("User_id: ", current_user_id);
+                            Log.i("User_Type: ", current_user_type);
+                            savePreferences(current_user_id);
                             Snackbar snackbarIE = Snackbar.make(getView(), getString(R.string.msg_login_successful), Snackbar.LENGTH_LONG);
                             View sbie = snackbarIE.getView();
                             TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);

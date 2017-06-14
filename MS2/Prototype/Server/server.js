@@ -67,7 +67,7 @@ app.post('/signup', controller_user.registerUser);
 app.post('/signin',
     passport.authenticate('local'),
     function (req, res) {
-        res.status(200).send({_id: req.user._id});
+        res.status(200).send({_id: req.user._id, user_type: req.user.user_type});
     });
 
 app.get('/users/:id', controller_user.getUserById);

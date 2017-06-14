@@ -77,12 +77,12 @@ node_modules
 # Mongodb Directorys
 MS1/Prototype/Server/db
 MS2/Prototype/Server/db
-MS3/Prototype/Server/db
+MS3/HarvestHand/Server/db
 
 #idea
 MS1/Prototype/Server/.idea
 MS2/Prototype/Server/.idea
-MS3/Prototype/Server/.idea
+MS3/HarvestHand/Server/.idea
 MS1/Prototype/.idea
 MS2/Prototype/.idea
-MS3/Prototype/.idea
+MS3/HarvestHand/.idea
