@@ -86,4 +86,4 @@ public class ShowLocationActivity extends Activity implements LocationListener {
                 Toast.LENGTH_SHORT).show();
     }
 }
-*/
+
