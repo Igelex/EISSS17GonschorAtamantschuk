@@ -81,11 +81,12 @@ public class MainActivity extends AppCompatActivity {
             */
             SharedPreferences sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             /*
-            * Bilde Uri für Request
+            * Bilde Uri für Entries - Request
             */
             Uri baseUri = Uri.parse(URL);
             Uri.Builder uriBuilder = baseUri.buildUpon();
             uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, sPref.getString(USER_SP_ID, null));
+            uriBuilder.appendQueryParameter(URL_PARAMS_COLLAB_ID, sPref.getString(USER_SP_ID, null));
             CURRENT_URL = uriBuilder.toString();
             Log.i("URI: ", CURRENT_URL);
             //Helper methode
