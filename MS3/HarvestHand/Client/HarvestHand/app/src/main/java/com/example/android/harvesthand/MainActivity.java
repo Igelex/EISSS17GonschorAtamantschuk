@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView entryList;
     private ListAdapter adapter;
     private final String URL_TUTORIAL = "/tutorials/";
+    SharedPreferences sPref;
 
 
     @Override
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             /*
             *Holl user_id aus SharedPreferences
             */
-            SharedPreferences sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
+            sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             /*
             * Bilde Uri für Entries - Request
             */
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("URI: ", CURRENT_URL);
             //Helper methode
             getEntries(CURRENT_URL);
+
         } else {
             Toast.makeText(this, getString(R.string.msg_no_internet_connection), Toast.LENGTH_LONG).show();
         }
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_refresh:
                 progressBar.setVisibility(View.VISIBLE);
-                if(adapter != null){
+                if (adapter != null) {
                     adapter.clear();
                 }
                 getEntries(CURRENT_URL);
@@ -143,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                             int artId = jsonObject.getInt("art_id");
 
                             //Die Daten werden der ArrayList hinzugefügt
-                            entryArrayList.add(new Entry(entryID, entryName,artId,location,area));
+                            entryArrayList.add(new Entry(entryID, entryName, artId, location, area));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -183,13 +185,6 @@ public class MainActivity extends AppCompatActivity {
                             snackBarText404.setTextColor(Color.rgb(253, 86, 86));
                             snackbar404.show();
                             break;
-                        case 204:
-                            Snackbar snackbar = Snackbar.make(container, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
-                            View text = snackbar.getView();
-                            TextView snackBarText2 = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText2.setTextColor(Color.rgb(253, 86, 86));
-                            snackbar.show();
-                            break;
                     }
                 } else {
                     Snackbar snackbar = Snackbar.make(container, getString(R.string.connection_err), Snackbar.LENGTH_LONG);
@@ -211,18 +206,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Entry currentEq = adapter.getItem(position);
-
-                Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
-
-                /*Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
-                intent.putExtra("URL", URL_BASE + currentEq.getEntryId() + URL_TUTORIAL
-                        + currentEq.getTutorialId());
-                intent.putExtra("ph", currentEq.getEntryPhValue());
-                intent.putExtra("name", currentEq.getEntryName());
-                intent.putExtra("water", currentEq.getEntryWater());
-                //intent.putExtra("minerals", arrayList.get(position).getEntryMinerals());*/
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
+                if (sPref.getInt(USER_SP_TYPE, -1) == 1) {
+                    startActivity(new Intent(MainActivity.this, EntryTutorialActivity.class));
+                } else {
+                    Intent intent = new Intent(MainActivity.this, EntryDetails.class);
+                    intent.putExtra("URL", URL + currentEq.getEntryId() + URL_BASE_TUTORIAL
+                            + currentEq.getTutorialId());
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
                 }
             }
         });

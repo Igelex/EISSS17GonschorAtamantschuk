@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -66,9 +67,9 @@ public class ListAdapter extends ArrayAdapter<Entry> {
 
         entryName.setText(currentEntry.getEntryName());
         entryLocation.setText(currentEntry.getLocation());
-        entryArea.setText("" + currentEntry.getArea());
+        entryArea.setText(String.valueOf(currentEntry.getArea()));
 
-        if (userType == 0) {
+        if (userType == 1) {
             speaker = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
