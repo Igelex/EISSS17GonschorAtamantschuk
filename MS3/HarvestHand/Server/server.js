@@ -31,9 +31,6 @@ db.once('open', function () {
 
 require('./libs/javascript/passport');
 
-app.get("/location",function (res, req) {
-});
-
 app.get("/wetter", wetter.wetter);
 
 //all environments
