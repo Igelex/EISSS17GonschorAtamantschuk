@@ -15,7 +15,7 @@ public class Contracts {
     public static String URL_BASE_USERS = "users/";
     public static String URL_BASE_SIGNIN = "signin";
     public static String URL_BASE_SIGNUP = "signup";
-    public static String URL_BASE_TUTORIAL = "tutorial/";
+    public static String URL_BASE_TUTORIAL = "/tutorial/";
 
     public static String URL_PARAMS_OWNER_ID = "owner_id";
     public static String URL_PARAMS_COLLAB_ID = "collab_id";
