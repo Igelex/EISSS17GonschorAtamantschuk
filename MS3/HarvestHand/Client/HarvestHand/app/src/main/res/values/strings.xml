@@ -67,4 +67,6 @@
     <string name="item_speaktext_area">Area:</string>
     <string name="titel_activity_user_profile">Profile</string>
     <string name="logout">logout</string>
+    <string name="msg_unsaved_changes_dialog">Discard your changes and quit editing?</string>
+    <string name="keep_editing">Keep editing</string>
 </resources>

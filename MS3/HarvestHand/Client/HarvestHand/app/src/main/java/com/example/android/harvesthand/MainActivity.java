@@ -79,18 +79,15 @@ public class MainActivity extends AppCompatActivity {
             /*
             *Holl user_id aus SharedPreferences
             */
-            SharedPreferences sPref = getSharedPreferences("User_id Pref", MODE_PRIVATE);
+            SharedPreferences sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             /*
             * Bilde Uri für Request
             */
             Uri baseUri = Uri.parse(URL);
             Uri.Builder uriBuilder = baseUri.buildUpon();
-            uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, sPref.getString("user_id", ""));
+            uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, sPref.getString(USER_SP_ID, null));
             CURRENT_URL = uriBuilder.toString();
             Log.i("URI: ", CURRENT_URL);
-
-
-
             //Helper methode
             getEntries(CURRENT_URL);
         } else {
@@ -116,12 +113,10 @@ public class MainActivity extends AppCompatActivity {
                 if(adapter != null){
                     adapter.clear();
                 }
-
                 getEntries(CURRENT_URL);
                 break;
             case R.id.action_person:
                 startActivity(new Intent(this, UserProfile.class));
-                Toast.makeText(this, "Person", Toast.LENGTH_LONG).show();
                 break;
         }
         return true;

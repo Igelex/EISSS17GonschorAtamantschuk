@@ -7,8 +7,10 @@ import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.os.Build.VERSION_CODES.M;
+import static com.example.android.harvesthand.Contracts.*;
 
 
 /**
@@ -32,6 +34,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
     private Context mContext;
     private ImageButton earButton, menuButton;
     private TextToSpeech speaker;
+    private int userType;
 
     public ListAdapter(@NonNull Context context, @NonNull ArrayList entries) {
         super(context, 0, entries);
@@ -49,8 +52,10 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                     parent, false);
         }
 
-        SharedPreferences sPref = mContext.getSharedPreferences("User_id Pref", MODE_PRIVATE);
-        int userType = sPref.getInt("user_type", -1);
+        SharedPreferences sPref = mContext.getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
+        if(sPref != null) {
+            userType = sPref.getInt(USER_SP_TYPE, -1);
+        }
 
         Entry currentEntry = getItem(position);
 
@@ -63,36 +68,31 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         entryLocation.setText(currentEntry.getLocation());
         entryArea.setText("" + currentEntry.getArea());
 
-        speaker = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    speaker.setLanguage(Locale.getDefault());
-                    Log.i("local: ", Locale.getDefault().toString());
+        if (userType == 0) {
+            speaker = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    if (status != TextToSpeech.ERROR) {
+                        speaker.setLanguage(Locale.getDefault());
+                        Log.i("local: ", Locale.getDefault().toString());
+                    }
                 }
-            }
-        });
+            });
+            earButton = listView.findViewById(R.id.item_speak_icon);
+            earButton.setVisibility(View.VISIBLE);
+            earButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    speak(mContext.getString(R.string.item_speaktext_name) +entryName.getText().toString()
+                            + mContext.getString(R.string.item_speaktext_coma) +
+                            mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
+                            + mContext.getString(R.string.item_speaktext_coma)+
+                            mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString());
 
-        earButton = listView.findViewById(R.id.item_speak_icon);
-        earButton.setVisibility(View.VISIBLE);
-        earButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                speak(mContext.getString(R.string.item_speaktext_name) +entryName.getText().toString()
-                        + mContext.getString(R.string.item_speaktext_coma) +
-                        mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
-                        + mContext.getString(R.string.item_speaktext_coma)+
-                        mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString());
+                    Toast.makeText(mContext,"ID: " + entryId, Toast.LENGTH_LONG).show();
 
-                Toast.makeText(mContext,"ID: " + entryId, Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-        /*if (userType == 0) {
-
-
-
+                }
+            });
         } else {
             menuButton = listView.findViewById(R.id.item_menu_button);
             menuButton.setVisibility(View.VISIBLE);
@@ -123,12 +123,11 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                 }
             });
         }
-*/
         return listView;
     }
 
     private void speak(String textToSpeech){
-        speaker.speak(/*"ID: " + entryId + ", " + */textToSpeech, TextToSpeech.QUEUE_FLUSH,null);
+        speaker.speak(textToSpeech, TextToSpeech.QUEUE_FLUSH,null);
     }
 
     private void showDeleteConfirmationDialog() {

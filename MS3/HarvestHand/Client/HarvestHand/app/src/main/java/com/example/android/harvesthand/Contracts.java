@@ -19,6 +19,13 @@ public class Contracts {
 
     public static String URL_PARAMS_OWNER_ID = "owner_id";
 
+    public static String USER_SHARED_PREFS = "user";
+    public static String USER_SP_ID = "user_id";
+    public static String USER_SP_TYPE = "user_type";
+
+    public static String IP_ADDRESS_SHARED_PREFS = "ipaddress";
+    public static String IP_SP_IP = "ip";
+
 
 
     private Contracts() {

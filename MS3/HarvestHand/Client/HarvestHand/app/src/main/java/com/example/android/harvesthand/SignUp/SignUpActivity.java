@@ -21,10 +21,14 @@ import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
 
 import static com.example.android.harvesthand.Contracts.BASE_URL;
+import static com.example.android.harvesthand.Contracts.IP_ADDRESS_SHARED_PREFS;
+import static com.example.android.harvesthand.Contracts.IP_SP_IP;
 import static com.example.android.harvesthand.Contracts.URL_IP;
 import static com.example.android.harvesthand.Contracts.URL_IP_BASE;
 import static com.example.android.harvesthand.Contracts.URL_PORT;
 import static com.example.android.harvesthand.Contracts.URL_PROTOCOL;
+import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
+import static com.example.android.harvesthand.Contracts.USER_SP_ID;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -62,15 +66,15 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             });
 
-            sPrefIp = getSharedPreferences("IP_Address", Context.MODE_PRIVATE);
-            sPrefUser = getSharedPreferences("User_id Pref", MODE_PRIVATE);
+            sPrefIp = getSharedPreferences(IP_ADDRESS_SHARED_PREFS, Context.MODE_PRIVATE);
+            sPrefUser = getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
 
-            if(!(sPrefIp.getString("ip_address", null) == null)){
-                URL_IP = sPrefIp.getString("ip_address", null);
+            if(!(sPrefIp.getString(IP_SP_IP, null) == null)){
+                URL_IP = sPrefIp.getString(IP_SP_IP, null);
                 BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
-                Toast.makeText(SignUpActivity.this, sPrefIp.getString("ip_address", null),
+                Toast.makeText(SignUpActivity.this, sPrefIp.getString(IP_SP_IP, null),
                         Toast.LENGTH_LONG).show();
-                if(!(sPrefUser.getString("user_id", null) == null)) {
+                if(!(sPrefUser.getString(USER_SP_ID, null) == null)) {
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     finish();
                 }
@@ -89,10 +93,10 @@ public class SignUpActivity extends AppCompatActivity {
         dialogView = getLayoutInflater().inflate(R.layout.ipaddress_custom_dialog, null);
         final EditText mIp = (EditText) dialogView.findViewById(R.id.input_enter_ip);
 
-        if(sPrefIp.getString("ip_address", null) == null){
+        if(sPrefIp.getString(IP_SP_IP, null) == null){
             mIp.setText(URL_IP_BASE);
         }else {
-            mIp.setText(sPrefIp.getString("ip_address", null));
+            mIp.setText(sPrefIp.getString(IP_SP_IP, null));
         }
 
         mBuilder.setView(dialogView);
@@ -104,11 +108,11 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if(!mIp.getText().toString().trim().isEmpty()){
                     savePreferences(mIp.getText().toString().trim());
-                    URL_IP = sPrefIp.getString("ip_address", null);
+                    URL_IP = sPrefIp.getString(IP_SP_IP, null);
                     BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
                     Toast.makeText(SignUpActivity.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
-                    if(!(sPrefUser.getString("user_id", null) == null)) {
+                    if(!(sPrefUser.getString(USER_SP_ID, null) == null)) {
                         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                         finish();
                     }
@@ -134,7 +138,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void savePreferences(String ip) {
         SharedPreferences.Editor editor = sPrefIp.edit();
-        editor.putString("ip_address", ip);
+        editor.putString(IP_SP_IP, ip);
         editor.apply();
         Log.i("Save IP Address: ", ip);
     }

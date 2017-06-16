@@ -34,6 +34,9 @@ import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNIN;
 import static com.example.android.harvesthand.Contracts.URL_IP;
 import static com.example.android.harvesthand.Contracts.URL_PORT;
 import static com.example.android.harvesthand.Contracts.URL_PROTOCOL;
+import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
+import static com.example.android.harvesthand.Contracts.USER_SP_ID;
+import static com.example.android.harvesthand.Contracts.USER_SP_TYPE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -168,10 +171,10 @@ public class SignInFragment extends Fragment {
     }
 
     private void savePreferences(String id, int type) {
-        sPref = getActivity().getSharedPreferences("User_id Pref", Context.MODE_PRIVATE);
+        sPref = getActivity().getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
-        editor.putString("user_id", id);
-        editor.putInt("user_type", type);
+        editor.putString(USER_SP_ID, id);
+        editor.putInt(USER_SP_TYPE, type);
         editor.apply();
         Log.i("Save User_id: ", id);
         Log.i("Save User_type: ", ""+type);
