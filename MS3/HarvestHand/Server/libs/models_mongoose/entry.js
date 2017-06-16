@@ -15,7 +15,7 @@ var entrySchema = mongoose.Schema({
     /*ID des Erstellers*/
     owner_id: {type: String, required: true},
     /*Colaborators, die den Zugriff auf den Eintrag haben*/
-    collaborators:[String],
+    collaborators:{type:Array, default:[]},
 
     /*
     * Properties

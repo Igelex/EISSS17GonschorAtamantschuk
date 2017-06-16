@@ -3,10 +3,10 @@
  */
 
 var request = require('request');
-var Key = '28182cd556dbb993';
+var key = '28182cd556dbb993';
 
-var requestUrl = 'http://api.wunderground.com/api/Your_Key/geolookup/q/autoip.json'
-var requestUrl = 'http://api.wunderground.com/api/28182cd556dbb993/conditions/q/CA/San_Francisco.json'
+var requestUrl = 'http://api.wunderground.com/api/' + key + '/geolookup/q/autoip.json'
+var requestUrl = 'http://api.wunderground.com/api/' + key + '/conditions/q/CA/San_Francisco.json'
 module.exports.wetter = function (req, res) {
     request(requestUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {

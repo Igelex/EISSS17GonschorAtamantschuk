@@ -38,21 +38,27 @@ module.exports.addEntry = function (req, res) {
 //Alle Entries anzeigen
 module.exports.getEntries = function (req, res) {
     console.log("Get Entries: " + req.query.owner_id);
-    Entry.find({"owner_id": req.query.owner_id}, {"entry_name": true, "art_id":true, "area":true, "location": true})
+    Entry.find({
+        $or:[{"owner_id": req.query.owner_id},{"collaborators": req.query.collab_id}]}/*,
+        {
+        "entry_name": true,
+        "art_id": true, "area": true,
+        "location": true
+        }*/)
         .exec(function (err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500).type('text').send({msg: 'DB Error', res: false});
-        } else {
-            if (result != null) {
-                console.log("Found Entries: " + result);
-                res.status(200).type('application/json').send(result);
+            if (err) {
+                console.log(err);
+                res.status(500).type('text').send({msg: 'DB Error', res: false});
+            } else {
+                if (result != null) {
+                    console.log("Found Entries: " + result);
+                    res.status(200).type('application/json').send(result);
+                }
+                else {
+                    res.status(204).type('application/json').send({msg: 'No Entries found', res: false});
+                }
             }
-            else {
-                res.status(204).type('application/json').send({msg: 'No Entries found', res: false});
-            }
-        }
-    })
+        })
 };
 
 //Bestimmten Entry anzeigen

@@ -16,7 +16,6 @@ var express = require('express'),
     controller_user = require('./libs/javascript/controller_user'),
     routes = require('./libs/routes/index'),
     wetter = require('./libs/javascript/weather'),
-    location = require('./libs/javascript/location'),
     port = 3001;
 
 /*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial

@@ -25,7 +25,8 @@ module.exports.registerUser = function (req, res) {
                 name: req.body.name,
                 email: req.body.email,
                 pass: req.body.pass,
-                user_type: req.body.user_type
+                user_type: req.body.user_type,
+                phone_number: req.body.phone_number
             });
 
             //User Speichern

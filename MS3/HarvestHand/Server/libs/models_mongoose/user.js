@@ -10,7 +10,7 @@ var userSchema = mongoose.Schema({
     email: {type: String, unique: true},
     pass: {type: String, required: false},
     user_type: {type: Number, required: true}, /*TYPE_PROFI = 0, TYPE_USER = 1*/
-    phone_number:{type: Number, unique: true }
+    phone_number: {type: Number, unique: true}
 });
 
 module.exports = mongoose.model('user', userSchema);
