@@ -39,12 +39,12 @@ module.exports.addEntry = function (req, res) {
 module.exports.getEntries = function (req, res) {
     console.log("Get Entries: " + req.query.owner_id);
     Entry.find({
-        $or:[{"owner_id": req.query.owner_id},{"collaborators": req.query.collab_id}]}/*,
+        $or:[{"owner_id": req.query.owner_id},{"collaborators": req.query.collab_id}]},
         {
         "entry_name": true,
         "art_id": true, "area": true,
         "location": true
-        }*/)
+        })
         .exec(function (err, result) {
             if (err) {
                 console.log(err);

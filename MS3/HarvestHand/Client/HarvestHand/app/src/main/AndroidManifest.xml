@@ -62,6 +62,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.harvesthand.MainActivity" />
         </activity>
+        <activity android:name=".UserProfile"
+            android:label="@string/titel_activity_user_profile"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.harvesthand.MainActivity" />
+
+        </activity>
     </application>
 
 </manifest>

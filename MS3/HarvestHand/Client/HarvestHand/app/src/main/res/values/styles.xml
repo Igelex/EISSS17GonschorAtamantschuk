@@ -65,4 +65,10 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
+    <!--Style for all Buttons-->
+    <style name="button">
+        <item name="android:backgroundTint">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
 </resources>

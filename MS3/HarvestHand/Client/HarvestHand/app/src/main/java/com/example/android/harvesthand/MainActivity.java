@@ -120,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 getEntries(CURRENT_URL);
                 break;
             case R.id.action_person:
+                startActivity(new Intent(this, UserProfile.class));
                 Toast.makeText(this, "Person", Toast.LENGTH_LONG).show();
                 break;
         }

@@ -65,4 +65,6 @@
     <string name="item_speaktext_coma">,</string>
     <string name="item_speaktext_location">Location:</string>
     <string name="item_speaktext_area">Area:</string>
+    <string name="titel_activity_user_profile">Profile</string>
+    <string name="logout">logout</string>
 </resources>
