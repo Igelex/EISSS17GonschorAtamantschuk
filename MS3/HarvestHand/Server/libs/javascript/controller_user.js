@@ -57,8 +57,8 @@ module.exports.getUserById = function (req, res) {
                 res.status(200).type('application/json').send(result);
             }
             else {
-                console.log('In get User by , result 0: ' + result);
-                res.status(204).type('application/json').send({msg: 'No User found', res: false});
+                console.log('In get User by , result: ' + result);
+                res.status(204).type('application/json').send();
             }
         }
     });

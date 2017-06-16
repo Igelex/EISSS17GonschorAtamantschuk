@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private ListView entryList;
     private ListAdapter adapter;
-    private final String URL_TUTORIAL = "/tutorials/";
     SharedPreferences sPref;
 
 
@@ -211,6 +210,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Intent intent = new Intent(MainActivity.this, EntryDetails.class);
                     intent.putExtra("URL", URL + currentEq.getEntryId() + URL_BASE_TUTORIAL
+                            + currentEq.getTutorialId());
+                    Log.i("TUTORIAL_ID: ", URL + currentEq.getEntryId() + URL_BASE_TUTORIAL
                             + currentEq.getTutorialId());
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);

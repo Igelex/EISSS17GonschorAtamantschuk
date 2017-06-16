@@ -69,4 +69,5 @@
     <string name="logout">logout</string>
     <string name="msg_unsaved_changes_dialog">Discard your changes and quit editing?</string>
     <string name="keep_editing">Keep editing</string>
+    <string name="msg_please_login">Please Login!</string>
 </resources>

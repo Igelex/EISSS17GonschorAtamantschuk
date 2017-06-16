@@ -72,6 +72,7 @@ app.post('/signin',
 
 app.get('/users/:id', controller_user.getUserById);
 app.get('/users', controller_user.getUsers);
+app.delete('/users/:id', controller_user.deleteUser);
 //////////////////////////Users
 
 
