@@ -3,12 +3,10 @@ package com.example.android.harvesthand.SignUp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,7 +34,7 @@ import static com.example.android.harvesthand.Contracts.*;
 
 import static com.example.android.harvesthand.R.id.container;
 
-public class SignUpActivity extends AppCompatActivity {
+public class AddNewEntry extends AppCompatActivity {
 
 
     private ViewPager mViewPager;
@@ -118,15 +115,15 @@ public class SignUpActivity extends AppCompatActivity {
                     savePreferences(mIp.getText().toString().trim());
                     URL_IP = sPrefIp.getString(IP_SP_IP, null);
                     BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
-                    Toast.makeText(SignUpActivity.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddNewEntry.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     if (!(sPrefUser.getString(USER_SP_ID, null) == null)) {
-                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                        startActivity(new Intent(AddNewEntry.this, MainActivity.class));
                         finish();
                     }
                 } else {
                     mIp.setError(getString(R.string.errmsg_valid_input_required));
-                    Toast.makeText(SignUpActivity.this, getString(R.string.dialog_please_enter_ip), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddNewEntry.this, getString(R.string.dialog_please_enter_ip), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -137,7 +134,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Toast.makeText(SignUpActivity.this, getString(R.string.dialog_ip_not_changed), Toast.LENGTH_LONG).show();
+                Toast.makeText(AddNewEntry.this, getString(R.string.dialog_ip_not_changed), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -165,8 +162,8 @@ public class SignUpActivity extends AppCompatActivity {
                         try {
                             String currentUserId = response.getString("_id");
                             if (currentUserId != null) {
-                                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                Toast.makeText(SignUpActivity.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(AddNewEntry.this, MainActivity.class));
+                                Toast.makeText(AddNewEntry.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
                             }else {
                                 contracts.showSnackbar(view, getString(R.string.msg_please_login), true);
                             }
