@@ -4,7 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.lang.reflect.Array;
 
 public class AddNewEntry extends AppCompatActivity {
 
@@ -12,6 +16,12 @@ public class AddNewEntry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_entry);
+
+        Spinner cropSpinner = (Spinner)findViewById(R.id.spinner_crop);
+        Spinner soilSpinner = (Spinner)findViewById(R.id.spinner_soil);
+
+        cropSpinner.setAdapter(setupSpinner(R.array.crop_spinner_array));
+        soilSpinner.setAdapter(setupSpinner(R.array.soil_spinner_array));
     }
 
     @Override
@@ -36,6 +46,13 @@ public class AddNewEntry extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public ArrayAdapter setupSpinner(int strings){
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                strings, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return adapter;
     }
 
 
