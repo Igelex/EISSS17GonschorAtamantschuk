@@ -1,6 +1,8 @@
 package com.example.android.harvesthand.SignUp;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -21,6 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.android.harvesthand.Contracts;
 import com.example.android.harvesthand.R;
 
 import org.json.JSONException;
@@ -31,6 +34,9 @@ import java.util.Map;
 
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNUP;
+import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
+import static com.example.android.harvesthand.Contracts.USER_SP_ID;
+import static com.example.android.harvesthand.Contracts.USER_SP_TYPE;
 
 
 /**
@@ -171,7 +177,7 @@ public class SignUpFragment extends Fragment {
     }
 
     public void sendSignUpRequest() {
-
+        final Contracts contracts = new Contracts();
         Map<String, String> params = new HashMap<>();
         params.put("name", mName);
         params.put("email", mEmail);
@@ -181,7 +187,7 @@ public class SignUpFragment extends Fragment {
 
         Log.i("Params: ", params.toString());
 
-        JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(params),
+        final JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -189,8 +195,10 @@ public class SignUpFragment extends Fragment {
 
                         try {
                             String user_id = response.getString("_id");
-                            Log.i("User_id: ", user_id);
+                            int user_type = response.getInt("user_type");
+                            savePreferences(user_id, user_type);
                             progressBar.setVisibility(View.INVISIBLE);
+
                             Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.msg_signup_success), Snackbar.LENGTH_LONG);
                             View text = snackbar.getView();
                             TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
@@ -198,6 +206,7 @@ public class SignUpFragment extends Fragment {
                             snackbar.show();
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            contracts.showSnackbar(getView(), getString(R.string.msg_error), true);
                         }
                     }
                 },
@@ -208,38 +217,32 @@ public class SignUpFragment extends Fragment {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
-                                    Snackbar snackbarIE = Snackbar.make(getView(), getActivity().getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
-                                    View sbie = snackbarIE.getView();
-                                    TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                                    snackbarIE.show();
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_internal_error), true);
                                     break;
                                 case 404:
-                                    Snackbar snackbar404 = Snackbar.make(getView(), getActivity().getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
-                                    View snackbarView404 = snackbar404.getView();
-                                    TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarText404.setTextColor(Color.rgb(253, 86, 86));
-                                    snackbar404.show();
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_404_error), true);
                                     break;
                                 case 409:
-                                    Snackbar snackbarEmail = Snackbar.make(getView(), getActivity().getString(R.string.msg_email_exist), Snackbar.LENGTH_LONG);
-                                    View snackbarView = snackbarEmail.getView();
-                                    TextView snackBarTextEmail = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarTextEmail.setTextColor(Color.rgb(253, 86, 86));
-                                    snackbarEmail.show();
+                                    contracts.showSnackbar(getView(), getActivity().getString(R.string.msg_email_exist), true);
                                     break;
                                 default:
                                     break;
                             }
                         } else {
-                            Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.connection_err), Snackbar.LENGTH_LONG);
-                            View snackbarView = snackbar.getView();
-                            TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                            snackbar.show();
+                            contracts.showSnackbar(getView(), getString(R.string.connection_err), true);
                         }
                     }
                 });
         Volley.newRequestQueue(getContext()).add(request);
+    }
+
+    private void savePreferences(String id, int type) {
+        SharedPreferences sPref = getActivity().getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sPref.edit();
+        editor.putString(USER_SP_ID, id);
+        editor.putInt(USER_SP_TYPE, type);
+        editor.apply();
+        Log.i("Save User_id: ", id);
+        Log.i("Save User_type: ", String.valueOf(type));
     }
 }

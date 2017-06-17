@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.android.harvesthand.Contracts;
 import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
 
@@ -82,7 +83,7 @@ public class SignInFragment extends Fragment {
     }
 
     public void sendSignInRequest() {
-
+        final Contracts contracts = new Contracts();
         Map<String, String> params = new HashMap<>();
         params.put("email", mEmail);
         params.put("pass", mPass);
@@ -112,6 +113,7 @@ public class SignInFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            contracts.showSnackbar(getView(), getString(R.string.msg_error), true);
                         }
                     }
                 },
@@ -124,21 +126,19 @@ public class SignInFragment extends Fragment {
                                 case 401:
                                     inputEmail.setError(getString(R.string.msg_email_or_passwort_incorrect));
                                     inputPass.setError(getString(R.string.msg_email_or_passwort_incorrect));
-                                    Snackbar snackbarIE = Snackbar.make(getView(), getString(R.string.msg_email_or_passwort_incorrect), Snackbar.LENGTH_LONG);
-                                    View sbie = snackbarIE.getView();
-                                    TextView snackBarText = sbie.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                                    snackbarIE.show();
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_email_or_passwort_incorrect), true);
+                                    break;
+                                case 404:
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_404_error), true);
+                                    break;
+                                case 500:
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_internal_error), true);
                                     break;
                                 default:
                                     break;
                             }
                         } else {
-                            Snackbar snackbar = Snackbar.make(getView(), getString(R.string.connection_err), Snackbar.LENGTH_LONG);
-                            View text = snackbar.getView();
-                            TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                            snackbar.show();
+                            contracts.showSnackbar(getView(), getString(R.string.connection_err), true);
                         }
                     }
                 });

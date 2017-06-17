@@ -33,7 +33,6 @@ import static com.example.android.harvesthand.Contracts.*;
 public class ListAdapter extends ArrayAdapter<Entry> {
 
     private Context mContext;
-    private ImageButton earButton, menuButton;
     private TextToSpeech speaker;
     private int userType;
 
@@ -79,7 +78,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                     }
                 }
             });
-            earButton = listView.findViewById(R.id.item_speak_icon);
+            final ImageButton earButton = listView.findViewById(R.id.item_speak_icon);
             earButton.setVisibility(View.VISIBLE);
             earButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,7 +94,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                 }
             });
         } else {
-            menuButton = listView.findViewById(R.id.item_menu_button);
+            final ImageButton menuButton = listView.findViewById(R.id.item_menu_button);
             menuButton.setVisibility(View.VISIBLE);
             menuButton.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -1,5 +1,12 @@
 package com.example.android.harvesthand;
 
+import android.graphics.Color;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.widget.TextView;
+
+import static com.example.android.harvesthand.R.id.container;
+
 /**
  * Created by Pastuh on 13.06.2017.
  */
@@ -27,8 +34,16 @@ public class Contracts {
     public static String IP_ADDRESS_SHARED_PREFS = "ipaddress";
     public static String IP_SP_IP = "ip";
 
+    public Contracts() {
+    }
 
-
-    private Contracts() {
+    public void showSnackbar(View view, String msg, Boolean error){
+        Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
+        View snackbarView = snackbar.getView();
+        TextView snackBarText = (snackbarView.findViewById(android.support.design.R.id.snackbar_text));
+        if(error) {
+            snackBarText.setTextColor(Color.rgb(253, 86, 86));
+        }
+        snackbar.show();
     }
 }

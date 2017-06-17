@@ -26,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.android.harvesthand.Contracts;
 import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
 
@@ -151,7 +152,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void reqeustUserId(String URL) {
-        final View view = (View) findViewById(R.id.main_content);
+        final View view = findViewById(R.id.main_content);
+        final Contracts contracts = new Contracts();
 
         Log.i("URL: ", URL);
 
@@ -166,15 +168,12 @@ public class SignUpActivity extends AppCompatActivity {
                                 startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                                 Toast.makeText(SignUpActivity.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
                             }else {
-                                Snackbar snackbar = Snackbar.make(findViewById(R.id.main_content), getString(R.string.msg_please_login), Snackbar.LENGTH_LONG);
-                                View text = snackbar.getView();
-                                TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                                snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                                snackbar.show();
+                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true);
                             }
                             Log.i("User_id: ", currentUserId);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            contracts.showSnackbar(view, getString(R.string.msg_error), true);
                         }
                     }
                 },
@@ -185,26 +184,14 @@ public class SignUpActivity extends AppCompatActivity {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
-                                    Snackbar snackbarIE = Snackbar.make(view, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
-                                    View sbie = snackbarIE.getView();
-                                    TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                                    snackbarIE.show();
+                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true);
                                     break;
                                 case 404:
-                                    Snackbar snackbar404 = Snackbar.make(view, getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
-                                    View snackbarView404 = snackbar404.getView();
-                                    TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
-                                    snackBarText404.setTextColor(Color.rgb(253, 86, 86));
-                                    snackbar404.show();
+                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true);
                                     break;
                             }
                         } else {
-                            Snackbar snackbar = Snackbar.make(view, getString(R.string.connection_err), Snackbar.LENGTH_LONG);
-                            View text = snackbar.getView();
-                            TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                            snackbar.show();
+                            contracts.showSnackbar(view, getString(R.string.connection_err), true);
                         }
                     }
                 });

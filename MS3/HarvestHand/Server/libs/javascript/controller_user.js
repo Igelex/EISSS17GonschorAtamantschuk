@@ -39,7 +39,7 @@ module.exports.registerUser = function (req, res) {
                     return;
                 }
                 console.error(result);
-                res.status(200).type('application/json').send(result);
+                res.status(200).type('application/json').send({_id: result._id, user_type: result.user_type});
             });
         }
     });
@@ -58,7 +58,7 @@ module.exports.getUserById = function (req, res) {
             }
             else {
                 console.log('In get User by , result: ' + result);
-                res.status(204).type('application/json').send();
+                res.status(204).type('application/json').send(result);
             }
         }
     });

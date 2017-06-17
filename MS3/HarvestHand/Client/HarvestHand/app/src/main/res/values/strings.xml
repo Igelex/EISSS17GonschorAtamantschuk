@@ -70,4 +70,8 @@
     <string name="msg_unsaved_changes_dialog">Discard your changes and quit editing?</string>
     <string name="keep_editing">Keep editing</string>
     <string name="msg_please_login">Please Login!</string>
+    <string name="msg_error">Error!</string>
+    <string name="new_entry_hint_airmoisture">Air moisture</string>
+    <string name="new_entry_soiltemperature">Soil temperature</string>
+    <string name="new_entry_soilmoisture">Soil moisture</string>
 </resources>

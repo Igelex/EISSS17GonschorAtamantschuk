@@ -1,14 +1,15 @@
 package com.example.android.harvesthand;
 
+import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +28,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.android.harvesthand.SignUp.SignUpActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +36,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.R.attr.data;
+import static android.R.attr.y;
 import static com.example.android.harvesthand.Contracts.*;
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_ENTRIES;
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (networkInfo != null && networkInfo.isConnected()) {
 
-            container = (View) findViewById(R.id.entries_relativelayout);
+            container = findViewById(R.id.entries_relativelayout);
 
             FloatingActionButton fb = (FloatingActionButton) findViewById(R.id.fb_add_new_entry);
             fb.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +84,14 @@ public class MainActivity extends AppCompatActivity {
             *Holl user_id aus SharedPreferences
             */
             sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
+            if (sPref.getString(USER_SP_ID, null) == null) {
+                startActivity(new Intent(this, SignUpActivity.class));
+                Toast.makeText(this, getString(R.string.msg_please_login), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            Contracts contracts = new Contracts();
+
             /*
             * Bilde Uri für Entries - Request
             */
@@ -127,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
     //Request all Entries for user
 
     public void getEntries(String url) {
+
+        final Contracts contracts = new Contracts();
+
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -147,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                             entryArrayList.add(new Entry(entryID, entryName, artId, location, area));
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            contracts.showSnackbar(container, getString(R.string.msg_error), true);
                         }
 
                     }
@@ -155,12 +171,7 @@ public class MainActivity extends AppCompatActivity {
                     entryList.setAdapter(adapter);
                     defineOnItemClickListener();
                 } else {
-                    Snackbar snackbar = Snackbar.make(container, getString(R.string.msg_no_data), Snackbar.LENGTH_LONG);
-                    View text = snackbar.getView();
-                    TextView snackBarText2 = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                    snackBarText2.setTextColor(Color.rgb(253, 86, 86));
-                    snackbar.show();
-                    return;
+                    contracts.showSnackbar(container, getString(R.string.msg_no_data), true);
                 }
             }
         }, new Response.ErrorListener() {
@@ -171,26 +182,14 @@ public class MainActivity extends AppCompatActivity {
                 if (error.networkResponse != null) {
                     switch (error.networkResponse.statusCode) {
                         case 500:
-                            Snackbar snackbarIE = Snackbar.make(container, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
-                            View sbie = snackbarIE.getView();
-                            TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                            snackbarIE.show();
+                            contracts.showSnackbar(container, getString(R.string.msg_internal_error), true);
                             break;
                         case 404:
-                            Snackbar snackbar404 = Snackbar.make(container, getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
-                            View snackbarView404 = snackbar404.getView();
-                            TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText404.setTextColor(Color.rgb(253, 86, 86));
-                            snackbar404.show();
+                            contracts.showSnackbar(container, getString(R.string.msg_404_error), true);
                             break;
                     }
                 } else {
-                    Snackbar snackbar = Snackbar.make(container, getString(R.string.connection_err), Snackbar.LENGTH_LONG);
-                    View text = snackbar.getView();
-                    TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                    snackbar.show();
+                    contracts.showSnackbar(container, getString(R.string.connection_err), true);
                 }
                 error.printStackTrace();
             }
