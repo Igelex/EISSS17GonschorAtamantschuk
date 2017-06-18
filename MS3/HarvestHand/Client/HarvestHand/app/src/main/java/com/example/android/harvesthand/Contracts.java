@@ -5,8 +5,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 
-import static com.example.android.harvesthand.R.id.container;
-
 /**
  * Created by Pastuh on 13.06.2017.
  */

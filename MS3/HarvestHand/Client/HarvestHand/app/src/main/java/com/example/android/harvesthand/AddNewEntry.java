@@ -2,21 +2,16 @@ package com.example.android.harvesthand;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-<<<<<<< HEAD
-=======
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-=======
 import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -24,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.os.ResultReceiver;
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -33,11 +27,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-<<<<<<< HEAD
-=======
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -49,28 +40,21 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-<<<<<<< HEAD
-=======
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
-
 public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private ImageButton locationButton;
-<<<<<<< HEAD
-=======
     private ProgressBar locationPb;
     private EditText locationEdit;
     private Geocoder geocoder;
     private ScrollView container;
     private Contracts contracts;
     private TextInputLayout locationInputLayout;
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
 
 
     @Override
@@ -78,8 +62,7 @@ public class AddNewEntry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_entry);
 
-<<<<<<< HEAD
-=======
+
         contracts = new Contracts();
 
         geocoder = new Geocoder(this, Locale.getDefault());
@@ -90,31 +73,27 @@ public class AddNewEntry extends AppCompatActivity {
 
         locationInputLayout = (TextInputLayout) findViewById(R.id.add_inputlayout_entry_location);
 
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
         Spinner cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
         Spinner soilSpinner = (Spinner) findViewById(R.id.spinner_soil);
         cropSpinner.setAdapter(setupSpinner(R.array.crop_spinner_array));
         soilSpinner.setAdapter(setupSpinner(R.array.soil_spinner_array));
 
-<<<<<<< HEAD
         final EditText locationEdit = (EditText) findViewById(R.id.add_entry_location);
-=======
         locationEdit = (EditText) findViewById(R.id.add_entry_location);
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
         locationButton = (ImageButton) findViewById(R.id.add_location_button);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
-<<<<<<< HEAD
+
                 locationEdit.setText(location.getLatitude() + " | " + location.getLongitude());
                 Toast.makeText(AddNewEntry.this, location.getLatitude() + " | " + location.getLongitude(), Toast.LENGTH_LONG).show();
                 if (locationManager != null) {
                     locationManager.removeUpdates(locationListener);
                 }
 
-=======
+
                 contracts.showSnackbar(container, getString(R.string.msg_receive_gps_data), false, true);
                 if (!Geocoder.isPresent()) {
                     contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
@@ -123,7 +102,6 @@ public class AddNewEntry extends AppCompatActivity {
                 }
                 findGeocoder(location.getLatitude(), location.getLongitude());
                 stopRequestLocation();
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
             }
 
             @Override
@@ -164,11 +142,9 @@ public class AddNewEntry extends AppCompatActivity {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-<<<<<<< HEAD
 
                 Toast.makeText(AddNewEntry.this, "Reauest Location...", Toast.LENGTH_LONG).show();
-=======
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
+
                 if (ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -177,19 +153,18 @@ public class AddNewEntry extends AppCompatActivity {
                         requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
                                         android.Manifest.permission.ACCESS_FINE_LOCATION,
                                         android.Manifest.permission.INTERNET}
-<<<<<<< HEAD
+
                                 ,10);
                     }
                     return;
                 }
-=======
+
                                 , 10);
                     }
                     return;
                 }
                 locationPb.setVisibility(View.VISIBLE);
                 locationInputLayout.setHint(getString(R.string.msg_request_location));
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
                 locationManager.requestLocationUpdates("gps", 1000, 10, locationListener);
             }
         });
@@ -207,11 +182,8 @@ public class AddNewEntry extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-<<<<<<< HEAD
 
         //noinspection SimplifiableIfStatement
-=======
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
         switch (id) {
             case R.id.action_save:
                 Toast.makeText(this, "Entry saved", Toast.LENGTH_LONG).show();
@@ -233,7 +205,6 @@ public class AddNewEntry extends AppCompatActivity {
         final Contracts contracts = new Contracts();
 
         Log.i("URL: ", URL);
-<<<<<<< HEAD
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
                 new Response.Listener<JSONObject>() {
@@ -339,9 +310,6 @@ public class AddNewEntry extends AppCompatActivity {
             locationManager.removeUpdates(locationListener);
         }
     }
-
-=======
->>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
                 new Response.Listener<JSONObject>() {
