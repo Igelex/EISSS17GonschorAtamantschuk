@@ -20,9 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.android.harvesthand.SignUp.SignUpActivity;
+import com.example.android.harvesthand.SignUp.AddNewEntry;
 
-import static android.os.Build.VERSION_CODES.M;
 import static com.example.android.harvesthand.Contracts.*;
 
 public class UserProfile extends AppCompatActivity {
@@ -57,7 +56,7 @@ public class UserProfile extends AppCompatActivity {
                 SharedPreferences sPref = getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
                 if (sPref != null){
                     sPref.edit().remove(USER_SP_ID).apply();
-                    startActivity(new Intent(UserProfile.this, SignUpActivity.class));
+                    startActivity(new Intent(UserProfile.this, AddNewEntry.class));
                 }
 
             }

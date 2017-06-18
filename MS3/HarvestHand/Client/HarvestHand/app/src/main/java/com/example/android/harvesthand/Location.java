@@ -4,16 +4,13 @@ package com.example.android.harvesthand;
  * Created by franz on 15.06.2017.
  */
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class Location {
-        public static void main(String[] args) {
+public class Location{
+    public Location() {}
+    public static void main(String[] args) {
             try {
                 URL url = new URL("http://api.wunderground.com/api/28182cd556dbb993/geolookup/q/autoip.json");
                 BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
@@ -24,7 +21,8 @@ public class Location {
         } catch (Exception ex) {
             ex.printStackTrace();
         }}
-    private void sendData(String ip) {
+
+    /*private void sendData(String ip) {
         try {
             JSONObject json = new JSONObject();
 
@@ -48,5 +46,5 @@ public class Location {
 
         }
 
-    }}
+    }*/}
 

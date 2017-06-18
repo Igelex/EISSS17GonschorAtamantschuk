@@ -1,17 +1,13 @@
 package com.example.android.harvesthand;
 
-import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -20,7 +16,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -28,7 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.android.harvesthand.SignUp.SignUpActivity;
+import com.example.android.harvesthand.SignUp.AddNewEntry;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,8 +31,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static android.R.attr.data;
-import static android.R.attr.y;
 import static com.example.android.harvesthand.Contracts.*;
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_ENTRIES;
@@ -73,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
             fb.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(MainActivity.this, AddNewEntry.class));
+                    startActivity(new Intent(MainActivity.this, com.example.android.harvesthand.AddNewEntry.class));
                 }
             });
 
@@ -85,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             */
             sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             if (sPref.getString(USER_SP_ID, null) == null) {
-                startActivity(new Intent(this, SignUpActivity.class));
+                startActivity(new Intent(this, AddNewEntry.class));
                 Toast.makeText(this, getString(R.string.msg_please_login), Toast.LENGTH_SHORT).show();
                 finish();
             }

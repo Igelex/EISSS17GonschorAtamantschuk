@@ -55,12 +55,13 @@
             </android.support.design.widget.TextInputLayout>
 
             <ImageButton
-                android:id="@+id/imageView"
+                android:id="@+id/add_location_button"
                 android:layout_width="90dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:src="@drawable/map_marker_plus" />
+                android:src="@drawable/map_marker_plus"
+                style="@style/img_button" />
         </LinearLayout>
 
         <LinearLayout
@@ -246,7 +247,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_mode_edit_black_24dp" />
+                android:src="@drawable/ic_mode_edit_black_24dp"
+                />
 
         </LinearLayout>
 
