@@ -41,7 +41,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name=".SignUp.AddNewEntry"
+            android:name=".SignUp.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
