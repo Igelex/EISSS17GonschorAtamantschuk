@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                             entryArrayList.add(new Entry(entryID, entryName, artId, location, area));
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            contracts.showSnackbar(container, getString(R.string.msg_error), true);
+                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
                         }
 
                     }
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                     entryList.setAdapter(adapter);
                     defineOnItemClickListener();
                 } else {
-                    contracts.showSnackbar(container, getString(R.string.msg_no_data), true);
+                    contracts.showSnackbar(container, getString(R.string.msg_no_data), true, false);
                 }
             }
         }, new Response.ErrorListener() {
@@ -175,14 +175,14 @@ public class MainActivity extends AppCompatActivity {
                 if (error.networkResponse != null) {
                     switch (error.networkResponse.statusCode) {
                         case 500:
-                            contracts.showSnackbar(container, getString(R.string.msg_internal_error), true);
+                            contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
                             break;
                         case 404:
-                            contracts.showSnackbar(container, getString(R.string.msg_404_error), true);
+                            contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
                             break;
                     }
                 } else {
-                    contracts.showSnackbar(container, getString(R.string.connection_err), true);
+                    contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
                 }
                 error.printStackTrace();
             }

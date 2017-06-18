@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/colorPrimary"
     tools:context="com.example.android.harvesthand.SignUp.SignInFragment"
@@ -28,7 +29,9 @@
         android:id="@+id/inputlayout_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/TextInputLayout">
+        android:theme="@style/TextInputLayout"
+        app:counterEnabled="true"
+        app:counterMaxLength="6">
 
         <EditText
             android:id="@+id/signin_input_pass"

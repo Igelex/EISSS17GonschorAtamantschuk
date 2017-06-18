@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.harvesthand.AddNewEntry">
+    tools:context="com.example.android.harvesthand.AddNewEntry"
+    android:id="@+id/add_new_entry_container">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,6 +33,17 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/add_new_entry_location_pb"
+                android:visibility="gone"
+                android:layout_centerInParent="true" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,14 +55,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:theme="@style/TextInputLayout">
+                android:theme="@style/TextInputLayout"
+                android:hint="@string/new_entry_hint_location">
 
                 <EditText
                     android:id="@+id/add_entry_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:hint="@string/new_entry_hint_location" />
+                    android:ems="10" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -63,6 +75,8 @@
                 android:src="@drawable/map_marker_plus"
                 style="@style/img_button" />
         </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

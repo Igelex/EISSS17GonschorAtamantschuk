@@ -113,7 +113,7 @@ public class SignInFragment extends Fragment {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            contracts.showSnackbar(getView(), getString(R.string.msg_error), true);
+                            contracts.showSnackbar(getView(), getString(R.string.msg_error), true, false);
                         }
                     }
                 },
@@ -126,19 +126,19 @@ public class SignInFragment extends Fragment {
                                 case 401:
                                     inputEmail.setError(getString(R.string.msg_email_or_passwort_incorrect));
                                     inputPass.setError(getString(R.string.msg_email_or_passwort_incorrect));
-                                    contracts.showSnackbar(getView(), getString(R.string.msg_email_or_passwort_incorrect), true);
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_email_or_passwort_incorrect), true, false);
                                     break;
                                 case 404:
-                                    contracts.showSnackbar(getView(), getString(R.string.msg_404_error), true);
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_404_error), true, false);
                                     break;
                                 case 500:
-                                    contracts.showSnackbar(getView(), getString(R.string.msg_internal_error), true);
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_internal_error), true, false);
                                     break;
                                 default:
                                     break;
                             }
                         } else {
-                            contracts.showSnackbar(getView(), getString(R.string.connection_err), true);
+                            contracts.showSnackbar(getView(), getString(R.string.connection_err), true, false);
                         }
                     }
                 });

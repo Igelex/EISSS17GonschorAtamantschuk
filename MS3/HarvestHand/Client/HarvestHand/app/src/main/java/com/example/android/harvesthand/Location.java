@@ -1,8 +1,11 @@
+/*
 package com.example.android.harvesthand;
 
+*/
 /**
  * Created by franz on 15.06.2017.
- */
+ *//*
+
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -48,3 +51,4 @@ public class Location{
 
     }*/}
 
+*/

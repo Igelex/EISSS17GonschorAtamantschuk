@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<<<<<<< HEAD
     <item name="add_location_button" type="id" />
+=======
+    <item name="msg_request_location" type="id">Request location...</item>
+>>>>>>> 994723d56fe9eaa0679700245ebe993b885512c2
 </resources>

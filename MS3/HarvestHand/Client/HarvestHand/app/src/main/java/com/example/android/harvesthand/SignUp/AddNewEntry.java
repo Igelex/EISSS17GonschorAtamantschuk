@@ -165,12 +165,12 @@ public class AddNewEntry extends AppCompatActivity {
                                 startActivity(new Intent(AddNewEntry.this, MainActivity.class));
                                 Toast.makeText(AddNewEntry.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
                             }else {
-                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true);
+                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true, false);
                             }
                             Log.i("User_id: ", currentUserId);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            contracts.showSnackbar(view, getString(R.string.msg_error), true);
+                            contracts.showSnackbar(view, getString(R.string.msg_error), true, false);
                         }
                     }
                 },
@@ -181,14 +181,14 @@ public class AddNewEntry extends AppCompatActivity {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
-                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true);
+                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true, false);
                                     break;
                                 case 404:
-                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true);
+                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true, false);
                                     break;
                             }
                         } else {
-                            contracts.showSnackbar(view, getString(R.string.connection_err), true);
+                            contracts.showSnackbar(view, getString(R.string.connection_err), true, false);
                         }
                     }
                 });
