@@ -15,11 +15,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-=======
-        <service
-            android:name=".FetchAddress"
-            android:exported="false"/>
-
         <activity android:name=".MainActivity">
 
             <!--
