@@ -37,12 +37,15 @@ public class Contracts {
     public Contracts() {
     }
 
-    public void showSnackbar(View view, String msg, Boolean error){
+    public void showSnackbar(View view, String msg, Boolean error, Boolean success){
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
         View snackbarView = snackbar.getView();
         TextView snackBarText = (snackbarView.findViewById(android.support.design.R.id.snackbar_text));
         if(error) {
             snackBarText.setTextColor(Color.rgb(253, 86, 86));
+        }
+        if(success) {
+            snackBarText.setTextColor(Color.rgb(71, 151, 75));
         }
         snackbar.show();
     }

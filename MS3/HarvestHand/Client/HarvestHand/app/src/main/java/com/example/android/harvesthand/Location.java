@@ -1,8 +1,11 @@
+/*
 package com.example.android.harvesthand;
 
+*/
 /**
  * Created by franz on 15.06.2017.
- */
+ *//*
+
 
 import org.json.JSONObject;
 
@@ -50,3 +53,4 @@ public class Location {
 
     }}
 
+*/

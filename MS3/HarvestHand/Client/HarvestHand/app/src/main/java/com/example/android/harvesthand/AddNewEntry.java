@@ -2,17 +2,20 @@ package com.example.android.harvesthand;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.audiofx.BassBoost;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +23,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,27 +32,24 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.jar.*;
 
-import static android.R.attr.configure;
-import static android.os.Build.VERSION_CODES.M;
-import static com.example.android.harvesthand.R.id.location;
 
 public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private ImageButton locationButton;
+    /*private AddressResultReceiver mResultReceiver;*/
+    private EditText locationEdit;
+    private Geocoder geocoder;
+   private ScrollView container;
+    private Contracts contracts;
 
 
     @Override
@@ -56,24 +57,32 @@ public class AddNewEntry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_entry);
 
+        contracts = new Contracts();
+
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        container = (ScrollView) findViewById(R.id.add_new_entry_container);
+
         Spinner cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
         Spinner soilSpinner = (Spinner) findViewById(R.id.spinner_soil);
         cropSpinner.setAdapter(setupSpinner(R.array.crop_spinner_array));
         soilSpinner.setAdapter(setupSpinner(R.array.soil_spinner_array));
 
-        final EditText locationEdit = (EditText) findViewById(R.id.add_entry_location);
+        locationEdit = (EditText) findViewById(R.id.add_entry_location);
         locationButton = (ImageButton) findViewById(R.id.add_location_button);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
-                locationEdit.setText(location.getLatitude() + " | " + location.getLongitude());
-                Toast.makeText(AddNewEntry.this, location.getLatitude() + " | " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                if (locationManager != null) {
-                    locationManager.removeUpdates(locationListener);
+                contracts.showSnackbar(container, getString(R.string.msg_receive_gps_data), false, true);
+                if (!Geocoder.isPresent()) {
+                    contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
+                    stopRequestLocation();
+                    return;
                 }
-
+                findGeocoder(location.getLatitude(), location.getLongitude());
+                stopRequestLocation();
             }
 
             @Override
@@ -124,7 +133,7 @@ public class AddNewEntry extends AppCompatActivity {
                         requestPermissions(new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION,
                                         android.Manifest.permission.ACCESS_FINE_LOCATION,
                                         android.Manifest.permission.INTERNET}
-                                ,10);
+                                , 10);
                     }
                     return;
                 }
@@ -133,7 +142,6 @@ public class AddNewEntry extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,12 +152,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_save:
                 Toast.makeText(this, "Entry saved", Toast.LENGTH_LONG).show();
@@ -183,12 +186,12 @@ public class AddNewEntry extends AppCompatActivity {
                                 startActivity(new Intent(AddNewEntry.this, MainActivity.class));
                                 Toast.makeText(AddNewEntry.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
                             } else {
-                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true);
+                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true, false);
                             }
                             Log.i("User_id: ", currentUserId);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            contracts.showSnackbar(view, getString(R.string.msg_error), true);
+                            contracts.showSnackbar(view, getString(R.string.msg_error), true, false);
                         }
                     }
                 },
@@ -199,83 +202,52 @@ public class AddNewEntry extends AppCompatActivity {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
-                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true);
+                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true, false);
                                     break;
                                 case 404:
-                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true);
+                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true, false);
                                     break;
                             }
                         } else {
-                            contracts.showSnackbar(view, getString(R.string.connection_err), true);
+                            contracts.showSnackbar(view, getString(R.string.connection_err), true, false);
                         }
                     }
                 });
         Volley.newRequestQueue(this).add(request);
     }
 
-    /*@Override
-    protected void onHandleIntent(Intent intent) {
-        String errorMessage = "";
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-
-        // Get the location passed to this service through an extra.
-        Location location = intent.getParcelableExtra(
-                Constants.LOCATION_DATA_EXTRA);
-
-        // ...
-
-        List<String> addresses = null;
-
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.get
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            errorMessage = getString(R.string.service_not_available);
-            Log.e(TAG, errorMessage, ioException);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            errorMessage = getString(R.string.invalid_lat_long_used);
-            Log.e(TAG, errorMessage + ". " +
-                    "Latitude = " + location.getLatitude() +
-                    ", Longitude = " +
-                    location.getLongitude(), illegalArgumentException);
-        }
-
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = getString(R.string.no_address_found);
-                Log.e(TAG, errorMessage);
-            }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
-        } else {
-            Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
-
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            Log.i(TAG, getString(R.string.address_found));
-            deliverResultToReceiver(Constants.SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
-        }
-    }*/
-
     @Override
     protected void onPause() {
         super.onPause();
+        stopRequestLocation();
+    }
+
+    private void findGeocoder(Double lat, Double lon) {
+        final int maxResults = 1;
+        List<Address> addresses;
+        try {
+            addresses = geocoder.getFromLocation(lat, lon, maxResults);
+            if (addresses != null) {
+                Address currentAddress = addresses.get(0);
+                locationEdit.setText(currentAddress.getCountryName() + getString(R.string.item_speaktext_coma)
+                        + currentAddress.getLocality());
+            } else {
+                contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
+        }
+
+    }
+
+    private void stopRequestLocation(){
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
     }
-
-
 }
