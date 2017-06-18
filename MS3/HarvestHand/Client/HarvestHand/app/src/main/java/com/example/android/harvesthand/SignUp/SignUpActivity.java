@@ -34,7 +34,7 @@ import static com.example.android.harvesthand.Contracts.*;
 
 import static com.example.android.harvesthand.R.id.container;
 
-public class AddNewEntry extends AppCompatActivity {
+public class SignUpActivity extends AppCompatActivity {
 
 
     private ViewPager mViewPager;
@@ -115,15 +115,15 @@ public class AddNewEntry extends AppCompatActivity {
                     savePreferences(mIp.getText().toString().trim());
                     URL_IP = sPrefIp.getString(IP_SP_IP, null);
                     BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
-                    Toast.makeText(AddNewEntry.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     if (!(sPrefUser.getString(USER_SP_ID, null) == null)) {
-                        startActivity(new Intent(AddNewEntry.this, MainActivity.class));
+                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                         finish();
                     }
                 } else {
                     mIp.setError(getString(R.string.errmsg_valid_input_required));
-                    Toast.makeText(AddNewEntry.this, getString(R.string.dialog_please_enter_ip), Toast.LENGTH_LONG).show();
+                    Toast.makeText(SignUpActivity.this, getString(R.string.dialog_please_enter_ip), Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -134,7 +134,7 @@ public class AddNewEntry extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                Toast.makeText(AddNewEntry.this, getString(R.string.dialog_ip_not_changed), Toast.LENGTH_LONG).show();
+                Toast.makeText(SignUpActivity.this, getString(R.string.dialog_ip_not_changed), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -162,8 +162,8 @@ public class AddNewEntry extends AppCompatActivity {
                         try {
                             String currentUserId = response.getString("_id");
                             if (currentUserId != null) {
-                                startActivity(new Intent(AddNewEntry.this, MainActivity.class));
-                                Toast.makeText(AddNewEntry.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                                Toast.makeText(SignUpActivity.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
                             }else {
                                 contracts.showSnackbar(view, getString(R.string.msg_please_login), true, false);
                             }

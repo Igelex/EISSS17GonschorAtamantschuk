@@ -45,6 +45,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
+import static com.example.android.harvesthand.R.id.location;
+
 public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -62,7 +65,6 @@ public class AddNewEntry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_entry);
 
-
         contracts = new Contracts();
 
         geocoder = new Geocoder(this, Locale.getDefault());
@@ -78,7 +80,6 @@ public class AddNewEntry extends AppCompatActivity {
         cropSpinner.setAdapter(setupSpinner(R.array.crop_spinner_array));
         soilSpinner.setAdapter(setupSpinner(R.array.soil_spinner_array));
 
-        final EditText locationEdit = (EditText) findViewById(R.id.add_entry_location);
         locationEdit = (EditText) findViewById(R.id.add_entry_location);
         locationButton = (ImageButton) findViewById(R.id.add_location_button);
 
@@ -86,14 +87,7 @@ public class AddNewEntry extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(android.location.Location location) {
-
-                locationEdit.setText(location.getLatitude() + " | " + location.getLongitude());
-                Toast.makeText(AddNewEntry.this, location.getLatitude() + " | " + location.getLongitude(), Toast.LENGTH_LONG).show();
-                if (locationManager != null) {
-                    locationManager.removeUpdates(locationListener);
-                }
-
-
+                Log.i("LONG LAT", "" + location.getLatitude() + location.getLatitude()  );
                 contracts.showSnackbar(container, getString(R.string.msg_receive_gps_data), false, true);
                 if (!Geocoder.isPresent()) {
                     contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
@@ -132,8 +126,9 @@ public class AddNewEntry extends AppCompatActivity {
             case 10:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     setButton();
-                    return;
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -142,8 +137,6 @@ public class AddNewEntry extends AppCompatActivity {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(AddNewEntry.this, "Reauest Location...", Toast.LENGTH_LONG).show();
 
                 if (ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED &&
@@ -154,15 +147,11 @@ public class AddNewEntry extends AppCompatActivity {
                                         android.Manifest.permission.ACCESS_FINE_LOCATION,
                                         android.Manifest.permission.INTERNET}
 
-                                ,10);
-                    }
-                    return;
-                }
-
                                 , 10);
                     }
                     return;
                 }
+                Log.i("Push button", ""  );
                 locationPb.setVisibility(View.VISIBLE);
                 locationInputLayout.setHint(getString(R.string.msg_request_location));
                 locationManager.requestLocationUpdates("gps", 1000, 10, locationListener);
@@ -201,8 +190,6 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     public void sendRequest(String URL) {
-        final View view = findViewById(R.id.main_content);
-        final Contracts contracts = new Contracts();
 
         Log.i("URL: ", URL);
 
@@ -217,12 +204,12 @@ public class AddNewEntry extends AppCompatActivity {
                                 startActivity(new Intent(AddNewEntry.this, MainActivity.class));
                                 Toast.makeText(AddNewEntry.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
                             } else {
-                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true);
+                                contracts.showSnackbar(container, getString(R.string.msg_please_login), true, false);
                             }
                             Log.i("User_id: ", currentUserId);
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            contracts.showSnackbar(view, getString(R.string.msg_error), true);
+                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
                         }
                     }
                 },
@@ -233,119 +220,14 @@ public class AddNewEntry extends AppCompatActivity {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
-                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true);
+                                    contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
                                     break;
                                 case 404:
-                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true);
+                                    contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
                                     break;
                             }
                         } else {
-                            contracts.showSnackbar(view, getString(R.string.connection_err), true);
-                        }
-                    }
-                });
-        Volley.newRequestQueue(this).add(request);
-    }
-
-    /*@Override
-    protected void onHandleIntent(Intent intent) {
-        String errorMessage = "";
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-
-        // Get the location passed to this service through an extra.
-        Location location = intent.getParcelableExtra(
-                Constants.LOCATION_DATA_EXTRA);
-
-        // ...
-
-        List<String> addresses = null;
-
-        try {
-            addresses = geocoder.getFromLocation(
-                    location.get
-                    location.getLatitude(),
-                    location.getLongitude(),
-                    // In this sample, get just a single address.
-                    1);
-        } catch (IOException ioException) {
-            // Catch network or other I/O problems.
-            errorMessage = getString(R.string.service_not_available);
-            Log.e(TAG, errorMessage, ioException);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            // Catch invalid latitude or longitude values.
-            errorMessage = getString(R.string.invalid_lat_long_used);
-            Log.e(TAG, errorMessage + ". " +
-                    "Latitude = " + location.getLatitude() +
-                    ", Longitude = " +
-                    location.getLongitude(), illegalArgumentException);
-        }
-
-        // Handle case where no address was found.
-        if (addresses == null || addresses.size()  == 0) {
-            if (errorMessage.isEmpty()) {
-                errorMessage = getString(R.string.no_address_found);
-                Log.e(TAG, errorMessage);
-            }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
-        } else {
-            Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
-
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
-            Log.i(TAG, getString(R.string.address_found));
-            deliverResultToReceiver(Constants.SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
-        }
-    }*/
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (locationManager != null) {
-            locationManager.removeUpdates(locationListener);
-        }
-    }
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        //progressBar.setVisibility(View.INVISIBLE);
-                        try {
-                            String currentUserId = response.getString("_id");
-                            if (currentUserId != null) {
-                                startActivity(new Intent(AddNewEntry.this, MainActivity.class));
-                                Toast.makeText(AddNewEntry.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
-                            } else {
-                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true, false);
-                            }
-                            Log.i("User_id: ", currentUserId);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            contracts.showSnackbar(view, getString(R.string.msg_error), true, false);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //progressBar.setVisibility(View.INVISIBLE);
-                        if (error.networkResponse != null) {
-                            switch (error.networkResponse.statusCode) {
-                                case 500:
-                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true, false);
-                                    break;
-                                case 404:
-                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true, false);
-                                    break;
-                            }
-                        } else {
-                            contracts.showSnackbar(view, getString(R.string.connection_err), true, false);
+                            contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
                         }
                     }
                 });
@@ -359,6 +241,7 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     private void findGeocoder(Double lat, Double lon) {
+        Log.i("REQUEST ADRESS", "");
         final int maxResults = 1;
         List<Address> addresses;
         locationPb.setVisibility(View.GONE);

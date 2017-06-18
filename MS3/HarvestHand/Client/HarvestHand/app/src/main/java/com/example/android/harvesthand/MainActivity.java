@@ -23,7 +23,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.android.harvesthand.SignUp.AddNewEntry;
+import com.example.android.harvesthand.SignUp.SignUpActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             */
             sPref = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             if (sPref.getString(USER_SP_ID, null) == null) {
-                startActivity(new Intent(this, AddNewEntry.class));
+                startActivity(new Intent(this, SignUpActivity.class));
                 Toast.makeText(this, getString(R.string.msg_please_login), Toast.LENGTH_SHORT).show();
                 finish();
             }
