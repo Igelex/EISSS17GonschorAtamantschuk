@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="msg_request_location" type="id">Request location...</item>
+</resources>

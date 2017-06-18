@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -45,11 +47,12 @@ public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private ImageButton locationButton;
-    /*private AddressResultReceiver mResultReceiver;*/
+    private ProgressBar locationPb;
     private EditText locationEdit;
     private Geocoder geocoder;
-   private ScrollView container;
+    private ScrollView container;
     private Contracts contracts;
+    private TextInputLayout locationInputLayout;
 
 
     @Override
@@ -62,6 +65,10 @@ public class AddNewEntry extends AppCompatActivity {
         geocoder = new Geocoder(this, Locale.getDefault());
 
         container = (ScrollView) findViewById(R.id.add_new_entry_container);
+
+        locationPb = (ProgressBar) findViewById(R.id.add_new_entry_location_pb);
+
+        locationInputLayout = (TextInputLayout) findViewById(R.id.add_inputlayout_entry_location);
 
         Spinner cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
         Spinner soilSpinner = (Spinner) findViewById(R.id.spinner_soil);
@@ -123,8 +130,6 @@ public class AddNewEntry extends AppCompatActivity {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Toast.makeText(AddNewEntry.this, "Reauest Location...", Toast.LENGTH_LONG).show();
                 if (ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -137,6 +142,8 @@ public class AddNewEntry extends AppCompatActivity {
                     }
                     return;
                 }
+                locationPb.setVisibility(View.VISIBLE);
+                locationInputLayout.setHint(getString(R.string.msg_request_location));
                 locationManager.requestLocationUpdates("gps", 1000, 10, locationListener);
             }
         });
@@ -225,6 +232,8 @@ public class AddNewEntry extends AppCompatActivity {
     private void findGeocoder(Double lat, Double lon) {
         final int maxResults = 1;
         List<Address> addresses;
+        locationPb.setVisibility(View.GONE);
+        locationInputLayout.setHint(getString(R.string.new_entry_hint_location));
         try {
             addresses = geocoder.getFromLocation(lat, lon, maxResults);
             if (addresses != null) {
@@ -245,7 +254,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     }
 
-    private void stopRequestLocation(){
+    private void stopRequestLocation() {
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
