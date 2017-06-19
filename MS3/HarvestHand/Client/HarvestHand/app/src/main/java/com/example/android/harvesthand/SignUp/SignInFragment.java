@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -102,12 +103,7 @@ public class SignInFragment extends Fragment {
                             Log.i("User_id: ", current_user_id);
                             Log.i("User_Type: ", "" + current_user_type);
                             savePreferences(current_user_id, current_user_type);
-                            Snackbar snackbarIE = Snackbar.make(getView(), getString(R.string.msg_login_successful), Snackbar.LENGTH_LONG);
-                            View sbie = snackbarIE.getView();
-                            TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(71, 171, 75));
-                            snackbarIE.show();
-
+                            Toast.makeText(getContext(), R.string.msg_login_successful, Toast.LENGTH_SHORT ).show();
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             startActivity(intent);
 

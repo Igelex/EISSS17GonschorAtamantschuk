@@ -216,6 +216,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
     public void onPause(){
         if(speaker !=null){
             speaker.stop();

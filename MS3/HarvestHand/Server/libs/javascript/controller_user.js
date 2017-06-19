@@ -50,15 +50,22 @@ module.exports.getUserById = function (req, res) {
     console.info(req.params.id);
     User.findById(req.params.id, function (err, result) {
         if (err) {
-            res.status(500).type('text').write("DB error: " + err);
+            res.status(500).type('text').send("DB error: " + err);
         } else {
             if (result) {
-                console.log('In get User by Id: ' + result);
-                res.status(200).type('application/json').send(result);
+                var currentUser = {
+                    user_id: result._id,
+                    name: result.name,
+                    user_type: result.user_type,
+                    pass: result.pass,
+                    phone_number: result.phone_number
+                };
+                console.log('In get User by Id: ' + currentUser);
+                res.status(200).type('application/json').send(currentUser);
             }
             else {
-                console.log('In get User by , result: ' + result);
-                res.status(204).type('application/json').send(result);
+                console.log('No user found: ' + result);
+                res.status(204).type('application/json').send();
             }
         }
     });

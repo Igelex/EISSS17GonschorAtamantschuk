@@ -103,6 +103,7 @@
     <string name="msg_can_not_get_location">Can not get location</string>
     <string name="msg_receive_gps_data">Receive GPS data...</string>
     <string name="msg_request_location">Request location...</string>
+    <string name="settings_menu_item">settings</string>
 
 
     <string-array name="soil_spinner_array">

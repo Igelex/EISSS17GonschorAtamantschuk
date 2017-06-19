@@ -40,7 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private View dialogView;
     private SharedPreferences sPrefIp;
-    private SharedPreferences sPrefUser;
     private ProgressBar progressBar;
 
     @Override
@@ -75,14 +74,11 @@ public class SignUpActivity extends AppCompatActivity {
             progressBar = (ProgressBar) findViewById(R.id.signup_progressbar);
 
             sPrefIp = getSharedPreferences(IP_ADDRESS_SHARED_PREFS, Context.MODE_PRIVATE);
-            sPrefUser = getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
-
             if (!(sPrefIp.getString(IP_SP_IP, null) == null)) {
+                /*Wenn IP bereits in SharedPreferences, gespeichert, füg die in URL ein, ansonsten
+                dialogfenster anzeigen*/
                 URL_IP = sPrefIp.getString(IP_SP_IP, null);
                 BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
-                if (!(sPrefUser.getString(USER_SP_ID, null) == null)) {
-                    reqeustUserId(BASE_URL + URL_BASE_USERS + sPrefUser.getString(USER_SP_ID, null) );
-                    }
             } else {
                 showIPdialog();
             }
@@ -92,11 +88,13 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
-
+    /*
+    * Dialogfenster zur eingabe der IP-Adresse
+    * */
     private void showIPdialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
         dialogView = getLayoutInflater().inflate(R.layout.ipaddress_custom_dialog, null);
-        final EditText mIp = (EditText) dialogView.findViewById(R.id.input_enter_ip);
+        final EditText mIp = dialogView.findViewById(R.id.input_enter_ip);
 
         if (sPrefIp.getString(IP_SP_IP, null) == null) {
             mIp.setText(URL_IP_BASE);
@@ -107,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
         mBuilder.setView(dialogView);
         final AlertDialog dialog = mBuilder.create();
 
-        Button mSave = (Button) dialogView.findViewById(R.id.save_ip);
+        Button mSave = dialogView.findViewById(R.id.save_ip);
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,10 +115,6 @@ public class SignUpActivity extends AppCompatActivity {
                     BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
                     Toast.makeText(SignUpActivity.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
-                    if (!(sPrefUser.getString(USER_SP_ID, null) == null)) {
-                        startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                        finish();
-                    }
                 } else {
                     mIp.setError(getString(R.string.errmsg_valid_input_required));
                     Toast.makeText(SignUpActivity.this, getString(R.string.dialog_please_enter_ip), Toast.LENGTH_LONG).show();
@@ -129,7 +123,7 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
 
-        Button mDiscard = (Button) dialogView.findViewById(R.id.discard_ip);
+        Button mDiscard = dialogView.findViewById(R.id.discard_ip);
         mDiscard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,52 +140,5 @@ public class SignUpActivity extends AppCompatActivity {
         editor.putString(IP_SP_IP, ip);
         editor.apply();
         Log.i("Save IP Address: ", ip);
-    }
-
-    public void reqeustUserId(String URL) {
-        final View view = findViewById(R.id.main_content);
-        final Contracts contracts = new Contracts();
-
-        Log.i("URL: ", URL);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        try {
-                            String currentUserId = response.getString("_id");
-                            if (currentUserId != null) {
-                                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                                Toast.makeText(SignUpActivity.this, getString(R.string.welcome_to_harvesthand), Toast.LENGTH_SHORT).show();
-                            }else {
-                                contracts.showSnackbar(view, getString(R.string.msg_please_login), true, false);
-                            }
-                            Log.i("User_id: ", currentUserId);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            contracts.showSnackbar(view, getString(R.string.msg_error), true, false);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        if (error.networkResponse != null) {
-                            switch (error.networkResponse.statusCode) {
-                                case 500:
-                                    contracts.showSnackbar(view, getString(R.string.msg_internal_error), true, false);
-                                    break;
-                                case 404:
-                                    contracts.showSnackbar(view, getString(R.string.msg_404_error), true, false);
-                                    break;
-                            }
-                        } else {
-                            contracts.showSnackbar(view, getString(R.string.connection_err), true, false);
-                        }
-                    }
-                });
-        Volley.newRequestQueue(this).add(request);
     }
 }

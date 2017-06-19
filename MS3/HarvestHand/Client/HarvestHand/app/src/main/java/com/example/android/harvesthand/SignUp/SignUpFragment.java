@@ -2,6 +2,7 @@ package com.example.android.harvesthand.SignUp;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,12 +19,14 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.harvesthand.Contracts;
+import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
 
 import org.json.JSONException;
@@ -32,6 +35,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNUP;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
@@ -44,8 +48,6 @@ import static com.example.android.harvesthand.Contracts.USER_SP_TYPE;
  */
 public class SignUpFragment extends Fragment {
     private static String URL;
-    private final JSONObject jsonBody = null;
-
     private final static int PROFI = 0;
     private final static int USER = 1;
     private EditText inputName;
@@ -72,19 +74,19 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         // Inflate the layout for this fragment
-        inputName = (EditText) view.findViewById(R.id.signup_input_name);
-        inputEmail = (EditText) view.findViewById(R.id.signup_input_email);
-        inputPass = (EditText) view.findViewById(R.id.signup_input_pass);
+        inputName = view.findViewById(R.id.signup_input_name);
+        inputEmail =  view.findViewById(R.id.signup_input_email);
+        inputPass = view.findViewById(R.id.signup_input_pass);
 
-        usertypeRadioGroup = (RadioGroup) view.findViewById(R.id.rg_usertype);
+        usertypeRadioGroup = view.findViewById(R.id.rg_usertype);
 
-        progressBar = (ProgressBar) getActivity().findViewById(R.id.signup_progressbar);
+        progressBar = getActivity().findViewById(R.id.signup_progressbar);
 
         mName = inputName.getText().toString().trim();
         mEmail = inputEmail.getText().toString().trim();
         mPass = inputPass.getText().toString().trim();
 
-        mSignUpButton = (Button) view.findViewById(R.id.bt_signup);
+        mSignUpButton = view.findViewById(R.id.bt_signup);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -117,7 +119,7 @@ public class SignUpFragment extends Fragment {
 
     private boolean validEmailInput() {
         mEmail = inputEmail.getText().toString().trim();
-        mEmailTextInput = (TextInputLayout) getActivity().findViewById(R.id.signup_inputlayout_email);
+        mEmailTextInput = getActivity().findViewById(R.id.signup_inputlayout_email);
         if (mEmail.isEmpty() /*|| Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()*/) {
             mEmailTextInput.setErrorEnabled(true);
             mEmailTextInput.setError(getString(R.string.errmsg_email_required));
@@ -131,7 +133,7 @@ public class SignUpFragment extends Fragment {
 
     private boolean validNameInput() {
         mName = inputName.getText().toString().trim();
-        mNameTextInput = (TextInputLayout) getActivity().findViewById(R.id.signup_inputlayout_name);
+        mNameTextInput = getActivity().findViewById(R.id.signup_inputlayout_name);
         if (mName.isEmpty()) {
             mNameTextInput.setErrorEnabled(true);
             mNameTextInput.setError(getString(R.string.errmsg_name_required));
@@ -145,7 +147,7 @@ public class SignUpFragment extends Fragment {
 
     private boolean validPassInput() {
         mPass = inputPass.getText().toString().trim();
-        mPassTextInput = (TextInputLayout) getActivity().findViewById(R.id.signup_inputlayout_pass);
+        mPassTextInput = getActivity().findViewById(R.id.signup_inputlayout_pass);
         if (mPass.isEmpty()) {
             mPassTextInput.setErrorEnabled(true);
             mPassTextInput.setError(getString(R.string.errmsg_pass_required));
@@ -167,7 +169,7 @@ public class SignUpFragment extends Fragment {
         if (usertypeRadioGroup.getCheckedRadioButtonId() == -1) {
             Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.msg_choice_typeandgender), Snackbar.LENGTH_LONG);
             View snackbarView = snackbar.getView();
-            TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView snackBarText = snackbarView.findViewById(android.support.design.R.id.snackbar_text);
             snackBarText.setTextColor(Color.rgb(253, 86, 86));
             snackbar.show();
             return false;
@@ -197,13 +199,9 @@ public class SignUpFragment extends Fragment {
                             String user_id = response.getString("_id");
                             int user_type = response.getInt("user_type");
                             savePreferences(user_id, user_type);
+                            Toast.makeText(getContext(), R.string.msg_signup_success, Toast.LENGTH_SHORT).show();
                             progressBar.setVisibility(View.INVISIBLE);
-
-                            Snackbar snackbar = Snackbar.make(getView(), getActivity().getString(R.string.msg_signup_success), Snackbar.LENGTH_LONG);
-                            View text = snackbar.getView();
-                            TextView snackBarText = (TextView) text.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(71, 171, 75));
-                            snackbar.show();
+                            startActivity(new Intent(getContext(), MainActivity.class));
                         } catch (JSONException e) {
                             e.printStackTrace();
                             contracts.showSnackbar(getView(), getString(R.string.msg_error), true, false);
