@@ -6,7 +6,7 @@ var Tutorial = require('../models_mongoose/tutorial'),
 
 //Tutorial wird angelegt in DB
 module.exports.addTutorial = function (newTutorial) {
-    var newTutorial = new Tutorial(newTutorial)/*{
+    var newTutorial = new Tutorial({
         air_temp: {
             status: newTutorial.air_temp.status,
             deviation: newTutorial.air_temp.deviation,
@@ -17,7 +17,7 @@ module.exports.addTutorial = function (newTutorial) {
             deviation: newTutorial.air_moisture.deviation,
             norm: newTutorial.air_moisture.norm
         },
-        /!*Wasserbedarf l/m^2/Woche*!/
+        /*Wasserbedarf l/m^2/Woche*/
         soil_moisture: {
             status: newTutorial.soil_moisture.status,
             deviation: newTutorial.soil_moisture.deviation,
@@ -44,7 +44,7 @@ module.exports.addTutorial = function (newTutorial) {
             norm: newTutorial.height_meter.norm
         },
         mature_after_month: newTutorial.mature_after_month
-    });*/
+    });
     newTutorial.save(function (err, result) {
         if (err) {
             console.log(err);
