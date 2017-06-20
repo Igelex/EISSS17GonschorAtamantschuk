@@ -7,21 +7,7 @@ var Entry = require('../models_mongoose/entry'),
 
 //Neuen Eintrag in der DB speichern, parralel werden die Daten ausgewertet
 module.exports.addEntry = function (req, res) {
-    var newEntry = new Entry({
-        entry_name: req.body.entry_name,
-        art_id: req.body.art_id,
-        tutorial_id: req.body.tutorial_id,
-        owner_id: req.body.owner_id,
-        collaborators: req.body.collaborators,
-        ph_value: req.body.ph_value,
-        location: req.body.location,
-        area: req.body.area,
-        soil_temp: req.body.soil_temp,
-        soil_moisture: req.body.soil_moisture,
-        air_moisture: req.body.air_moisture,
-        air_temp: req.body.air_temp,
-        height_meter: req.body.height_meter
-    });
+    var newEntry = new Entry(req.body)
     newEntry.save(function (err, result) {
         if (err) {
             console.log(err);
@@ -29,8 +15,8 @@ module.exports.addEntry = function (req, res) {
         } else {
             console.log('Entry saved');
             res.status(200).type('text').send({msg: 'Entry saved', res: true});
-            //Wenn Entry gespeichert, anyalysiere Daten
-            analyzer.analyseData(result._id);
+            /*Wenn Entry gespeichert, anyalysiere Daten*/
+            analyzer.analyseData(result);
         }
     });
 };

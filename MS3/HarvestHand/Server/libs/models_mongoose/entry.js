@@ -9,7 +9,7 @@ var entrySchema = mongoose.Schema({
     /*Ein beschreibender Name*/
     entry_name: {type: String, required: true},
     /*Art der Pflanze, mit id identifiziert*/
-    art_id: {type: Number, required: true},
+    crop_id: {type: Number, required: true},
     /*Verknüpfter Tutorial*/
     tutorial_id: String,
     /*ID des Erstellers*/

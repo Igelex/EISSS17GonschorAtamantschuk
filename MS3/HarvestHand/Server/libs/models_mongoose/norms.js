@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 //was eingepflanzt wird
 
 var normsSchema = mongoose.Schema({
-    crop_id: Number,
+    crop_id: {type: Number, unique: true},
     name: [String],
     family: String,
     air_temp: {

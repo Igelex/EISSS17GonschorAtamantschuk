@@ -9,19 +9,19 @@ var tutorialSchema = mongoose.Schema({
     air_temp: {
         status: Number,
         deviation: Number,
-        norm: Number
+        norm: String
     },
     air_moisture: {
         status: Number,
         deviation: Number,
-        norm: Number
+        norm: String
     },
     /*Wasserbedarf l/m^2/Woche*/
     soil_moisture: {
         status: Number,
         deviation: Number,
         water_requirements: Number,
-        norm: Number
+        norm: String
     },
     soil: {
         status: Number,
@@ -30,17 +30,17 @@ var tutorialSchema = mongoose.Schema({
     soil_temp: {
         status: Number,
         deviation: Number,
-        norm: Number
+        norm: String
     },
     ph_value: {
         status: Number,
         deviation: Number,
-        norm: Number
+        norm: String
     },
     height_meter: {
         status: Number,
         deviation: Number,
-        norm: Number
+        norm: String
     },
     mature_after_month: Number
     /*.

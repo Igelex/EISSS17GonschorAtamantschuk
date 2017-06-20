@@ -4,20 +4,14 @@
 var Norm = require('../models_mongoose/norms');
 
 module.exports.addNorm = function (req, res) {
-    var newNorm = new Norm({
-        norm_name: req.body.norm_name,
-        art_id: req.body.art_id,
-        ph_norm: req.body.ph_norm,
-        water_norm: req.body.water_norm,
-        minerals_norm: req.body.minerals_norm
-    });
+    var newNorm = new Norm(req.body);
     newNorm.save(function (err, result) {
         if (err) {
             console.log(err);
             res.status(500).type('text').send('Norm not saved :' + err);
         } else {
             console.log('Norm saved');
-            res.status(200).type('text').send('Norm saved :' + result);
+            res.status(200).type('text').send(result);
         }
     });
 };
@@ -50,19 +44,20 @@ module.exports.deleteNorm = function (req, res) {
     });
 };
 
-module.exports.getNorm = function (art_id) {
-    Norm.findeOne({
-            art_id: art_id
+module.exports.getNorm = function (crop_id) {
+    Norm.findOne({
+            crop_id: crop_id
         },
         function (err, result) {
-            if (err){
-                Console.log("GetNorm DB Error:" + err);
-            }else {
-                if (result){
+            if (err) {
+                console.log("GetNorm DB Error:" + err);
+            } else {
+                if (result) {
+                    console.log("NORM is: " + result);
                     return result;
                 }
                 else {
-                    Console.log("No Norm found");
+                    console.log("No Norm found");
                     return null;
                 }
             }
