@@ -50,6 +50,27 @@ module.exports.deleteNorm = function (req, res) {
     });
 };
 
+module.exports.getNorm = function (art_id) {
+    Norm.findeOne({
+            art_id: art_id
+        },
+        function (err, result) {
+            if (err){
+                Console.log("GetNorm DB Error:" + err);
+            }else {
+                if (result){
+                    return result;
+                }
+                else {
+                    Console.log("No Norm found");
+                    return null;
+                }
+            }
+
+        })
+
+};
+
 //For debugging
 module.exports.getAllNorms = function (req, res) {
     Norm.find().exec(function (err, result) {
