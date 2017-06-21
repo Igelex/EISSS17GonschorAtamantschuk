@@ -20,9 +20,12 @@ var entrySchema = mongoose.Schema({
     /*
     * Properties
     */
-
-    location: String,
-    /*Fläche in ha*/
+    location: {
+        name: String,
+        countryISOCode: String,
+        city: String
+    },
+    /*Fläche in m2*/
     area: Number,
     /*Art des Bodens*/
     soil: Number,

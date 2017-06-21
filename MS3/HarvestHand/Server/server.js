@@ -15,7 +15,7 @@ var express = require('express'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
     controller_user = require('./libs/javascript/controller_user'),
     routes = require('./libs/routes/index'),
-    wetter = require('./libs/javascript/weather'),
+    weather = require('./libs/javascript/weather'),
     port = 3001;
 
 /*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
@@ -31,7 +31,7 @@ db.once('open', function () {
 
 require('./libs/javascript/passport');
 
-app.get("/wetter", wetter.wetter);
+app.get("/weather", weather.getPrecipitationForWeek);
 
 //all environments
 app.set('port', process.env.PORT || port);
@@ -59,8 +59,6 @@ app.get('/', function (req, res) {
 });
 
 //////////////////////////Users
-
-app.get("/wetter", wetter.wetter);
 
 app.post('/signup', controller_user.registerUser);
 

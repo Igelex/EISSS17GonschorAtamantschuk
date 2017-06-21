@@ -5,7 +5,7 @@ var Tutorial = require('../models_mongoose/tutorial'),
     controller_entry = require('./controller_entry');
 
 //Tutorial wird angelegt in DB
-module.exports.addTutorial = function (newTutorial) {
+module.exports.addTutorial = function (newTutorial, entry_id) {
     var newTutorial = new Tutorial({
         air_temp: {
             status: newTutorial.air_temp.status,

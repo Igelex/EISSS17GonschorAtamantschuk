@@ -4,9 +4,7 @@
 var controller_tutorial = require('./controller_tutorial'),
     http = require('http'),
     weather = require('./weather'),
-    norms_controller = require('./controller_norms'),
     Norm = require('../models_mongoose/norms'),
-    currentNorm,
     NORM = 0, //flag, wenn daten von der Norm nicht abweichen
     LESS = 1, //flag, wenn daten kleiner als die Norm
     GREATER = 2; //flag, wenn daten größer als die Norm
@@ -87,7 +85,7 @@ function analyseValues(entry, currentNorm) {
         newTutorial.air_temp.status = GREATER;
     } else {
         newTutorial.air_temp.deviation = 100;
-        ewTutorial.air_temp.status = Norm
+        newTutorial.air_temp.status = NORM
     }
     newTutorial.air_temp.norm = currentNorm.air_temp.min  + "-" + currentNorm.air_temp.max;
 
@@ -100,7 +98,7 @@ function analyseValues(entry, currentNorm) {
         newTutorial.air_moisture.status = GREATER;
     } else {
         newTutorial.air_moisture.deviation = 100;
-        ewTutorial.air_moisture.status = Norm
+        newTutorial.air_moisture.status = NORM
     }
     newTutorial.air_moisture.norm = currentNorm.air_moisture.min  + "-" + currentNorm.air_moisture.max;
 
@@ -113,7 +111,7 @@ function analyseValues(entry, currentNorm) {
         newTutorial.soil_temp.status = GREATER;
     } else {
         newTutorial.soil_temp.deviation = 100;
-        ewTutorial.soil_temp.status = Norm;
+        newTutorial.soil_temp.status = NORM;
     }
     newTutorial.soil_temp.norm = currentNorm.soil_temp.min  + "-" + currentNorm.soil_temp.max;
 
@@ -126,7 +124,7 @@ function analyseValues(entry, currentNorm) {
         newTutorial.height_meter.status = GREATER;
     } else {
         newTutorial.height_meter.deviation = 100;
-        ewTutorial.height_meter.status = Norm;
+        newTutorial.height_meter.status = NORM;
     }
     newTutorial.height_meter.norm = currentNorm.height_meter.min  + "-" + currentNorm.height_meter.max;
 
@@ -151,7 +149,7 @@ function analyseValues(entry, currentNorm) {
     }
     newTutorial.soil.norm = currentNorm.soil.id;
 
-    var weekPrecipitation = weather.getPrecipitationForWeek(entry.location);
+    var weekPrecipitation = 13 /*weather.getPrecipitationForWeek(entry.country, entry.city);*/
 
     if (entry.soil_moisture <= currentNorm.soil_moisture.min) {
         newTutorial.soil_moisture.deviation = (entry.soil_moisture * 100) / currentNorm.soil_moisture.min;
@@ -169,24 +167,5 @@ function analyseValues(entry, currentNorm) {
     newTutorial.mature_after_month = currentNorm.mature_after_month;
 
     console.log("New Tutorial: " + newTutorial);
-    controller_tutorial.addTutorial(newTutorial);
+    controller_tutorial.addTutorial(newTutorial, entry._id);
 }
-
-/*var options = {
- host: 'localhost',
- port: '3000',
- path: '/norms/' + entry.art_id,
- method: 'GET'
- };
-
- //Request um die Norm-Datei zu holen,
- var externalRequest = http.request(options, function (externalResponse) {
- externalResponse.on('data', function (data) {
- //Helpermethode
- analyseValues(entry, JSON.parse(data));
- //schließlich wird Tutorial erstellt
- controller_tutorial.addTutorial(entry._id, entry.entry_name, ph, water, minerals);
- });
- });
- externalRequest.end();
- };*/
