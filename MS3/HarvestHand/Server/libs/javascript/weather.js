@@ -6,11 +6,11 @@ var request = require('request');
 var key = '28182cd556dbb993';
 
 function  getPrecipitationForWeek(location) {
-
+    var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10days/q/DE/Gummersbach.json'
 }
 
-var requestUrl = 'http://api.wunderground.com/api/' + key + '/geolookup/q/+ location'
-var requestUrl = 'http://api.wunderground.com/api/' + key + '/conditions/q/CA/San_Francisco.json'
+//var requestUrl = 'http://api.wunderground.com/api/' + key + '/geolookup/q/+ location'
+var requestUrl = 'http://api.wunderground.com/api/' + key + '/conditions/q/DE/Gummersbach.json'
 module.exports.wetter = function (req, res) {
     request(requestUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {
