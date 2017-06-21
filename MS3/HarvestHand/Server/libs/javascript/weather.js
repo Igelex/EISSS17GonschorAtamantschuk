@@ -15,13 +15,13 @@ module.exports.getPrecipitationForWeek = function (country, city) {
 
     var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/' + country + '/'
         + city + '.json';
-
+    console.log('Send request...');
     request(requestUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             if (response) {
+                console.log('ON Response...');
                 var result = JSON.parse(body);
                 var forecastArray = result.forecast.simpleforecast.forecastday;
-                //console.log(forecastArray);
 
                 for (var i = 0; i < 7; i++) {
                     if (forecastArray[i].hasOwnProperty()) continue;
