@@ -5,8 +5,8 @@ var Tutorial = require('../models_mongoose/tutorial'),
     controller_entry = require('./controller_entry');
 
 //Tutorial wird angelegt in DB
-module.exports.addTutorial = function (newTutorial, entry_id) {
-    var newTutorial = new Tutorial({
+module.exports.addTutorial = function (Tutorial, entry_id) {
+    var newTutorial = new Tutorial(Tutorial)/*({
         air_temp: {
             status: newTutorial.air_temp.status,
             deviation: newTutorial.air_temp.deviation,
@@ -17,7 +17,7 @@ module.exports.addTutorial = function (newTutorial, entry_id) {
             deviation: newTutorial.air_moisture.deviation,
             norm: newTutorial.air_moisture.norm
         },
-        /*Wasserbedarf l/m^2/Woche*/
+        /!*Wasserbedarf l/m^2/Woche*!/
         soil_moisture: {
             status: newTutorial.soil_moisture.status,
             deviation: newTutorial.soil_moisture.deviation,
@@ -49,11 +49,11 @@ module.exports.addTutorial = function (newTutorial, entry_id) {
         if (err) {
             console.log(err);
         } else {
-            console.log('Tutorial saved ' + result);
+            console.log('Tutorial saved ' + result._id);
             //direkt wird die @tutorial_id im Eintrag aktualisiert
             controller_entry.updateEntryTutorialId(entry_id, result._id);
         }
-    });
+    });*/
 };
 
 //Zum Eintrag Passendes Tutorial wird gefunden

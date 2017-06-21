@@ -78,7 +78,7 @@ function analyseValues(entry, currentNorm) {
 
     /*Air temperature Analyse*/
     if (entry.air_temp <= currentNorm.air_temp.min) {
-        newTutorial.air_temp.deviation = (entry.air_temp * 100) / currentNorm.air_temp.min;
+        newTutorial.air_temp.deviation = Math.round((entry.air_temp * 100) / currentNorm.air_temp.min);
         newTutorial.air_temp.status = LESS;
     } else if (entry.air_temp >= currentNorm.air_temp.max) {
         newTutorial.air_temp.deviation = (currentNorm.air_temp.max * 100) / entry.air_temp;

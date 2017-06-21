@@ -71,7 +71,7 @@ module.exports.updateEntry = function (req, res) {
         if (err) {
             res.status(500).type('text').write({msg: 'DB Error', res: false});
         } else {
-            if (result != null) {
+            if (result) {
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + result._id + ' successfully updated',
                     res: true
@@ -89,23 +89,15 @@ module.exports.updateEntry = function (req, res) {
 
 //Wenn daten analysiert und Tutorial erstellt, wird die @tutorial_id im Entry aktualisiert
 module.exports.updateEntryTutorialId = function (id, tutorial_id) {
-    Entry.findById(id, function (err, result) {
-        console.info(result);
+    Entry.findByIdAndUpdate(id, {tutorial_id: tutorial_id},function (err, result) {
         if (err) {
             console.error("DB error: " + err);
-        } else {
-            if (result) {
-                result.tutorial_id = tutorial_id;
-            } else {
-                console.error('Entry with id: ' + id + ' not found');
+        }else {
+            if(result){
+                console.log("Update Entry: " + result._id);
+            }else {
+                console.error('Entry Tutorial not updated');
             }
-            result.save(function (err) {
-                if (err) {
-                    console.error('Entry not updated :' + err);
-                } else {
-                    console.log('Entry updated with tutorial_id: ' + tutorial_id);
-                }
-            });
         }
 
     });
