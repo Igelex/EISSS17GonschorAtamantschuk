@@ -5,7 +5,11 @@
 var request = require('request');
 var key = '28182cd556dbb993';
 
-var requestUrl = 'http://api.wunderground.com/api/' + key + '/geolookup/q/autoip.json'
+function  getPrecipitationForWeek(location) {
+
+}
+
+var requestUrl = 'http://api.wunderground.com/api/' + key + '/geolookup/q/+ location'
 var requestUrl = 'http://api.wunderground.com/api/' + key + '/conditions/q/CA/San_Francisco.json'
 module.exports.wetter = function (req, res) {
     request(requestUrl, function (error, response, body) {

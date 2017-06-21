@@ -32,7 +32,78 @@
         "max": 900,
         "min": 0
     },
-    "mature_after_month": 11
+    "mature_after_month": 11, 
+    
+    "crop_id": 1,
+    "name": "Kakao",
+    "family": "Malvengewächse",
+    "air_temp": {
+        "max": 25,
+        "min": 25
+    },
+    "air_moisture": {
+        "max": 90,
+        "min": 75
+    },
+    "water_requirements": 45,
+    "fertilizer": {
+        "name": "-",
+        "id": 1
+    },
+    "soil": {
+        "name": "tief/humusreich",
+        "id": 1
+    },
+    "soil_temp": {
+        "max": 26,
+        "min":10
+    },
+    "soil_moisture": {
+        "max": 70,
+        "min": 60
+    },
+    "ph_value": 6,
+    "height_meter": {
+        "max": 1000,
+        "min": 0
+    },
+    "mature_after_month": 12,
+    
+    "crop_id": 2,
+    "name": "Banane",
+    "family": "Bananenartige",
+    "air_temp": {
+        "max": 25,
+        "min": 1
+    },
+    "air_moisture": {
+        "max": 95,
+        "min": 90
+    },
+    "water_requirements": 45,
+    "fertilizer": {
+        "name": "gavno",
+        "id": 2
+    },
+    "soil": {
+        "name": "humusreich",
+        "id": 2
+    },
+    "soil_temp": {
+        "max": 26,
+        "min":10
+    },
+    "soil_moisture": {
+        "max": 70,
+        "min": 60
+    },
+    "ph_value": 6,
+    "height_meter": {
+        "max": 1000,
+        "min": 0
+    },
+    "mature_after_month": 12,
+
     "pflanze":{
         "kaffee":{
             "name": "Kaffee (Coffea)",

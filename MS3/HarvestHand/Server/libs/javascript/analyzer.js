@@ -151,7 +151,7 @@ function analyseValues(entry, currentNorm) {
     }
     newTutorial.soil.norm = currentNorm.soil.id;
 
-    var weekPrecipitation = 80; //weather.getPrecipitationForWeek(entry.location);
+    var weekPrecipitation = weather.getPrecipitationForWeek(entry.location);
 
     if (entry.soil_moisture <= currentNorm.soil_moisture.min) {
         newTutorial.soil_moisture.deviation = (entry.soil_moisture * 100) / currentNorm.soil_moisture.min;
