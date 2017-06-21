@@ -6,7 +6,8 @@ var request = require('request');
 var key = '28182cd556dbb993';
 
 function  getPrecipitationForWeek(location) {
-    var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10days/q/DE/Gummersbach.json'
+    var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/DE/Gummersbach.json'
+    var requestUrl = 'http://api.wunderground.com/api/' + key + /forecast10day/q/zmw:94125.1.99999.json'
 }
 
 //var requestUrl = 'http://api.wunderground.com/api/' + key + '/geolookup/q/+ location'
