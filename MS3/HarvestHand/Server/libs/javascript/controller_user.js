@@ -104,18 +104,19 @@ module.exports.deleteUser = function (req, res) {
 };
 
 module.exports.getUsers = function (req, res){
-    User.find(function (err, result) {
+    User.findOne({'phone_number': req.query.phone_number},
+        {'_id' : true},function (err, result) {
         if (err){
             res.status(500).send("DB error: " + err);
         }else {
             if (result){
+                console.log('Get Collab: ' + result);
                 res.status(200).send(result);
             }else {
-                res.status(204).send("No users found");
+                console.log('No Collab: ' + result);
+                res.status(204).send();
             }
         }
 
     })
-
-
-}
+};

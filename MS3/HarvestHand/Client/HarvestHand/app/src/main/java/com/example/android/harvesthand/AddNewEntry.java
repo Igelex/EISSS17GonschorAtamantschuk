@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -37,11 +40,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static android.os.Build.VERSION_CODES.M;
 import static com.example.android.harvesthand.Contracts.*;
 
@@ -49,18 +52,18 @@ public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private ImageButton locationButton;
-    private ProgressBar locationPb;
+    private ProgressBar locationPb, collabPb;
     private EditText locationEdit, nameEdit, areaEdit, heightEdit, airtempEdit, airmoistureEdit;
-    private EditText soiltempEdit, soilmoistureEdit, phEdit, collabEdit;
+    private EditText soiltempEdit, soilmoistureEdit, phEdit, addCollab ;
     private Geocoder geocoder;
     private ScrollView container;
     private Contracts contracts;
     private TextInputLayout locationInputLayout, nameInputLayout, areaInputLayout, heightInputLayout;
     private TextInputLayout airtempInputLayout, airmoistureInputLayout, soiltempInputLayout, soilmoistureInputLayout;
     private TextInputLayout phInputLayout, collabInputLayout;
-    private String countryISOCode, city, locationName;
+    private String countryISOCode, city, locationName, URL;
     private SharedPreferences sPrefUser;
-    private ArrayList<String> collabs;
+    private ArrayList<String> collabsArray;
     private int cropId, soilId;
 
 
@@ -69,7 +72,9 @@ public class AddNewEntry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_entry);
 
-        collabs = new ArrayList<>();
+        final CheckCollaborator checkCollaborator = new CheckCollaborator();
+
+        collabsArray = new ArrayList<>();
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
 
@@ -80,6 +85,7 @@ public class AddNewEntry extends AppCompatActivity {
         container = (ScrollView) findViewById(R.id.add_new_entry_container);
 
         locationPb = (ProgressBar) findViewById(R.id.add_new_entry_location_pb);
+        collabPb = (ProgressBar) findViewById(R.id.add_new_entry_collab_pb);
 
         locationInputLayout = (TextInputLayout) findViewById(R.id.add_inputlayout_entry_location);
 
@@ -100,7 +106,26 @@ public class AddNewEntry extends AppCompatActivity {
         soiltempEdit = (EditText) findViewById(R.id.add_entry_soiltemp);
         soilmoistureEdit = (EditText) findViewById(R.id.add_entry_soilmoisture);
         phEdit = (EditText) findViewById(R.id.add_entry_ph);
-        collabEdit = (EditText) findViewById(R.id.add_entry_collab);
+
+        addCollab = (EditText) findViewById(R.id.add_entry_collab);
+        ListView collabList = (ListView) findViewById(R.id.add_entry_collab_list);
+        final CollabListAdapter adapter = new CollabListAdapter(this, collabsArray);
+        collabList.setAdapter(adapter);
+        addCollab.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
+                    if (i == KeyEvent.KEYCODE_ENTER) {
+                        if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())){
+                            collabsArray.add(0, addCollab.getText().toString());
+                            adapter.notifyDataSetChanged();
+                            addCollab.setText("");
+                            return true;
+                        }
+                    }
+                return false;
+            }
+        });
 
         locationButton = (ImageButton) findViewById(R.id.add_location_button);
 
@@ -323,7 +348,7 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("soil_temp", Integer.valueOf(soiltempEdit.getText().toString().trim()));
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
-            entryObject.put("collaborators", collabs.add(collabEdit.getText().toString().trim()));
+            entryObject.put("collaborators", collabsArray);
             entryObject.put("owner_id", sPrefUser.getString(USER_SP_ID, null));
             entryObject.put("tutorial_id", "");
             entryObject.put("crop_id", cropId);
@@ -400,6 +425,15 @@ public class AddNewEntry extends AppCompatActivity {
 
             }
         });
+    }
+
+    private String buildURL(){
+        Uri baseUri = Uri.parse(BASE_URL + URL_BASE_USERS);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter(URL_PARAMS_PHONE_NUMBER, addCollab.getText().toString().trim());
+        Log.i("COLLAB URL:", uriBuilder.toString());
+        URL = uriBuilder.toString();
+        return URL;
     }
 
     private void stopRequestLocation() {

@@ -24,6 +24,7 @@ public class Contracts {
 
     public static String URL_PARAMS_OWNER_ID = "owner_id";
     public static String URL_PARAMS_COLLAB_ID = "collab_id";
+    public static String URL_PARAMS_PHONE_NUMBER = "phone_number";
 
     public static String USER_SHARED_PREFS = "user";
     public static String USER_SP_ID = "user_id";
