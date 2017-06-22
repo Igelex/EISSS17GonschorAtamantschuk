@@ -6,6 +6,8 @@ var controller_tutorial = require('./controller_tutorial'),
     weather = require('./weather'),
     Norm = require('../models_mongoose/norms'),
     weekPrecipitation = 0,
+    entry,
+    currentNorm
     NORM = 0, //flag, wenn daten von der Norm nicht abweichen
     LESS = 1, //flag, wenn daten kleiner als die Norm
     GREATER = 2; //flag, wenn daten größer als die Norm
@@ -52,22 +54,19 @@ var newTutorial = {
 
 //Analysiert Daten eines Eintrags, wird beim erstellen des Eintrags aufgerufen
 /*Standardwerte werden aus der Datenbank geholt*/
-module.exports.analyseData = function (entry) {
+module.exports.analyseData = function (currentEntry) {
     /*Standardwerte werden aus der Datenbank geholt*/
     Norm.findOne({
-            crop_id: entry.crop_id
+            crop_id: currentEntry.crop_id
         },
-        function (err, currentNorm) {
+        function (err, norm) {
             if (err) {
                 console.log("GetNorm DB Error:" + err);
             } else {
-                if (currentNorm) {
-
-                    analyseValues(entry, currentNorm,
-                        fetchWeatherData(entry.location.countryISOCode, entry.location.city));
-                    /*fetchWeatherData(entry.location.countryISOCode, entry.location.city,
-                    analyseValues(entry, currentNorm));*/
-                    console.log('Percip: ' + weekPrecipitation);
+                if (norm) {
+                    currentNorm = norm;
+                    entry = currentEntry;
+                    fetchWeatherData(entry.location.countryISOCode, entry.location.city);
                 }
                 else {
                     console.log("Cant save Tutorila, NORM is: " + currentNorm);
@@ -78,17 +77,14 @@ module.exports.analyseData = function (entry) {
 };
 
 function fetchWeatherData(countryISOCode, city) {
-    weekPrecipitation = weather.getPrecipitationForWeek(countryISOCode, city);
-    console.log('Percip in fetch: ' + weekPrecipitation);
+    weather.getPrecipitationForWeek(countryISOCode, city);
 }
 
 /*Vergleicht Daten des Eitrags mit den dazugehörigen Normen, für jeden wert wird flag gesetzt und die Abweichnung in
  prozent berechnet*/
-function analyseValues(entry, currentNorm, callback) {
+module.exports.analyseValues = function (weekPrecipitation) {
 
-    callback();
-
-    console.log('Percip in CALLBACK: ' + weekPrecipitation);
+    console.log('Percip in AnalyseValues: ' + weekPrecipitation);
     /*Air temperature Analyse*/
     if (entry.air_temp < currentNorm.air_temp.min) {
         newTutorial.air_temp.deviation = calculateDeviation(currentNorm.air_temp.min, entry.air_temp);
@@ -97,7 +93,7 @@ function analyseValues(entry, currentNorm, callback) {
         newTutorial.air_temp.deviation = calculateDeviation(entry.air_temp, currentNorm.air_temp.max);
         newTutorial.air_temp.status = GREATER;
     } else {
-        newTutorial.air_temp.deviation = 100;
+        newTutorial.air_temp.deviation = 0;
         newTutorial.air_temp.status = NORM
     }
     newTutorial.air_temp.norm = currentNorm.air_temp.min + "-" + currentNorm.air_temp.max;
@@ -110,7 +106,7 @@ function analyseValues(entry, currentNorm, callback) {
         newTutorial.air_moisture.deviation = calculateDeviation(entry.air_moisture, currentNorm.air_moisture.max);
         newTutorial.air_moisture.status = GREATER;
     } else {
-        newTutorial.air_moisture.deviation = 100;
+        newTutorial.air_moisture.deviation = 0;
         newTutorial.air_moisture.status = NORM
     }
     newTutorial.air_moisture.norm = currentNorm.air_moisture.min + "-" + currentNorm.air_moisture.max;
@@ -123,7 +119,7 @@ function analyseValues(entry, currentNorm, callback) {
         newTutorial.soil_temp.deviation = calculateDeviation(entry.soil_temp, currentNorm.soil_temp.max);
         newTutorial.soil_temp.status = GREATER;
     } else {
-        newTutorial.soil_temp.deviation = 100;
+        newTutorial.soil_temp.deviation = 0;
         newTutorial.soil_temp.status = NORM;
     }
     newTutorial.soil_temp.norm = currentNorm.soil_temp.min + "-" + currentNorm.soil_temp.max;
@@ -136,7 +132,7 @@ function analyseValues(entry, currentNorm, callback) {
         newTutorial.height_meter.deviation = calculateDeviation(entry.height_meter, currentNorm.height_meter.max);
         newTutorial.height_meter.status = GREATER;
     } else {
-        newTutorial.height_meter.deviation = 100;
+        newTutorial.height_meter.deviation = 0;
         newTutorial.height_meter.status = NORM;
     }
     newTutorial.height_meter.norm = currentNorm.height_meter.min + "-" + currentNorm.height_meter.max;
@@ -149,7 +145,7 @@ function analyseValues(entry, currentNorm, callback) {
         newTutorial.ph_value.deviation = calculateDeviation(entry.ph_value, currentNorm.ph_value);
         newTutorial.ph_value.status = GREATER
     } else {
-        newTutorial.ph_value.deviation = 100;
+        newTutorial.ph_value.deviation = 0;
         newTutorial.ph_value.status = NORM;
     }
     newTutorial.ph_value.norm = currentNorm.ph_value;
@@ -170,7 +166,7 @@ function analyseValues(entry, currentNorm, callback) {
         newTutorial.soil_moisture.deviation = calculateDeviation(entry.soil_moisture, currentNorm.soil_moisture.max);
         newTutorial.soil_moisture.status = GREATER;
     } else {
-        newTutorial.soil_moisture.deviation = 100;
+        newTutorial.soil_moisture.deviation = 0;
         newTutorial.soil_moisture.status = NORM;
     }
     newTutorial.soil_moisture.norm = currentNorm.soil_moisture.min + "-" + currentNorm.soil_moisture.max;

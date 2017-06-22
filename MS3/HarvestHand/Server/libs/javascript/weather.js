@@ -2,16 +2,17 @@
  * Created by franz on 24.05.2017.
  */
 
-var request = require('request');
-var key = '28182cd556dbb993';
+var request = require('request'),
+    analyzer = require('./analyzer'),
+    key = '28182cd556dbb993';
 
 /*var requestUrl2 = 'http://api.wunderground.com/api/' + key + /forecast10day/q/zmw:94125.1.99999.json'
  var requestUrl1 = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/DE/Gummersbach.json'*/
 
 module.exports.getPrecipitationForWeek = function (country, city) {
     var weekPrecipitation = 0;
-    country = 'DE';
-    city = 'Gummersbach'
+    country = 'SN';
+    city = 'Dakar'
 
     var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/' + country + '/'
         + city + '.json';
@@ -32,15 +33,15 @@ module.exports.getPrecipitationForWeek = function (country, city) {
                  * 1 mm Niederschlag == 1 Liter/m^2
                  * */
                 console.log('Precipitation week : ' + weekPrecipitation);
-                return weekPrecipitation;
+                analyzer.analyseValues(weekPrecipitation);
 
             } else {
                 console.log('No weatherdata : ' + response);
-                return weekPrecipitation = 0;
+                analyzer.analyseValues(weekPrecipitation);
             }
         } else {
             console.log(error, response.statusCode, body);
-            return weekPrecipitation = 0;
+            analyzer.analyseValues(weekPrecipitation);
         }
     });
 };
