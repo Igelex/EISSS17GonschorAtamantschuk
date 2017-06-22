@@ -31,10 +31,12 @@ import java.util.Map;
 
 import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNIN;
 import static com.example.android.harvesthand.Contracts.URL_IP;
+import static com.example.android.harvesthand.Contracts.URL_PARAMS_PHONE_NUMBER;
 import static com.example.android.harvesthand.Contracts.URL_PORT;
 import static com.example.android.harvesthand.Contracts.URL_PROTOCOL;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
 import static com.example.android.harvesthand.Contracts.USER_SP_ID;
+import static com.example.android.harvesthand.Contracts.USER_SP_NUMBER;
 import static com.example.android.harvesthand.Contracts.USER_SP_TYPE;
 
 /**
@@ -43,10 +45,8 @@ import static com.example.android.harvesthand.Contracts.USER_SP_TYPE;
 public class SignInFragment extends Fragment {
 
     private static String URL;
-    private EditText inputEmail;
-    private EditText inputPass;
-    private String mEmail;
-    private String mPass;
+    private EditText inputNumber;
+    private String mNumber;
     private ProgressBar progressBar;
     private SharedPreferences sPref;
 
@@ -61,8 +61,7 @@ public class SignInFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        inputEmail = view.findViewById(R.id.signin_input_email);
-        inputPass = view.findViewById(R.id.signin_input_pass);
+        inputNumber = view.findViewById(R.id.signin_input_number);
 
         progressBar = getActivity().findViewById(R.id.signup_progressbar);
 
@@ -70,7 +69,7 @@ public class SignInFragment extends Fragment {
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validEmailInput() && validPassInput()) {
+                if (validNumberInput()) {
                     progressBar.setVisibility(View.VISIBLE);
                     sendSignInRequest();
                 }
@@ -83,8 +82,7 @@ public class SignInFragment extends Fragment {
     public void sendSignInRequest() {
         final Contracts contracts = new Contracts();
         Map<String, String> params = new HashMap<>();
-        params.put("email", mEmail);
-        params.put("pass", mPass);
+        params.put("phone_number", mNumber);
         URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;
         Log.i("Params: ", params.toString());
         Log.i("URL: ", URL);
@@ -96,10 +94,11 @@ public class SignInFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         try {
                             String current_user_id = response.getString("_id");
+                            String current_user_number = response.getString("phone_number");
                             int current_user_type = response.getInt("user_type");
                             Log.i("User_id: ", current_user_id);
                             Log.i("User_Type: ", "" + current_user_type);
-                            savePreferences(current_user_id, current_user_type);
+                            savePreferences(current_user_id, current_user_type, current_user_number);
                             Toast.makeText(getContext(), R.string.msg_login_successful, Toast.LENGTH_SHORT ).show();
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             startActivity(intent);
@@ -117,8 +116,7 @@ public class SignInFragment extends Fragment {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 401:
-                                    inputEmail.setError(getString(R.string.msg_number_incorrect));
-                                    inputPass.setError(getString(R.string.msg_number_incorrect));
+                                    inputNumber.setError(getString(R.string.msg_number_incorrect));
                                     contracts.showSnackbar(getView(), getString(R.string.msg_number_incorrect), true, false);
                                     break;
                                 case 404:
@@ -138,35 +136,21 @@ public class SignInFragment extends Fragment {
         Volley.newRequestQueue(getContext()).add(request);
     }
 
-    private boolean validPassInput() {
-        mPass = inputPass.getText().toString().trim();
-        if (mPass.isEmpty()) {
-            inputPass.setError(getString(R.string.errmsg_number_required));
-            inputPass.requestFocus();
-            return false;
-        } else if (mPass.length() < 6) {
-            inputPass.setError(mPass.length() + "/6");
-            inputPass.requestFocus();
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean validEmailInput() {
-        mEmail = inputEmail.getText().toString().trim();
-        if (mEmail.isEmpty() /*|| Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()*/) {
-            inputEmail.setError(getString(R.string.errmsg_email_required));
-            inputEmail.requestFocus();
+    private boolean validNumberInput() {
+        mNumber = inputNumber.getText().toString().trim();
+        if (mNumber.isEmpty()) {
+            inputNumber.setError(getString(R.string.errmsg_number_required));
+            inputNumber.requestFocus();
             return false;
         }
         return true;
     }
 
-    private void savePreferences(String id, int type) {
+    private void savePreferences(String id, int type, String number) {
         sPref = getActivity().getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
         editor.putString(USER_SP_ID, id);
+        editor.putString(USER_SP_NUMBER, number);
         editor.putInt(USER_SP_TYPE, type);
         editor.apply();
         Log.i("Save User_id: ", id);

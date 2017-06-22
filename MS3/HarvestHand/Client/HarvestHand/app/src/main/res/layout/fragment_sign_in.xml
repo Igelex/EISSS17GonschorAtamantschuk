@@ -9,23 +9,6 @@
     android:paddingTop="16dp">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputlayout_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/TextInputLayout">
-
-        <EditText
-            android:id="@+id/signin_input_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/input_your_email"
-            android:inputType="textEmailAddress"
-            style="@style/inputsStyle"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
         android:id="@+id/inputlayout_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,12 +17,12 @@
         app:counterMaxLength="6">
 
         <EditText
-            android:id="@+id/signin_input_pass"
+            android:id="@+id/signin_input_number"
             style="@style/inputsStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/input_your_password"
+            android:hint="@string/input_your_number"
             android:inputType="textPassword" />
 
         <Button

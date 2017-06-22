@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/input_your_password"
+                android:hint="@string/input_your_number"
                 android:inputType="textPassword" />
 
         </android.support.design.widget.TextInputLayout>

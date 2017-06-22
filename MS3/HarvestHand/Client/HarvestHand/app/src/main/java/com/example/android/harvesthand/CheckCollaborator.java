@@ -17,12 +17,12 @@ import org.json.JSONObject;
 
 public class CheckCollaborator {
 
-    static Boolean userExist = false;
+    static String user = null;
 
     public CheckCollaborator() {
     }
 
-    protected boolean getUser(final Context context, ProgressBar pg, View c, String url ) {
+    protected String getUser(final Context context, ProgressBar pg, View c, String url ) {
         final ProgressBar progressBar = pg;
         final View container = c;
         final Contracts contracts = new Contracts();
@@ -39,18 +39,18 @@ public class CheckCollaborator {
                                 Log.i("CHecke USER:", response.getString("_id"));
                                 String userId = response.getString("_id");
                                 if (userId != null && userId.length() > 0) {
-                                    userExist = true;
+                                    user = userId;
                                 }
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                                 contracts.showSnackbar(container, context.getString(R.string.msg_error), true, false);
-                                userExist = false;
+                                user = null;
                             }
                         }else{
                             contracts.showSnackbar(container,
                                     context.getString(R.string.msg_user_not_found), true, false);
-                            userExist = false;
+                            user = null;
                         }
                     }
                 },
@@ -62,25 +62,25 @@ public class CheckCollaborator {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
                                     contracts.showSnackbar(container, context.getString(R.string.msg_internal_error), true, false);
-                                    userExist = false;
+                                    user = null;
                                     break;
                                 case 404:
                                     contracts.showSnackbar(container, context.getString(R.string.msg_404_error), true, false);
-                                    userExist = false;
+                                    user = null;
                                     break;
                                 case 204:
                                     contracts.showSnackbar(container, "hui popimi", true, false);
-                                    userExist = false;
+                                    user = null;
                                     break;
                             }
                         } else {
                             contracts.showSnackbar(container, context.getString(R.string.connection_err), true, false);
-                            userExist = false;
+                            user = null;
                         }
                     }
                 });
         Volley.newRequestQueue(context).add(request);
-        return userExist;
+        return user;
     }
 
 }

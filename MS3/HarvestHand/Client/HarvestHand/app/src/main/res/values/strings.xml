@@ -103,6 +103,7 @@
     <string name="settings_menu_item">settings</string>
     <string name="msg_cant_save">Error, cant save. Please try again</string>
     <string name="msg_user_not_found">User not found</string>
+    <string name="input_your_number">Your Phone Number</string>
 
 
     <string-array name="soil_spinner_array">

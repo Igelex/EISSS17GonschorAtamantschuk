@@ -36,12 +36,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -63,7 +65,7 @@ public class AddNewEntry extends AppCompatActivity {
     private TextInputLayout phInputLayout, collabInputLayout;
     private String countryISOCode, city, locationName, URL;
     private SharedPreferences sPrefUser;
-    private ArrayList<String> collabsArray;
+    private ArrayList collabsArray;
     private int cropId, soilId;
 
 
@@ -116,8 +118,9 @@ public class AddNewEntry extends AppCompatActivity {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
-                        if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())){
-                            collabsArray.add(0, addCollab.getText().toString());
+                        String user = checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL());
+                        if (user != null && !user.isEmpty()){
+                            collabsArray.add(0, user);
                             adapter.notifyDataSetChanged();
                             addCollab.setText("");
                             return true;
@@ -334,6 +337,7 @@ public class AddNewEntry extends AppCompatActivity {
 
         JSONObject entryObject = new JSONObject();
         JSONObject locationObject = new JSONObject();
+        JSONArray collabJsonArray = new JSONArray();
 
         try {
             locationObject.put("name", locationName);
@@ -348,7 +352,7 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("soil_temp", Integer.valueOf(soiltempEdit.getText().toString().trim()));
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
-            entryObject.put("collaborators", collabsArray);
+            entryObject.put("collaborators", new JSONArray(collabsArray));
             entryObject.put("owner_id", sPrefUser.getString(USER_SP_ID, null));
             entryObject.put("tutorial_id", "");
             entryObject.put("crop_id", cropId);

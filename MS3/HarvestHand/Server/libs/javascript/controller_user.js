@@ -7,13 +7,12 @@ var User = require('../models_mongoose/user');
 module.exports.registerUser = function (req, res) {
 
     //Überprüfen ob User bereits existiert
-    User.findOne({email: req.body.phone_number}, function (err, result) {
+    User.findOne({phone_number: req.body.phone_number}, function (err, result) {
         if (err) {
             res.status(500).type('application/json').send({msg: 'DB Error'});
             console.error(err);
             return;
         }
-
         if (result) {
             //Es existiert bereits ein user mit der angegeben Email existiert
             console.log('User already exists');
@@ -38,6 +37,24 @@ module.exports.registerUser = function (req, res) {
         }
     });
 };
+
+module.exports.logIn = function (req, res) {
+    console.log('Params Number ' + req.body.phone_number);
+    User.findOne({'phone_number': req.body.phone_number}, function (err, user) {
+        if (err) {
+            res.status(500).type('text').send("DB error: " + err);
+        }
+        if (user) {
+            console.log('Welcome: ' + user);
+            res.status(200).type('application/json').send(user);
+        } else {
+            console.log('Incorrect NUmber :' + user);
+            res.status(401).type('application/json').send({msg: 'Incorrect Number', res: true});
+        }
+    });
+
+};
+
 
 //Bestimmten User anzeigen
 module.exports.getUserById = function (req, res) {

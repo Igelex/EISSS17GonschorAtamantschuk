@@ -13,7 +13,7 @@ module.exports.addEntry = function (req, res) {
             console.log(err);
             res.status(500).type('text').send({msg: 'Entry not saved', res: false});
         } else {
-            console.log('Entry saved: ' + result._id);
+            console.log('Entry saved: ' + result);
             res.status(200).type('text').send({msg: 'Entry saved', res: true});
             /*Wenn Entry gespeichert, anyalysiere Daten*/
             console.log('Starte Bodenanalyse...');
@@ -22,11 +22,12 @@ module.exports.addEntry = function (req, res) {
     });
 };
 
-//Alle Entries anzeigen
+//Alle Entries anzeigen eisen Users anzeigen
 module.exports.getEntries = function (req, res) {
-    console.log("Get Entries: " + req.query.owner_id);
+    console.log("Get Entries owner_id: " + req.query.owner_id);
+    console.log("Get Entries number: " + req.query.phone_number);
     Entry.find({
-            $or: [{"owner_id": req.query.owner_id}, {"collaborators": req.query.collab_id}]
+            $or: [{owner_id: req.query.owner_id}, {collaborators: req.query.collab_id}]
         },
         {
             "entry_name": true,
@@ -43,7 +44,7 @@ module.exports.getEntries = function (req, res) {
                     res.status(200).type('application/json').send(result);
                 }
                 else {
-                    res.status(200).type('application/json').send({msg: 'No Entries found', res: false});
+                    res.status(204).type('application/json').send({msg: 'No Entries found', res: false});
                 }
             }
     })
