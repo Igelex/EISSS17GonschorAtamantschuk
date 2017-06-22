@@ -12,72 +12,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="16dp">
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="With email"
-                android:layout_weight="1"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="With number"
-                android:layout_weight="1"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/signup_inputlayout_name"
+            android:id="@+id/signup_inputlayout_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/TextInputLayout">
 
             <EditText
-                android:id="@+id/signup_input_name"
-                style="@style/inputsStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/input_your_name" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/signup_inputlayout_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/TextInputLayout">
-
-            <EditText
-                android:id="@+id/signup_input_email"
-                style="@style/inputsStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="@string/input_your_email"
-                android:inputType="textEmailAddress" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/signup_inputlayout_pass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/TextInputLayout">
-
-            <EditText
-                android:id="@+id/signup_input_pass"
+                android:id="@+id/signup_input_number"
                 style="@style/inputsStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

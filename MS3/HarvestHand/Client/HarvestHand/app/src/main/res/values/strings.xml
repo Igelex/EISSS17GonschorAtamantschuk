@@ -4,9 +4,6 @@
 
     <!--Signup-->
     <string name="signup">Sign up</string>
-    <string name="input_your_email">Your Email</string>
-    <string name="input_your_password">Your Password</string>
-    <string name="input_your_name">Your Name</string>
     <string name="signin">Sign in</string>
 
     <string name="welcome_to_harvesthand">Welcome to HarvestHand</string>
@@ -18,17 +15,15 @@
     <string name="profi">Advanced</string>
     <string name="user">User</string>
 
-    <!--Snackbar messages-->
-    <string name="errmsg_email_required">Please enter you Email</string>
+    <!--Feedback messages-->
     <string name="errmsg_valid_input_required">Valid input required!</string>
-    <string name="errmsg_name_required">Please enter Name</string>
-    <string name="errmsg_pass_required">Please enter Password</string>
+    <string name="errmsg_number_required">Please enter Telephone number</string>
     <string name="msg_choice_typeandgender">Please select Usertype!</string>
     <string name="msg_internal_error">Internal Error! Please try again</string>
-    <string name="msg_email_exist">This Email already in use!</string>
+    <string name="msg_number_exist">This Number already in use!</string>
     <string name="msg_signup_success">Registration successful!</string>
     <string name="connection_err">Connection error!</string>
-    <string name="msg_email_or_passwort_incorrect">Email or Passwort incorrect!</string>
+    <string name="msg_number_incorrect">Number incorrect!</string>
     <string name="msg_login_successful">Login successful</string>
     <string name="msg_404_error">Error! Resource not found</string>
     <string name="msg_no_internet_connection">No internet connection!</string>

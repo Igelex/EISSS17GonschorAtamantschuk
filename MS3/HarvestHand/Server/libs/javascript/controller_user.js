@@ -7,7 +7,7 @@ var User = require('../models_mongoose/user');
 module.exports.registerUser = function (req, res) {
 
     //Überprüfen ob User bereits existiert
-    User.findOne({email: req.body.email}, function (err, result) {
+    User.findOne({email: req.body.phone_number}, function (err, result) {
         if (err) {
             res.status(500).type('application/json').send({msg: 'DB Error'});
             console.error(err);
@@ -21,13 +21,7 @@ module.exports.registerUser = function (req, res) {
 
         } else {
             //Es existiert kein user mit der angegeben Email
-            var newUser = new User({
-                name: req.body.name,
-                email: req.body.email,
-                pass: req.body.pass,
-                user_type: req.body.user_type,
-                phone_number: req.body.phone_number
-            });
+            var newUser = new User(req.body);
 
             //User Speichern
             newUser.save(function (err, result) {

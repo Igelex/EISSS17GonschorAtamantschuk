@@ -4,9 +4,7 @@ package com.example.android.harvesthand.SignUp;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -120,9 +117,9 @@ public class SignInFragment extends Fragment {
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 401:
-                                    inputEmail.setError(getString(R.string.msg_email_or_passwort_incorrect));
-                                    inputPass.setError(getString(R.string.msg_email_or_passwort_incorrect));
-                                    contracts.showSnackbar(getView(), getString(R.string.msg_email_or_passwort_incorrect), true, false);
+                                    inputEmail.setError(getString(R.string.msg_number_incorrect));
+                                    inputPass.setError(getString(R.string.msg_number_incorrect));
+                                    contracts.showSnackbar(getView(), getString(R.string.msg_number_incorrect), true, false);
                                     break;
                                 case 404:
                                     contracts.showSnackbar(getView(), getString(R.string.msg_404_error), true, false);
@@ -144,7 +141,7 @@ public class SignInFragment extends Fragment {
     private boolean validPassInput() {
         mPass = inputPass.getText().toString().trim();
         if (mPass.isEmpty()) {
-            inputPass.setError(getString(R.string.errmsg_pass_required));
+            inputPass.setError(getString(R.string.errmsg_number_required));
             inputPass.requestFocus();
             return false;
         } else if (mPass.length() < 6) {

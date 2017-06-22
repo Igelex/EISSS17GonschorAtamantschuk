@@ -35,7 +35,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNUP;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
@@ -50,17 +49,11 @@ public class SignUpFragment extends Fragment {
     private static String URL;
     private final static int PROFI = 0;
     private final static int USER = 1;
-    private EditText inputName;
-    private EditText inputEmail;
     private EditText inputPass;
     private RadioGroup usertypeRadioGroup;
-    private String mName;
-    private String mEmail;
     private String mPass;
     private int mUserType;
     private Button mSignUpButton;
-    private TextInputLayout mEmailTextInput;
-    private TextInputLayout mNameTextInput;
     private TextInputLayout mPassTextInput;
     private ProgressBar progressBar;
 
@@ -74,23 +67,19 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
         // Inflate the layout for this fragment
-        inputName = view.findViewById(R.id.signup_input_name);
-        inputEmail =  view.findViewById(R.id.signup_input_email);
-        inputPass = view.findViewById(R.id.signup_input_pass);
+        inputPass = view.findViewById(R.id.signup_input_number);
 
         usertypeRadioGroup = view.findViewById(R.id.rg_usertype);
 
         progressBar = getActivity().findViewById(R.id.signup_progressbar);
 
-        mName = inputName.getText().toString().trim();
-        mEmail = inputEmail.getText().toString().trim();
         mPass = inputPass.getText().toString().trim();
 
         mSignUpButton = view.findViewById(R.id.bt_signup);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validNameInput() && validEmailInput() && validPassInput() && checkRadioButtons()) {
+                if (validPassInput() && checkRadioButtons()) {
                     progressBar.setVisibility(View.VISIBLE);
                     sendSignUpRequest();
                 }
@@ -117,40 +106,14 @@ public class SignUpFragment extends Fragment {
         return view;
     }
 
-    private boolean validEmailInput() {
-        mEmail = inputEmail.getText().toString().trim();
-        mEmailTextInput = getActivity().findViewById(R.id.signup_inputlayout_email);
-        if (mEmail.isEmpty() /*|| Patterns.EMAIL_ADDRESS.matcher(mEmail).matches()*/) {
-            mEmailTextInput.setErrorEnabled(true);
-            mEmailTextInput.setError(getString(R.string.errmsg_email_required));
-            inputEmail.setError(getString(R.string.errmsg_valid_input_required));
-            inputEmail.requestFocus();
-            return false;
-        }
-        mEmailTextInput.setErrorEnabled(false);
-        return true;
-    }
 
-    private boolean validNameInput() {
-        mName = inputName.getText().toString().trim();
-        mNameTextInput = getActivity().findViewById(R.id.signup_inputlayout_name);
-        if (mName.isEmpty()) {
-            mNameTextInput.setErrorEnabled(true);
-            mNameTextInput.setError(getString(R.string.errmsg_name_required));
-            inputName.setError(getString(R.string.errmsg_valid_input_required));
-            inputName.requestFocus();
-            return false;
-        }
-        mNameTextInput.setErrorEnabled(false);
-        return true;
-    }
 
     private boolean validPassInput() {
         mPass = inputPass.getText().toString().trim();
-        mPassTextInput = getActivity().findViewById(R.id.signup_inputlayout_pass);
+        mPassTextInput = getActivity().findViewById(R.id.signup_inputlayout_number);
         if (mPass.isEmpty()) {
             mPassTextInput.setErrorEnabled(true);
-            mPassTextInput.setError(getString(R.string.errmsg_pass_required));
+            mPassTextInput.setError(getString(R.string.errmsg_number_required));
             inputPass.setError(getString(R.string.errmsg_valid_input_required));
             inputPass.requestFocus();
             return false;
@@ -181,8 +144,6 @@ public class SignUpFragment extends Fragment {
     public void sendSignUpRequest() {
         final Contracts contracts = new Contracts();
         Map<String, String> params = new HashMap<>();
-        params.put("name", mName);
-        params.put("email", mEmail);
         params.put("pass", mPass);
         params.put("user_type", Integer.toString(mUserType));
         URL = BASE_URL + URL_BASE_SIGNUP ;
@@ -221,7 +182,7 @@ public class SignUpFragment extends Fragment {
                                     contracts.showSnackbar(getView(), getString(R.string.msg_404_error), true, false);
                                     break;
                                 case 409:
-                                    contracts.showSnackbar(getView(), getActivity().getString(R.string.msg_email_exist), true, false);
+                                    contracts.showSnackbar(getView(), getActivity().getString(R.string.msg_number_exist), true, false);
                                     break;
                                 default:
                                     break;
