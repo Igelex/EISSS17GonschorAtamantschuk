@@ -46,6 +46,7 @@
     <string name="new_entry_hint_airmoisture">Air moisture</string>
     <string name="new_entry_hint_soiltemperature">Soil temperature</string>
     <string name="new_entry_hint_soilmoisture">Soil moisture</string>
+    <string name="new_entry_hint_collab">Add collaborators(Number)</string>
     <string name="label_new_entry">New Entry</string>
 
     <!--Menu items-->
@@ -104,6 +105,7 @@
     <string name="msg_receive_gps_data">Receive GPS data...</string>
     <string name="msg_request_location">Request location...</string>
     <string name="settings_menu_item">settings</string>
+    <string name="msg_cant_save">Error, cant save. Please try again</string>
 
 
     <string-array name="soil_spinner_array">
