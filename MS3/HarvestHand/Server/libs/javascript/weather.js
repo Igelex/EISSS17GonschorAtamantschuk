@@ -11,9 +11,6 @@ var request = require('request'),
 
 module.exports.getPrecipitationForWeek = function (country, city) {
     var weekPrecipitation = 0;
-    country = 'SN';
-    city = 'Dakar'
-
     var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/' + country + '/'
         + city + '.json';
     console.log('Send request...');

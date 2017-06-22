@@ -173,9 +173,18 @@ public class AddNewEntry extends AppCompatActivity {
                     return;
                 }
                 Log.i("Push button", "");
-                locationPb.setVisibility(View.VISIBLE);
-                locationInputLayout.setHint(getString(R.string.msg_request_location));
-                locationManager.requestLocationUpdates("gps", 1000, 10, locationListener);
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    locationPb.setVisibility(View.VISIBLE);
+                    locationInputLayout.setHint(getString(R.string.msg_request_location));
+                    locationManager.requestLocationUpdates("gps", 1000, 10, locationListener);
+                } else {
+                    Toast.makeText(AddNewEntry.this, getString(R.string.msg_can_not_get_location),
+                            Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(intent);
+                    return;
+                }
+
             }
         });
 

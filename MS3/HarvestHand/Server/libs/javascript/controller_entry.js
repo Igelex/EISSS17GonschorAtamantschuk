@@ -31,7 +31,8 @@ module.exports.getEntries = function (req, res) {
         {
             "entry_name": true,
             "art_id": true, "area": true,
-            "location": true
+            "location": true,
+            "crop_id": true
         }, function (err, result) {
             if (err) {
                 console.log(err);

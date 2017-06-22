@@ -175,12 +175,14 @@ public class MainActivity extends AppCompatActivity {
                 if (response.length() > 0) {
                     for (int i = 0; i < response.length(); i++) {
                         try {
-                            JSONObject jsonObject = response.getJSONObject(i);
-                            String entryName = jsonObject.getString("entry_name");
-                            String location = jsonObject.getString("location");
-                            String entryID = jsonObject.getString("_id");
-                            int area = jsonObject.getInt("area");
-                            int artId = jsonObject.getInt("art_id");
+                            JSONObject entryObject = response.getJSONObject(i);
+                            JSONObject locationObject = entryObject.getJSONObject("location");
+
+                            String entryName = entryObject.getString("entry_name");
+                            String location = locationObject.getString("city");
+                            String entryID = entryObject.getString("_id");
+                            int area = entryObject.getInt("area");
+                            int artId = entryObject.getInt("crop_id");
 
                             //Die Daten werden der ArrayList hinzugefügt
                             entryArrayList.add(new Entry(entryID, entryName, artId, location, area));
