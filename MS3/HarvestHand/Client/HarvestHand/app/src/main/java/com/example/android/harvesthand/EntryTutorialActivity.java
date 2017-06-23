@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -71,7 +72,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                     tutorialID = intent.getStringExtra("tutorial_id");
                     Log.i("Tutorila ID:", tutorialID);
                     entryLocationCity = intent.getStringExtra("entry_location_city");
-                    cropID = intent.getIntExtra("cropID", 0);
+                    cropID = intent.getIntExtra("crop_id", 0);
                     entryName = intent.getStringExtra("entry_name");
                     setTitle(entryName);
                 } catch (Exception e) {
@@ -107,15 +108,35 @@ public class EntryTutorialActivity extends AppCompatActivity {
             Toast.makeText(EntryTutorialActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
         }
 
-        speaker = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+        speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status != TextToSpeech.ERROR) {
-                    speaker.setLanguage(Locale.ENGLISH);
+                    speaker.setLanguage(Locale.getDefault());
+                    Log.i("local: ", Locale.getDefault().toString());
                 }
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.tutorial_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_speak:
+                speaker.speak("I can speak to you", TextToSpeech.QUEUE_FLUSH, null);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     //Request Tutorial
@@ -174,6 +195,16 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         setBackgroundColor();
                         setCropBackgroundImg(cropID);
                         setSoilBackgroundImg(soilCurrentValue);
+
+                        ImageButton earLocation = (ImageButton) findViewById(R.id.tutorial_location_ear);
+                        earButtonsClickLIstener(earLocation, getString(R.string.item_speaktext_location)
+                                + entryLocationCity);
+                        ImageButton earHeight = (ImageButton) findViewById(R.id.tutorial_height_ear);
+                        earButtonsClickLIstener(earHeight, getString(R.string.tutorial_speaktext_height)
+                                + heightCurrentValue);
+                        ImageButton earMature = (ImageButton) findViewById(R.id.tutorial_mature_ear);
+                        earButtonsClickLIstener(earMature, getString(R.string.tutorial_speaktext_mature)
+                                + matureMonth + getString(R.string.tutorial_month));
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -260,30 +291,10 @@ public class EntryTutorialActivity extends AppCompatActivity {
         return mColor;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.tutorial_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_speak:
-                speaker.speak("I can speak to you", TextToSpeech.QUEUE_FLUSH, null);
-                Toast.makeText(this, "He speak to you", Toast.LENGTH_LONG).show();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void setTextView(){
         location.setText(entryLocationCity);
-        height.setText(String.valueOf(heightCurrentValue));
-        mature.setText(String.valueOf(matureMonth));
+        height.setText(String.valueOf(heightCurrentValue) + getString(R.string.add_entry_meter));
+        mature.setText(String.valueOf(matureMonth) + getString(R.string.tutorial_month));
         airTemp.setText(airTempCurrentValue + celsius);
         airMoisture.setText(String.valueOf(airMoistureCurrentValue));
         ph.setText(String.valueOf(phCurrentValue));
@@ -294,6 +305,20 @@ public class EntryTutorialActivity extends AppCompatActivity {
     private String buildeUrl(){
         Log.i("Tutorila URL :", BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID);
         return BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID;
+    }
+
+    private void speakText(String text){
+        speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    private void earButtonsClickLIstener(ImageButton ear, String text){
+        final String speakText = text;
+        ear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                speakText(speakText);
+            }
+        });
     }
 
     @Override

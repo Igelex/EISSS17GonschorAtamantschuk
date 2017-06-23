@@ -64,9 +64,7 @@ public class AddNewEntry extends AppCompatActivity {
     private Geocoder geocoder;
     private ScrollView container;
     private Contracts contracts;
-    private TextInputLayout locationInputLayout, nameInputLayout, areaInputLayout, heightInputLayout;
-    private TextInputLayout airtempInputLayout, airmoistureInputLayout, soiltempInputLayout, soilmoistureInputLayout;
-    private TextInputLayout phInputLayout, collabInputLayout;
+    private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, URL;
     private SharedPreferences sPrefUser;
     private ArrayList collabsArray;
@@ -439,14 +437,11 @@ public class AddNewEntry extends AppCompatActivity {
                     case 1:
                         soilId = SOIL_ID_SAND;
                         break;
-                    /*case 2:
-                        soilId = 1;
+                    case 2:
+                        soilId = SOIL_ID_CLAY;
                         break;
-                    case 3:
-                        cropId = 2;
-                        break;*/
                     default:
-                        cropId = NOT_SELECTED;
+                        soilId = NOT_SELECTED;
                         break;
                 }
             }

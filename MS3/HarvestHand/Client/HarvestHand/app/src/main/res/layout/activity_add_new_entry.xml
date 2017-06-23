@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="8dp"
-                android:text="m"
+                android:text="@string/add_entry_m_squared"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
 
             <android.support.design.widget.TextInputLayout
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="m"
+                android:text="@string/add_entry_meter"
                 android:textAppearance="@style/TextAppearance.AppCompat" />
         </LinearLayout>
 
