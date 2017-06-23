@@ -1,10 +1,12 @@
 package com.example.android.harvesthand;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -14,11 +16,14 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,6 +33,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -41,9 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -67,6 +71,16 @@ public class AddNewEntry extends AppCompatActivity {
     private SharedPreferences sPrefUser;
     private ArrayList collabsArray;
     private int cropId, soilId;
+    private Spinner cropSpinner, soilSpinner;
+    private Boolean change = false;
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            change = true;
+            return false;
+        }
+    };
 
 
     @Override
@@ -91,12 +105,12 @@ public class AddNewEntry extends AppCompatActivity {
 
         locationInputLayout = (TextInputLayout) findViewById(R.id.add_inputlayout_entry_location);
 
-        Spinner cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
-        Spinner soilSpinner = (Spinner) findViewById(R.id.spinner_soil);
+        cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
+        soilSpinner = (Spinner) findViewById(R.id.spinner_soil);
         cropSpinner.setAdapter(setupSpinner(R.array.crop_spinner_array));
         setupCropSpinner(cropSpinner);
         soilSpinner.setAdapter(setupSpinner(R.array.soil_spinner_array));
-        setupCropSpinner(soilSpinner);
+        setupSoilSpinner(soilSpinner);
 
 
         locationEdit = (EditText) findViewById(R.id.add_entry_location);
@@ -108,6 +122,7 @@ public class AddNewEntry extends AppCompatActivity {
         soiltempEdit = (EditText) findViewById(R.id.add_entry_soiltemp);
         soilmoistureEdit = (EditText) findViewById(R.id.add_entry_soilmoisture);
         phEdit = (EditText) findViewById(R.id.add_entry_ph);
+        setOnTouchListener();
 
         addCollab = (EditText) findViewById(R.id.add_entry_collab);
         ListView collabList = (ListView) findViewById(R.id.add_entry_collab_list);
@@ -118,9 +133,8 @@ public class AddNewEntry extends AppCompatActivity {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
-                        String user = checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL());
-                        if (user != null && !user.isEmpty()){
-                            collabsArray.add(0, user);
+                        if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())){
+                            collabsArray.add(0, addCollab.getText().toString().trim());
                             adapter.notifyDataSetChanged();
                             addCollab.setText("");
                             return true;
@@ -135,7 +149,7 @@ public class AddNewEntry extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
-            public void onLocationChanged(android.location.Location location) {
+            public void onLocationChanged(Location location) {
                 Log.i("LONG LAT", "" + location.getLatitude() + location.getLatitude());
                 contracts.showSnackbar(container, getString(R.string.msg_receive_gps_data), false, true);
                 if (!Geocoder.isPresent()) {
@@ -233,10 +247,25 @@ public class AddNewEntry extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_save:
-                sendRequest(BASE_URL + URL_BASE_ENTRIES);
-                Log.i("Post entry with URL :", BASE_URL + URL_BASE_ENTRIES);
-
+                if (validateUserInput()){
+                    sendRequest(BASE_URL + URL_BASE_ENTRIES);
+                    Log.i("Post entry with URL :", BASE_URL + URL_BASE_ENTRIES);
+                }
                 break;
+            case android.R.id.home:
+                if (!change) {
+                    NavUtils.navigateUpFromSameTask(AddNewEntry.this);
+                    return true;
+                }
+                DialogInterface.OnClickListener discardButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                NavUtils.navigateUpFromSameTask(AddNewEntry.this);
+                            }
+                        };
+                showUnsavedChangesDialog(discardButtonClickListener);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -337,11 +366,9 @@ public class AddNewEntry extends AppCompatActivity {
 
         JSONObject entryObject = new JSONObject();
         JSONObject locationObject = new JSONObject();
-        JSONArray collabJsonArray = new JSONArray();
-
         try {
             locationObject.put("name", locationName);
-            locationObject.put("ccountryISOCodeou", countryISOCode);
+            locationObject.put("countryISOCode", countryISOCode);
             locationObject.put("city", city);
 
             entryObject.put("entry_name", nameEdit.getText().toString().trim());
@@ -377,19 +404,19 @@ public class AddNewEntry extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        cropId = -1;
+                        cropId = NOT_SELECTED;
                         break;
                     case 1:
-                        cropId = 0;
+                        cropId = CROP_ID_CAFFE;
                         break;
                     case 2:
-                        cropId = 1;
+                        cropId = CROP_ID_TOMATO;
                         break;
                     case 3:
-                        cropId = 2;
+                        cropId = CROP_ID_RICE;
                         break;
                     default:
-                        cropId = -1;
+                        cropId = NOT_SELECTED;
                         break;
                 }
             }
@@ -407,10 +434,10 @@ public class AddNewEntry extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        soilId = -1;
+                        soilId = NOT_SELECTED;
                         break;
                     case 1:
-                        soilId = 0;
+                        soilId = SOIL_ID_SAND;
                         break;
                     /*case 2:
                         soilId = 1;
@@ -419,7 +446,7 @@ public class AddNewEntry extends AppCompatActivity {
                         cropId = 2;
                         break;*/
                     default:
-                        cropId = -1;
+                        cropId = NOT_SELECTED;
                         break;
                 }
             }
@@ -438,6 +465,66 @@ public class AddNewEntry extends AppCompatActivity {
         Log.i("COLLAB URL:", uriBuilder.toString());
         URL = uriBuilder.toString();
         return URL;
+    }
+    private boolean validateUserInput(){
+        if (validation(nameEdit) && validation(locationEdit) && validateSpinners(cropSpinner)
+                && validateSpinners(soilSpinner) && validation(areaEdit) && validation(heightEdit)
+                && validation(airtempEdit) && validation(airmoistureEdit) && validation(soiltempEdit)
+                && validation(soilmoistureEdit) && validation(phEdit)){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean validateSpinners(Spinner spinner){
+        if (spinner.getSelectedItemPosition() != DEFAULT_SELECTION){
+            Log.i("Spinner validation: ", String.valueOf(spinner.getSelectedItemPosition()));
+            return true;
+        }
+        View selectedView = spinner.getSelectedView();
+        if (selectedView != null && selectedView instanceof TextView) {
+            TextView selectedTextView = (TextView) selectedView;
+            selectedTextView.setError(getString(R.string.errmsg_valid_input_required));
+        }
+        contracts.showSnackbar(container, getString(R.string.msg_select_spinners), true, false);
+        return false;
+    }
+
+    private boolean validation(EditText input) {
+        if (!input.getText().toString().trim().isEmpty()){
+            return true;
+        }
+        input.setError(getString(R.string.errmsg_valid_input_required));
+        return false;
+    }
+
+    private void setOnTouchListener(){
+        locationEdit.setOnTouchListener(mTouchListener);
+        nameEdit.setOnTouchListener(mTouchListener);
+        airtempEdit.setOnTouchListener(mTouchListener);
+        airmoistureEdit.setOnTouchListener(mTouchListener);
+        soiltempEdit.setOnTouchListener(mTouchListener);
+        soilmoistureEdit.setOnTouchListener(mTouchListener);
+        areaEdit.setOnTouchListener(mTouchListener);
+        heightEdit.setOnTouchListener(mTouchListener);
+        phEdit.setOnTouchListener(mTouchListener);
+    }
+
+    private void showUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.msg_unsaved_changes_dialog);
+        builder.setPositiveButton(R.string.dialog_ip_discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void stopRequestLocation() {

@@ -34,6 +34,21 @@ public class Contracts {
     public static String IP_ADDRESS_SHARED_PREFS = "ipaddress";
     public static String IP_SP_IP = "ip";
 
+    /*
+    * Arten der Pflanzen nach ID intialisiert
+    * */
+    public static int DEFAULT_SELECTION = 0;
+    public static int NOT_SELECTED = -1;
+    public static int CROP_ID_CAFFE = 0;
+    public static int CROP_ID_TOMATO = 1;
+    public static int CROP_ID_RICE = 2;/*...*/
+
+    /*
+    * Bodenarten nach ID intialisiert
+    * */
+    public static int SOIL_ID_SAND = 0;
+    public static int SOIL_ID_CLAY= 1;/*...*/
+
     public Contracts() {
     }
 

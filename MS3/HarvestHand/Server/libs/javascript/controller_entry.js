@@ -27,7 +27,7 @@ module.exports.getEntries = function (req, res) {
     console.log("Get Entries owner_id: " + req.query.owner_id);
     console.log("Get Entries number: " + req.query.phone_number);
     Entry.find({
-            $or: [{owner_id: req.query.owner_id}, {collaborators: req.query.collab_id}]
+            $or: [{owner_id: req.query.owner_id}, {collaborators: req.query.phone_number}]
         },
         {
             "entry_name": true,

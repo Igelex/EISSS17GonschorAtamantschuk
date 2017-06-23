@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             Uri baseUri = Uri.parse(CURRENT_ENTRIES_URL);
             Uri.Builder uriBuilder = baseUri.buildUpon();
             uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, sPrefUser.getString(USER_SP_ID, null));
-            uriBuilder.appendQueryParameter(URL_PARAMS_COLLAB_ID, sPrefUser.getString(USER_SP_ID, null));
+            uriBuilder.appendQueryParameter(URL_PARAMS_PHONE_NUMBER, sPrefUser.getString(USER_SP_NUMBER, null));
             CURRENT_ENTRIES_URL = uriBuilder.toString();
             Log.i("URI: ", CURRENT_ENTRIES_URL);
             //Helper methode
