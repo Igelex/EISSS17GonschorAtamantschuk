@@ -8,4 +8,23 @@
 
     <color name="colorFalseState">#fd5656</color>
     <color name="colorHint">#969696</color>
+
+    <!--Deviation Colors-->
+    <color name="deviation0">#1fae1f</color>
+
+    <!-- Deviation <=10 -->
+    <color name="deviation10">#729618</color>
+
+    <!-- Deviation <=20 -->
+    <color name="deviation20">#d1b03e</color>
+
+    <!-- Deviation <=30 -->
+    <color name="deviation30">#cc8a1e</color>
+
+    <!-- Deviation <=40 -->
+    <color name="deviation40">#e6692f</color>
+
+    <!-- Deviation >40 -->
+    <color name="deviation50">#D93218</color>
+
 </resources>

@@ -105,9 +105,7 @@ app.get('/norms/:id', function (req, res) {
 });
 
 //Hole Tutorial zum bestimmten Eintrag
-app.get('/entries/:id/tutorials/:id', function (req, res) {
-    controller_tutorial.getTutorialById(req, res);
-});
+app.get('/entries/:id/tutorial/:id', controller_tutorial.getTutorialById);
 
 
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

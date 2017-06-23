@@ -1,28 +1,56 @@
 package com.example.android.harvesthand;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
+import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.example.android.harvesthand.Contracts.*;
+
 public class EntryTutorialActivity extends AppCompatActivity {
 
-    private ImageView phImg, waterImg, mineralsImg;
     private ProgressBar progressBar;
-    private String tutorialURL;
-    private int ph, water, minerals, tutorial_ph, tutorial_water, tutorial_minerals;
-    private RelativeLayout view;
+    private String entryId, tutorialID, entryLocationCity, entryName;
+    private String airTempNorm, airMoistureNorm, soilMoistureNorm, soilTempNorm, phNorm, heightNorm;
+    private int cropID, airTempStatus, airTepmDeviation, airTempCurrentValue;
+    private int airMoistureStatus, airMoistureDeviation, airMoistureCurrentValue;
+    private int soilTempStatus, soilTempDeviation, soilTempCurrentValue;
+    private int phStatus, phDeviation, phCurrentValue;
+    private int heightStatus, heightDeviation, heightCurrentValue;
+    private int soilMoistureStatus, soilMoistureDeviation, soilMoistureCurrentValue, waterRequire;
+    private int soilStatus, soilCurrentValue, soilNorm, matureMonth;
+    private ConstraintLayout container;
     private TextToSpeech speaker;
+    private Contracts contracts;
+    private TextView location, height, mature, airMoisture, airTemp, ph, soilTemp, soilMoisture;
+    private String celsius = "\u2103";
+    private CircleImageView airTempImg, airMoistureImg, cropImg, soilImg, phImg, soilTempImg, soilMoistureImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,35 +60,49 @@ public class EntryTutorialActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
+        contracts = new Contracts();
+
         if (networkInfo != null && networkInfo.isConnected()) {
 
-           /* Intent intent = getIntent();
-            if (intent.hasExtra("URL")) {
-                tutorialURL = intent.getStringExtra("URL");
-                Toast.makeText(this, "URL : " + tutorialURL, Toast.LENGTH_LONG).show();
+            Intent intent = getIntent();
+            if (intent != null) {
+                try {
+                    entryId = intent.getStringExtra("entry_id");
+                    tutorialID = intent.getStringExtra("tutorial_id");
+                    Log.i("Tutorila ID:", tutorialID);
+                    entryLocationCity = intent.getStringExtra("entry_location_city");
+                    cropID = intent.getIntExtra("cropID", 0);
+                    entryName = intent.getStringExtra("entry_name");
+                    setTitle(entryName);
+                } catch (Exception e) {
+                    contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                    return;
+                }
             }
 
-            //werden erstmal nicht benutzt
-            if (intent.hasExtra("ph")) {
-                ph = intent.getIntExtra("ph", 0);
-            }
+            container = (ConstraintLayout) findViewById(R.id.entry_tutorial_root);
 
-            if (intent.hasExtra("URL")) {
-                water = intent.getIntExtra("water", 0);
-            }
+            progressBar = (ProgressBar) findViewById(R.id.tutorial_pg);
+            progressBar.setVisibility(View.VISIBLE);
 
-            if (intent.hasExtra("URL")) {
-                minerals = intent.getIntExtra("minerals", 0);
-            }
-            //werden erstmal nicht benutzt
+            airTempImg = (CircleImageView) findViewById(R.id.tutorial_airtemp_image);
+            airMoistureImg = (CircleImageView) findViewById(R.id.tutorial_airmoisture_image);
+            cropImg = (CircleImageView) findViewById(R.id.tutorial_crop_image);
+            soilImg = (CircleImageView) findViewById(R.id.tutorial_soil_image);
+            phImg = (CircleImageView) findViewById(R.id.tutorial_ph_image);
+            soilTempImg = (CircleImageView) findViewById(R.id.tutorial_soiltemp_image);
+            soilMoistureImg = (CircleImageView) findViewById(R.id.tutorial_soilmoisture_image);
 
-            if (intent.hasExtra("name")) {
+            location = (TextView) findViewById(R.id.tutorial_loc);
+            height = (TextView) findViewById(R.id.tutorial_hight);
+            mature = (TextView) findViewById(R.id.tutorial_mature);
+            airTemp = (TextView) findViewById(R.id.tutorial_text_air_temp);
+            airMoisture = (TextView) findViewById(R.id.tutorial_text_air_moisture);
+            soilTemp = (TextView) findViewById(R.id.tutorial_text_soil_temp);
+            soilMoisture = (TextView) findViewById(R.id.tutorial_text_soil_moisture);
+            ph = (TextView) findViewById(R.id.tutorial_text_ph);
 
-                setTitle(intent.getStringExtra("name"));
-            }
-            view = (RelativeLayout) findViewById(R.id.entry_tutorial_root);*/
-
-            //getTutorial(tutorialURL);
+            getTutorial(buildeUrl());
         } else {
             Toast.makeText(EntryTutorialActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
         }
@@ -75,7 +117,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         });
 
     }
-/*
+
     //Request Tutorial
     public void getTutorial(String url) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
@@ -85,20 +127,60 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 if (response.length() > 0) {
                     try {
-                        tutorial_ph = response.getInt("ph");
-                        tutorial_water = response.getInt("water");
-                        tutorial_minerals = response.getInt("minerals");
+                        JSONObject airTempObject = response.getJSONObject("air_temp");
+                        airTempCurrentValue = airTempObject.getInt("currentValue");
+                        airTempStatus = airTempObject.getInt("status");
+                        airTepmDeviation = airTempObject.getInt("deviation");
+                        airTempNorm = airTempObject.getString("norm");
 
-                        //Anhand der Tutorial-Daten Visual Feedback geben
-                        setPhIcon(tutorial_ph);
-                        setWaterIcon(tutorial_water);
-                        setMineralsIcon(tutorial_minerals);
+                        JSONObject airMoistureObject = response.getJSONObject("air_moisture");
+                        airMoistureCurrentValue = airMoistureObject.getInt("currentValue");
+                        airMoistureStatus = airMoistureObject.getInt("status");
+                        airMoistureDeviation = airMoistureObject.getInt("deviation");
+                        airMoistureNorm = airMoistureObject.getString("norm");
+
+                        JSONObject soilMoistureObject = response.getJSONObject("soil_moisture");
+                        soilMoistureCurrentValue = soilMoistureObject.getInt("currentValue");
+                        soilMoistureStatus = soilMoistureObject.getInt("status");
+                        soilMoistureDeviation = soilMoistureObject.getInt("deviation");
+                        soilMoistureNorm = soilMoistureObject.getString("norm");
+                        waterRequire = soilMoistureObject.getInt("water_requirements");
+
+                        JSONObject soilObject = response.getJSONObject("soil");
+                        soilCurrentValue = soilObject.getInt("currentValue");
+                        soilStatus = soilObject.getInt("status");
+                        soilNorm = soilObject.getInt("norm");
+
+                        JSONObject soilTempObject = response.getJSONObject("soil_temp");
+                        soilTempCurrentValue = soilTempObject.getInt("currentValue");
+                        soilTempStatus = soilTempObject.getInt("status");
+                        soilTempDeviation = soilTempObject.getInt("deviation");
+                        soilTempNorm = soilTempObject.getString("norm");
+
+                        JSONObject phObject = response.getJSONObject("ph_value");
+                        phCurrentValue = phObject.getInt("currentValue");
+                        phStatus = phObject.getInt("status");
+                        phDeviation = phObject.getInt("deviation");
+                        phNorm = phObject.getString("norm");
+
+                        JSONObject heightObject = response.getJSONObject("height_meter");
+                        heightCurrentValue = heightObject.getInt("currentValue");
+                        heightStatus = heightObject.getInt("status");
+                        heightDeviation = heightObject.getInt("deviation");
+                        heightNorm = heightObject.getString("norm");
+                        matureMonth = response.getInt("mature_after_month");
+
+                        setTextView();
+                        setBackgroundColor();
+                        setCropBackgroundImg(cropID);
+                        setSoilBackgroundImg(soilCurrentValue);
+
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
                     }
-                } else{
-                    Toast.makeText(EntryTutorialActivity.this, "No data found", Toast.LENGTH_SHORT).show();
-                    return;
+                } else {
+                    contracts.showSnackbar(container, getString(R.string.msg_no_data), true, false);
                 }
 
             }
@@ -109,28 +191,18 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 if (error.networkResponse != null) {
                     switch (error.networkResponse.statusCode) {
                         case 500:
-                            Snackbar snackbarIE = Snackbar.make(view, getString(R.string.msg_internal_error), Snackbar.LENGTH_LONG);
-                            View sbie = snackbarIE.getView();
-                            TextView snackBarText = (TextView) sbie.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                            snackbarIE.show();
+                            contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
+                            error.printStackTrace();
                             break;
                         case 404:
-                            Snackbar snackbar404 = Snackbar.make(view, getString(R.string.msg_404_error), Snackbar.LENGTH_LONG);
-                            View snackbarView404 = snackbar404.getView();
-                            TextView snackBarText404 = (TextView) snackbarView404.findViewById(android.support.design.R.id.snackbar_text);
-                            snackBarText404.setTextColor(Color.rgb(253, 86, 86));
-                            snackbar404.show();
+                            contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
+                            error.printStackTrace();
                             break;
                         default:
                             break;
                     }
                 } else {
-                    Snackbar snackbar = Snackbar.make(view, getString(R.string.connection_err), Snackbar.LENGTH_LONG);
-                    View snackbarView = snackbar.getView();
-                    TextView snackBarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-                    snackBarText.setTextColor(Color.rgb(253, 86, 86));
-                    snackbar.show();
+                    contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
                     error.printStackTrace();
                 }
             }
@@ -139,57 +211,54 @@ public class EntryTutorialActivity extends AppCompatActivity {
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
 
-    //Icon setzen
-    public void setPhIcon(int ph){
-        switch (ph){
+    private void setSoilBackgroundImg(int soilId){
+        switch (soilId) {
             case 0:
-                phImg.setImageResource(R.drawable.emoticon);
+                soilImg.setImageResource(R.drawable.soil_0_sand_img);
                 break;
+
             case 1:
-                phImg.setImageResource(R.drawable.emoticon_sad);
+                soilImg.setImageResource(R.drawable.soil_1_clay_img);
                 break;
-            case 2:
-                phImg.setImageResource(R.drawable.emoticon_neutral);
-                break;
-            default:
-                phImg.setImageResource(R.drawable.emoticon_neutral);
+            /*...*/
         }
     }
 
-    //Icon setzen
-    public void setWaterIcon(int water){
-        switch (water){
+    private void setCropBackgroundImg(int cropID){
+        switch (cropID) {
             case 0:
-                waterImg.setImageResource(R.drawable.emoticon);
+                cropImg.setImageResource(R.drawable.crop_0_caffe_img);
                 break;
+
             case 1:
-                waterImg.setImageResource(R.drawable.emoticon_sad);
+                cropImg.setImageResource(R.drawable.crop_1_tomato_img);
                 break;
-            case 2:
-                waterImg.setImageResource(R.drawable.emoticon_neutral);
-                break;
-            default:
-                waterImg.setImageResource(R.drawable.emoticon_neutral);
+            /*...*/
         }
     }
 
-    //Icon setzen
-    public void setMineralsIcon(int minerals){
-        switch (minerals){
-            case 0:
-                mineralsImg.setImageResource(R.drawable.emoticon);
-                break;
-            case 1:
-                mineralsImg.setImageResource(R.drawable.emoticon_sad);
-                break;
-            case 2:
-                mineralsImg.setImageResource(R.drawable.emoticon_neutral);
-                break;
-            default:
-                mineralsImg.setImageResource(R.drawable.emoticon_neutral);
-        }
+    private void setBackgroundColor(){
+        airTempImg.setImageResource(setColor(airTepmDeviation));
+        airMoistureImg.setImageResource(setColor(airMoistureDeviation));
+        soilTempImg.setImageResource(setColor(soilTempDeviation));
+        soilMoistureImg.setImageResource(setColor(soilMoistureDeviation));
+        phImg.setImageResource(setColor(phDeviation));}
 
-    }*/
+    private int setColor(int deviation){
+        int mColor;
+        if (deviation <= 10){
+            mColor = R.drawable.circle_10;
+        } else if (deviation <= 20){
+            mColor = R.drawable.circle_20;
+        } else if (deviation <= 30){
+            mColor = R.drawable.circle_30;
+        } else if (deviation <= 40){
+            mColor = R.drawable.circle_40;
+        } else {
+            mColor = R.drawable.circle_50;
+        }
+        return mColor;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -200,12 +269,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_speak:
                 speaker.speak("I can speak to you", TextToSpeech.QUEUE_FLUSH, null);
@@ -216,9 +280,25 @@ public class EntryTutorialActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setTextView(){
+        location.setText(entryLocationCity);
+        height.setText(String.valueOf(heightCurrentValue));
+        mature.setText(String.valueOf(matureMonth));
+        airTemp.setText(airTempCurrentValue + celsius);
+        airMoisture.setText(String.valueOf(airMoistureCurrentValue));
+        ph.setText(String.valueOf(phCurrentValue));
+        soilTemp.setText(soilTempCurrentValue + celsius);
+        soilMoisture.setText(String.valueOf(soilMoistureCurrentValue));
+    }
+
+    private String buildeUrl(){
+        Log.i("Tutorila URL :", BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID);
+        return BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID;
+    }
+
     @Override
-    public void onPause(){
-        if(speaker !=null){
+    public void onPause() {
+        if (speaker != null) {
             speaker.stop();
             speaker.shutdown();
         }

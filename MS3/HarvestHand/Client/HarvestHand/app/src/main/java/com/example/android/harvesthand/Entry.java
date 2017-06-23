@@ -1,22 +1,24 @@
 package com.example.android.harvesthand;
 
+import java.util.ArrayList;
+
 /**
  * Created by Pastuh on 13.05.2017.
  */
 
 public class Entry {
     private String entryId, tutorialId, entryName, ownerID, location;
-    private int area, soil, airTemp, soilTemp, artId, soilMoisture, phValue, height;
-    private int[] collaborators;
+    private int area, soil, airTemp, soilTemp, cropId, soilMoisture, phValue, height;
+    private ArrayList collaborators;
 
-    public Entry(String entryId, String tutorialId, String entryName, int artId, String ownerID,
+    public Entry(String entryId, String tutorialId, String entryName, int cropId, String ownerID,
                  String location, int area, int soil, int airTemp, int soilTemp,
-                 int soilMoisture, int phValue, int height/*, int[] collaborators*/) {
+                 int soilMoisture, int phValue, int height, ArrayList collaborators) {
 
         this.entryId = entryId;
         this.tutorialId = tutorialId;
         this.entryName = entryName;
-        this.artId = artId;
+        this.cropId = cropId;
         this.ownerID = ownerID;
         this.location = location;
         this.area = area;
@@ -26,15 +28,16 @@ public class Entry {
         this.soilMoisture = soilMoisture;
         this.phValue = phValue;
         this.height = height;
-        /*this.collaborators = collaborators;*/
+        this.collaborators = collaborators;
     }
 
-    public Entry(String entryId, String entryName, int artId, String location, int area) {
+    public Entry(String entryId, String entryName, int cropId, String location, int area, String tutorialId) {
         this.entryId = entryId;
         this.entryName = entryName;
-        this.artId = artId;
+        this.cropId = cropId;
         this.location = location;
         this.area = area;
+        this.tutorialId = tutorialId;
     }
 
     public String getEntryId() {
@@ -61,12 +64,12 @@ public class Entry {
         this.entryName = entryName;
     }
 
-    public int getArtId() {
-        return artId;
+    public int getCropId() {
+        return cropId;
     }
 
-    public void setArtId(int artId) {
-        this.artId = artId;
+    public void setCropId(int artId) {
+        this.cropId = artId;
     }
 
     public String getOwnerID() {
@@ -141,11 +144,11 @@ public class Entry {
         this.height = height;
     }
 
-    public int[] getCollaborators() {
+    public ArrayList getCollaborators() {
         return collaborators;
     }
 
-    public void setCollaborators(int[] collaborators) {
+    public void setCollaborators(ArrayList collaborators) {
         this.collaborators = collaborators;
     }
 }

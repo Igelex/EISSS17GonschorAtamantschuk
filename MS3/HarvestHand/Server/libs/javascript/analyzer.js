@@ -16,6 +16,7 @@ var newTutorial = {
     air_temp: {
         status: Number,
         deviation: Number,
+        currentValue: Number,
         norm: String
     },
     air_moisture: {
@@ -27,26 +28,31 @@ var newTutorial = {
     soil_moisture: {
         status: Number,
         deviation: Number,
+        currentValue: Number,
         water_requirements: Number,
         norm: String
     },
     soil: {
         status: Number,
+        currentValue: Number,
         norm: Number
     },
     soil_temp: {
         status: Number,
         deviation: Number,
+        currentValue: Number,
         norm: String
     },
     ph_value: {
         status: Number,
         deviation: Number,
+        currentValue: Number,
         norm: String
     },
     height_meter: {
         status: Number,
         deviation: Number,
+        currentValue: Number,
         norm: String
     },
     mature_after_month: Number
@@ -96,6 +102,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
         newTutorial.air_temp.deviation = 0;
         newTutorial.air_temp.status = NORM
     }
+    newTutorial.air_temp.currentValue = entry.air_temp;
     newTutorial.air_temp.norm = currentNorm.air_temp.min + "-" + currentNorm.air_temp.max;
 
     /*Air moisture Analyse*/
@@ -109,6 +116,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
         newTutorial.air_moisture.deviation = 0;
         newTutorial.air_moisture.status = NORM
     }
+    newTutorial.air_moisture.currentValue = entry.air_moisture;
     newTutorial.air_moisture.norm = currentNorm.air_moisture.min + "-" + currentNorm.air_moisture.max;
 
     /*Soil temperature Analyse*/
@@ -122,6 +130,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
         newTutorial.soil_temp.deviation = 0;
         newTutorial.soil_temp.status = NORM;
     }
+    newTutorial.soil_temp.currentValue = entry.soil_temp;
     newTutorial.soil_temp.norm = currentNorm.soil_temp.min + "-" + currentNorm.soil_temp.max;
 
     /*Height Analyse*/
@@ -135,6 +144,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
         newTutorial.height_meter.deviation = 0;
         newTutorial.height_meter.status = NORM;
     }
+    newTutorial.height_meter.currentValue = entry.height_meter;
     newTutorial.height_meter.norm = currentNorm.height_meter.min + "-" + currentNorm.height_meter.max;
 
     /*PH Analyse*/
@@ -148,6 +158,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
         newTutorial.ph_value.deviation = 0;
         newTutorial.ph_value.status = NORM;
     }
+    newTutorial.ph_value.currentValue = entry.ph_value;
     newTutorial.ph_value.norm = currentNorm.ph_value;
 
     /*Bodentyp Anylyse*/
@@ -156,8 +167,8 @@ module.exports.analyseValues = function (weekPrecipitation) {
     } else {
         newTutorial.soil.status = NORM;
     }
+    newTutorial.soil.currentValue = entry.soil;
     newTutorial.soil.norm = currentNorm.soil.id;
-    /*var weekPrecipitation = weather.getPrecipitationForWeek(entry.location.country, entry.location.city);*/
 
     if (entry.soil_moisture < currentNorm.soil_moisture.min) {
         newTutorial.soil_moisture.deviation = calculateDeviation(currentNorm.soil_moisture.min, entry.soil_moisture);
@@ -169,6 +180,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
         newTutorial.soil_moisture.deviation = 0;
         newTutorial.soil_moisture.status = NORM;
     }
+    newTutorial.soil_moisture.currentValue = entry.soil_moisture;
     newTutorial.soil_moisture.norm = currentNorm.soil_moisture.min + "-" + currentNorm.soil_moisture.max;
     newTutorial.soil_moisture.water_requirements = currentNorm.water_requirements * entry.area - weekPrecipitation;
     newTutorial.mature_after_month = currentNorm.mature_after_month;

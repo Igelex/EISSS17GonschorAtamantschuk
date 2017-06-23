@@ -62,7 +62,8 @@ module.exports.getTutorialById = function (req, res) {
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
-            if (result != null) {
+            if (result) {
+                console.log("GetTutorial bi ID: " + result);
                 res.status(200).type('application/json').send(result);
             }
             else {
@@ -78,7 +79,7 @@ module.exports.deleteTutorial = function (req, res) {
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
-            if (result != null) {
+            if (result) {
                 res.status(200).type('text').send('Tutorial with id: ' + result._id + ' succesfully deleted');
             } else {
                 res.status(204 ).type('text').send('Tutorial with id: ' + req.params.id + ' not found');

@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                     fb.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startActivity(new Intent(MainActivity.this, com.example.android.harvesthand.AddNewEntry.class));
+                            startActivity(new Intent(MainActivity.this, AddNewEntry.class));
                         }
                     });
                 }
@@ -179,13 +179,14 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject locationObject = entryObject.getJSONObject("location");
 
                             String entryName = entryObject.getString("entry_name");
-                            String location = locationObject.getString("city");
+                            String entryLocationCity = locationObject.getString("city");
                             String entryID = entryObject.getString("_id");
                             int area = entryObject.getInt("area");
-                            int artId = entryObject.getInt("crop_id");
+                            int cropID = entryObject.getInt("crop_id");
+                            String tutorialID = entryObject.getString("tutorial_id");
 
                             //Die Daten werden der ArrayList hinzugefügt
-                            entryArrayList.add(new Entry(entryID, entryName, artId, location, area));
+                            entryArrayList.add(new Entry(entryID, entryName, cropID, entryLocationCity, area, tutorialID));
                         } catch (JSONException e) {
                             e.printStackTrace();
                             contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
@@ -209,15 +210,17 @@ public class MainActivity extends AppCompatActivity {
                     switch (error.networkResponse.statusCode) {
                         case 500:
                             contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
+                            error.printStackTrace();
                             break;
                         case 404:
                             contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
+                            error.printStackTrace();
                             break;
                     }
                 } else {
                     contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
+                    error.printStackTrace();
                 }
-                error.printStackTrace();
             }
         });
 
@@ -231,16 +234,17 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Entry currentEq = adapter.getItem(position);
                 if (sPrefUser.getInt(USER_SP_TYPE, -1) == 1) {
-                    startActivity(new Intent(MainActivity.this, EntryTutorialActivity.class));
-                } else {
-                    Intent intent = new Intent(MainActivity.this, EntryDetails.class);
-                    intent.putExtra("URL", URL + currentEq.getEntryId() + URL_BASE_TUTORIAL
-                            + currentEq.getTutorialId());
-                    Log.i("TUTORIAL_ID: ", URL + currentEq.getEntryId() + URL_BASE_TUTORIAL
-                            + currentEq.getTutorialId());
+                    Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
+                    intent.putExtra("entry_id", currentEq.getEntryId());
+                    intent.putExtra("tutorial_id", currentEq.getTutorialId());
+                    intent.putExtra("entry_location_city", currentEq.getLocation());
+                    intent.putExtra("crop_id", currentEq.getCropId());
+                    intent.putExtra("entry_name", currentEq.getEntryName());
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);
                     }
+                } else {
+                    startActivity(new Intent(MainActivity.this, EntryDetails.class));
                 }
             }
         });
@@ -283,13 +287,16 @@ public class MainActivity extends AppCompatActivity {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
                                     contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
+                                    error.printStackTrace();
                                     break;
                                 case 404:
                                     contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
+                                    error.printStackTrace();
                                     break;
                             }
                         } else {
                             contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
+                            error.printStackTrace();
                         }
                     }
                 });

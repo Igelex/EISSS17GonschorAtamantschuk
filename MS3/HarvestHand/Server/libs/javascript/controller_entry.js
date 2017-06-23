@@ -31,15 +31,17 @@ module.exports.getEntries = function (req, res) {
         },
         {
             "entry_name": true,
-            "art_id": true, "area": true,
+            "art_id": true,
+            "area": true,
             "location": true,
+            "tutorial_id": true,
             "crop_id": true
         }, function (err, result) {
             if (err) {
                 console.log(err);
                 res.status(500).type('text').send({msg: 'DB Error', res: false});
             } else {
-                if (result) {
+                if (result.length > 0) {
                     console.log("Found Entries: " + result);
                     res.status(200).type('application/json').send(result);
                 }
