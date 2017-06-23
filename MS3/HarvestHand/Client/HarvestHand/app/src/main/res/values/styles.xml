@@ -71,4 +71,11 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <!--Tutorial Values text Style-->
+    <style name="tutorial_text_values">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">30dp</item>
+
+    </style>
+
 </resources>

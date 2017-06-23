@@ -1,146 +1,377 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/entry_tutorial_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/turorial_back"
+    android:background="@drawable/tutorial_background_img"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.android.harvesthand.EntryTutorialActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/location_icon" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:srcCompat="@drawable/tutorial_height_icon" />
 
     <ProgressBar
         android:id="@+id/pg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:indeterminate="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_airmoisture_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/circlebad"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial_airtemp_image" />
+
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_airtemp_image"
+        app:layout_constraintRight_toLeftOf="@+id/tutorial_airtemp_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_airtemp_image"
+        app:srcCompat="@drawable/tutorial_moisture_icon" />
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_airtemp_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/circle_yellow"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_airmoisture_image"
+        app:layout_constraintRight_toLeftOf="@+id/tutorial_airmoisture_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_airmoisture_image"
+        app:srcCompat="@drawable/tutorial_air_temp_icon" />
+
+
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="298dp"
+        android:layout_height="129dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView8"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tutorial_crop_image"
+        app:layout_constraintVertical_bias="0.845"
+        app:srcCompat="@drawable/tutorial_shapes" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_crop_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ground_icon"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.581" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tutorial_soil_image"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_soil_image"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_soil_image"
+        app:srcCompat="@drawable/tutorial_soil_icon" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tutorial_ph_image"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_ph_image"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_ph_image"
+        app:srcCompat="@drawable/tutorial_ph_icon" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tutorial_soiltemp_image"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_soiltemp_image"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_soiltemp_image"
+        app:srcCompat="@drawable/tutorial_soil_temp_icon" />
+
+    <ImageView
+        android:id="@+id/imageView10"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/tutorial_soilmoisture_image"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_soilmoisture_image"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_soilmoisture_image"
+        app:srcCompat="@drawable/tutorial_moisture_icon" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_soil_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="1"
+        android:src="@drawable/ground_icon"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_ph_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/circlebad"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_soiltemp_image"
+        app:layout_constraintLeft_toRightOf="@+id/tutorial_soil_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_soiltemp_image" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_soiltemp_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/circle_yellow"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tutorial_ph_image"
+        app:layout_constraintRight_toLeftOf="@+id/tutorial_soilmoisture_image" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tutorial_soilmoisture_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/circle"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_soiltemp_image"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_soiltemp_image"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <TextView
+        android:id="@+id/tutorial_loc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentRight="true"
-        android:layout_margin="8dp">
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:autoLink="web"
+        android:linksClickable="true"
+        android:text="Sinegal"
+        android:textColor="@android:color/white"
+        android:textColorLink="@color/wallet_holo_blue_light"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintLeft_toRightOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.666" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/tutorial_airmoisture_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/circlebad"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/tutorial_airtemp_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/circle_yellow"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"/>
-
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/tutorial_soil_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ground_icon"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/tutorial_ph_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/circlebad"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/tutorial_soiltemp_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/circle_yellow"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/tutorial_soilmoisture_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/circle"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp"
-            android:layout_centerVertical="true"
-            android:layout_weight="1"/>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/tutorial_high"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/linearLayout">
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:autoLink="web"
+        android:text="1240m"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+        app:layout_constraintLeft_toRightOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/imageView2"
+        app:layout_constraintVertical_bias="0.529" />
 
-        <TextView
-            android:id="@+id/tutorial_loc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sinegal"
-            android:textSize="21sp"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp"
-            android:textColorLink="@color/wallet_holo_blue_light"
-            android:linksClickable="true"
-            android:autoLink="web"/>
+    <TextView
+        android:id="@+id/tutorial_maiture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="33dp"
+        android:autoLink="web"
+        android:text="24 month"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-        <TextView
-            android:id="@+id/tutorial_high"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1240m"
-            android:textSize="21sp"
-            android:layout_marginBottom="40dp"
-            android:textColor="@android:color/white"
-            android:autoLink="web"/>
+    <TextView
+        android:id="@+id/tutorial_text_air_moisture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_airtemp_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_airtemp_image"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_airtemp_image"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_airtemp_image"
+        android:layout_marginBottom="8dp"
+        style="@style/tutorial_text_values"/>
+    <TextView
+        android:id="@+id/tutorial_text_air_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20\u2103"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_airmoisture_image"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_airmoisture_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_airmoisture_image"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_airmoisture_image"
+        style="@style/tutorial_text_values"/>
+    <TextView
+        android:id="@+id/tutorial_text_ph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_ph_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_ph_image"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_ph_image"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_ph_image"
+        android:layout_marginBottom="8dp"
+        style="@style/tutorial_text_values"/>
+    <TextView
+        android:id="@+id/tutorial_text_soil_temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="40 \u2103"
+        android:textSize="20sp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_soiltemp_image"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_soiltemp_image"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_soiltemp_image"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_soiltemp_image"
+        style="@style/tutorial_text_values"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="@+id/tutorial_soilmoisture_image"
+        app:layout_constraintBottom_toBottomOf="@+id/tutorial_soilmoisture_image"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/tutorial_soilmoisture_image"
+        app:layout_constraintTop_toTopOf="@+id/tutorial_soilmoisture_image"
+        android:layout_marginTop="8dp"
+        style="@style/tutorial_text_values"/>
 
-        <TextView
-            android:id="@+id/tutorial_maiture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="9 month"
-            android:textSize="16sp"
-            android:autoLink="web"/>
 
-    </LinearLayout>
-
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
