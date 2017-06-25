@@ -8,12 +8,18 @@
     </style>
 
     <!-- Base application theme. -->
-    <style name="SignUpTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="SignUpTheme" parent="Theme.AppCompat.Dialog">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- ShowTutorial theme. -->
+    <style name="ShowTutorialTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    
     <!-- Card TextView Style. -->
     <style name="card_textview">
         <item name="android:layout_marginLeft">10dp</item>

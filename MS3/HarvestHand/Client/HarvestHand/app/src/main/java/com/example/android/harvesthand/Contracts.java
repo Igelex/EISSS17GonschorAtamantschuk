@@ -49,6 +49,19 @@ public class Contracts {
     public static int SOIL_ID_SAND = 0;
     public static int SOIL_ID_CLAY= 1;/*...*/
 
+    /*
+    * Id der Eigenschaft für Tutorial
+    * */
+    public static int PROPERTY_AIR_MOISTURE = 0;
+    public static int PROPERTY_AIR_TEMP = 1;
+    public static int PROPERTY_SOIL_TEMP = 2;
+    public static int PROPERTY_SOIL_MOISTURE = 3;
+    public static int PROPERTY_PH = 4;
+    public static int PROPERTY_SOIL_TYPE = 5;
+    public static int PROPERTY_HEIGHT= 6;
+
+
+
     public Contracts() {
     }
 

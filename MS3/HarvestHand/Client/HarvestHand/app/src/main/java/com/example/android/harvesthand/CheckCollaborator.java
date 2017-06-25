@@ -22,9 +22,8 @@ public class CheckCollaborator {
     public CheckCollaborator() {
     }
 
-    protected boolean getUser(final Context context, ProgressBar pg, View c, String url ) {
-        final ProgressBar progressBar = pg;
-        final View container = c;
+    protected boolean getUser(final Context context, final ProgressBar progressBar, final View container,
+                              String url ) {
         final Contracts contracts = new Contracts();
 
         Log.i("URL in CHECK: ", url);
@@ -66,10 +65,6 @@ public class CheckCollaborator {
                                     break;
                                 case 404:
                                     contracts.showSnackbar(container, context.getString(R.string.msg_404_error), true, false);
-                                    userExist = false;
-                                    break;
-                                case 204:
-                                    contracts.showSnackbar(container, "hui popimi", true, false);
                                     userExist = false;
                                     break;
                             }

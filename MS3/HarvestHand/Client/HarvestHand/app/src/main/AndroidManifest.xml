@@ -18,6 +18,7 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -32,6 +33,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
+
+        <activity
+            android:name=".ShowTutorialActivity"
+            android:parentActivityName=".EntryTutorialActivity"
+            android:theme="@style/ShowTutorialTheme">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".EntryTutorialActivity" />
+        </activity>
+
         <activity
             android:name=".SignUp.SignUpActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -55,13 +68,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.harvesthand.MainActivity" />
         </activity>
-        <activity android:name=".UserProfile"
+        <activity
+            android:name=".UserProfile"
             android:label="@string/titel_activity_user_profile"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.harvesthand.MainActivity" />
-
         </activity>
     </application>
 

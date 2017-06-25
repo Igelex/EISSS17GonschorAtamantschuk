@@ -2,19 +2,18 @@ package com.example.android.harvesthand;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.GradientDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +51,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
     private TextView location, height, mature, airMoisture, airTemp, ph, soilTemp, soilMoisture;
     private String celsius = "\u2103";
     private CircleImageView airTempImg, airMoistureImg, cropImg, soilImg, phImg, soilTempImg, soilMoistureImg;
+    private ImageButton imgSoilmoisture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,16 +195,8 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         setBackgroundColor();
                         setCropBackgroundImg(cropID);
                         setSoilBackgroundImg(soilCurrentValue);
-
-                        ImageButton earLocation = (ImageButton) findViewById(R.id.tutorial_location_ear);
-                        earButtonsClickLIstener(earLocation, getString(R.string.item_speaktext_location)
-                                + entryLocationCity);
-                        ImageButton earHeight = (ImageButton) findViewById(R.id.tutorial_height_ear);
-                        earButtonsClickLIstener(earHeight, getString(R.string.tutorial_speaktext_height)
-                                + heightCurrentValue);
-                        ImageButton earMature = (ImageButton) findViewById(R.id.tutorial_mature_ear);
-                        earButtonsClickLIstener(earMature, getString(R.string.tutorial_speaktext_mature)
-                                + matureMonth + getString(R.string.tutorial_month));
+                        setSpeaker();
+                        setStartTutorialClickListener();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -242,7 +234,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
 
-    private void setSoilBackgroundImg(int soilId){
+    private void setSoilBackgroundImg(int soilId) {
         switch (soilId) {
             case 0:
                 soilImg.setImageResource(R.drawable.soil_0_sand_img);
@@ -255,7 +247,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         }
     }
 
-    private void setCropBackgroundImg(int cropID){
+    private void setCropBackgroundImg(int cropID) {
         switch (cropID) {
             case 0:
                 cropImg.setImageResource(R.drawable.crop_0_caffe_img);
@@ -268,22 +260,23 @@ public class EntryTutorialActivity extends AppCompatActivity {
         }
     }
 
-    private void setBackgroundColor(){
+    private void setBackgroundColor() {
         airTempImg.setImageResource(setColor(airTepmDeviation));
         airMoistureImg.setImageResource(setColor(airMoistureDeviation));
         soilTempImg.setImageResource(setColor(soilTempDeviation));
         soilMoistureImg.setImageResource(setColor(soilMoistureDeviation));
-        phImg.setImageResource(setColor(phDeviation));}
+        phImg.setImageResource(setColor(phDeviation));
+    }
 
-    private int setColor(int deviation){
+    private int setColor(int deviation) {
         int mColor;
-        if (deviation <= 10){
+        if (deviation <= 10) {
             mColor = R.drawable.circle_10;
-        } else if (deviation <= 20){
+        } else if (deviation <= 20) {
             mColor = R.drawable.circle_20;
-        } else if (deviation <= 30){
+        } else if (deviation <= 30) {
             mColor = R.drawable.circle_30;
-        } else if (deviation <= 40){
+        } else if (deviation <= 40) {
             mColor = R.drawable.circle_40;
         } else {
             mColor = R.drawable.circle_50;
@@ -291,7 +284,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         return mColor;
     }
 
-    private void setTextView(){
+    private void setTextView() {
         location.setText(entryLocationCity);
         height.setText(String.valueOf(heightCurrentValue) + getString(R.string.add_entry_meter));
         mature.setText(String.valueOf(matureMonth) + getString(R.string.tutorial_month));
@@ -302,16 +295,28 @@ public class EntryTutorialActivity extends AppCompatActivity {
         soilMoisture.setText(String.valueOf(soilMoistureCurrentValue));
     }
 
-    private String buildeUrl(){
+    private String buildeUrl() {
         Log.i("Tutorila URL :", BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID);
         return BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID;
     }
 
-    private void speakText(String text){
+    private void setSpeaker() {
+        ImageButton earLocation = (ImageButton) findViewById(R.id.tutorial_location_ear);
+        earButtonsClickListener(earLocation, getString(R.string.item_speaktext_location)
+                + entryLocationCity);
+        ImageButton earHeight = (ImageButton) findViewById(R.id.tutorial_height_ear);
+        earButtonsClickListener(earHeight, getString(R.string.tutorial_speaktext_height)
+                + heightCurrentValue);
+        ImageButton earMature = (ImageButton) findViewById(R.id.tutorial_mature_ear);
+        earButtonsClickListener(earMature, getString(R.string.tutorial_speaktext_mature)
+                + matureMonth + getString(R.string.tutorial_month));
+    }
+
+    private void speakText(String text) {
         speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    private void earButtonsClickLIstener(ImageButton ear, String text){
+    private void earButtonsClickListener(ImageButton ear, String text) {
         final String speakText = text;
         ear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -321,13 +326,41 @@ public class EntryTutorialActivity extends AppCompatActivity {
         });
     }
 
+    private void setStartTutorialClickListener(){
+        startTutorial(soilMoistureImg, soilMoistureNorm, soilMoistureStatus, soilMoistureCurrentValue,
+                PROPERTY_SOIL_MOISTURE, waterRequire);
+
+
+        startTutorial(airTempImg, airTempNorm, airTempStatus, airTempCurrentValue, PROPERTY_AIR_TEMP,
+                0);
+    }
+
+    private void startTutorial(ImageView button, final String norm, final int status,
+                               final int currentValue, final int property, final int waterReq) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(EntryTutorialActivity.this, ShowTutorialActivity.class);
+                intent.putExtra("norm", norm);
+                intent.putExtra("status", status);
+                intent.putExtra("currentValue", currentValue);
+                intent.putExtra("property", property);
+                if (waterReq != 0){
+                    intent.putExtra("water_require", waterReq);
+                }
+                startActivity(intent);
+            }
+        });
+
+    }
+
     @Override
-    public void onPause() {
+    public void onDestroy() {
         if (speaker != null) {
             speaker.stop();
             speaker.shutdown();
         }
-        super.onPause();
+        super.onDestroy();
     }
 
 }
