@@ -1,10 +1,10 @@
 package com.example.android.harvesthand;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -13,34 +13,33 @@ import java.util.ArrayList;
  * Created by Pastuh on 13.05.2017.
  */
 
-public class TutorialRecyclerAdapter extends RecyclerView.Adapter<TutorialRecyclerAdapter.EntryViewHolder> {
+public class TutorialRecyclerAdapter extends RecyclerView.Adapter<TutorialRecyclerAdapter.TutorialViewHolder> {
 
-    ArrayList<Entry> arrayList = new ArrayList<Entry>();
+    ArrayList<Tutorial> arrayList = new ArrayList<>();
 
-    public TutorialRecyclerAdapter(ArrayList<Entry> arrayList) {
+    public TutorialRecyclerAdapter(ArrayList<Tutorial> arrayList) {
 
         this.arrayList = arrayList;
     }
 
     @Override
-    public EntryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TutorialViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tutorial_item, parent, false);
-        EntryViewHolder entryViewHolder = new EntryViewHolder(view);
-        return entryViewHolder;
+        TutorialViewHolder tutorialViewHolder = new TutorialViewHolder(view);
+        return tutorialViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(final EntryViewHolder holder, final int position) {
+    public void onBindViewHolder(final TutorialViewHolder holder, final int position) {
 
         //Cardview mit Daten füllen
-        holder.entryName.setText(arrayList.get(position).getEntryName());
-        holder.entryId.setText(arrayList.get(position).getEntryId());
-        holder.clickView.setOnClickListener(new View.OnClickListener() {
+        holder.img.setImageResource(arrayList.get(position).getmImageId());
+        /*holder.clickView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
-        });
+        });*/
     }
 
     @Override
@@ -48,14 +47,12 @@ public class TutorialRecyclerAdapter extends RecyclerView.Adapter<TutorialRecycl
         return arrayList.size();
     }
 
-    public class EntryViewHolder extends RecyclerView.ViewHolder {
-        TextView entryName, entryId, entryPhValue, entryWater, entryMinerals;
-        View clickView;
+    public class TutorialViewHolder extends RecyclerView.ViewHolder {
+        ImageView img;
 
-        public EntryViewHolder(final View itemView) {
+        public TutorialViewHolder(final View itemView) {
             super(itemView);
-            clickView = itemView;
-            entryName = (TextView) itemView.findViewById(R.id.name);
+             img = itemView.findViewById(R.id.show_item_image);
 
         }
     }

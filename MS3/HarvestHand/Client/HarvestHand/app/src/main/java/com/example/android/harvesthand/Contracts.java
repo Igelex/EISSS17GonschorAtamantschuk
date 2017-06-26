@@ -52,10 +52,10 @@ public class Contracts {
     /*
     * Id der Eigenschaft für Tutorial
     * */
-    public static int PROPERTY_AIR_MOISTURE = 0;
+    public static int PROPERTY_SOIL_MOISTURE = 0;
     public static int PROPERTY_AIR_TEMP = 1;
     public static int PROPERTY_SOIL_TEMP = 2;
-    public static int PROPERTY_SOIL_MOISTURE = 3;
+    public static int PROPERTY_AIR_MOISTURE = 3;
     public static int PROPERTY_PH = 4;
     public static int PROPERTY_SOIL_TYPE = 5;
     public static int PROPERTY_HEIGHT= 6;

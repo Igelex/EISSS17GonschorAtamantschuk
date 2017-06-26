@@ -18,7 +18,7 @@
             android:id="@+id/show_item_image"
             android:layout_width="wrap_content"
             android:layout_height="150dp"
-            android:src="@drawable/tutorial_soilmoisture_less" />
+            android:src="@drawable/tutorial_soilmoisture_less_kanne" />
 
         <View
             android:layout_width="match_parent"

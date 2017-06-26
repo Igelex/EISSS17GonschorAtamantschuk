@@ -6,6 +6,9 @@
     <!-- Background Color for SignIn-Up fragments -->
     <color name="colorMainBackgroud">#c4c4c4</color>
 
+    <!-- Background Color for ShowTutorialActivity -->
+    <color name="colorTutorialBackground">#d1d1d1</color>
+
     <color name="colorFalseState">#fd5656</color>
     <color name="colorHint">#969696</color>
 
