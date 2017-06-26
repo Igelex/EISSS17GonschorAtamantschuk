@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
@@ -62,15 +60,13 @@ public class ShowTutorialActivity extends AppCompatActivity {
 
         currentValueText = (TextView) findViewById(R.id.show_current_value);
         currentValueText.setText(String.valueOf(currentValue));
-        normText = (TextView) findViewById(R.id.show_norm_value);
 
-        String[] strings = getResources().getStringArray(R.array.soil_spinner_array);
+        /*String[] strings = getResources().getStringArray(R.array.soil_spinner_array);
         for (String s : strings) {
             int i = s.indexOf(getString(R.string.soil_sand));
             if (i >= 0) {
-                normText.setText(s);
             }
-        }
+        }*/
 
     }
 
@@ -101,9 +97,6 @@ public class ShowTutorialActivity extends AppCompatActivity {
                                 this.getPackageName());
 
                         tutorialList.add(new Tutorial(drawableId));
-                        //ImageView img = (ImageView) findViewById(R.id.img);
-                        //img.setImageResource(drawableId);
-                        //img.setImageDrawable(getResources().getDrawable(drawableId));
                         Log.i("Image Name: ", f.getName());
                     }
                 }

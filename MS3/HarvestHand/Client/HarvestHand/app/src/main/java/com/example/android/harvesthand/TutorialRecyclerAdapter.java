@@ -7,54 +7,74 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
+
 import java.util.ArrayList;
-
 /**
- * Created by Pastuh on 13.05.2017.
+ * Code von https://github.com/lopspower/HFRecyclerView
  */
-
-public class TutorialRecyclerAdapter extends RecyclerView.Adapter<TutorialRecyclerAdapter.TutorialViewHolder> {
+public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
 
     ArrayList<Tutorial> arrayList = new ArrayList<>();
 
-    public TutorialRecyclerAdapter(ArrayList<Tutorial> arrayList) {
-
-        this.arrayList = arrayList;
+    public TutorialRecyclerAdapter(ArrayList<Tutorial> list) {
+        //With Footer
+        super(list, false, true);
+        this.arrayList = list;
     }
 
     @Override
-    public TutorialViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tutorial_item, parent, false);
-        TutorialViewHolder tutorialViewHolder = new TutorialViewHolder(view);
-        return tutorialViewHolder;
-    }
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ItemViewHolder) {
+            ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            itemViewHolder.img.setImageResource(arrayList.get(position).getmImageId());
+        } else if (holder instanceof HeaderViewHolder) {
 
-    @Override
-    public void onBindViewHolder(final TutorialViewHolder holder, final int position) {
-
-        //Cardview mit Daten füllen
-        holder.img.setImageResource(arrayList.get(position).getmImageId());
-        /*holder.clickView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });*/
-    }
-
-    @Override
-    public int getItemCount() {
-        return arrayList.size();
-    }
-
-    public class TutorialViewHolder extends RecyclerView.ViewHolder {
-        ImageView img;
-
-        public TutorialViewHolder(final View itemView) {
-            super(itemView);
-             img = itemView.findViewById(R.id.show_item_image);
-
+        } else if (holder instanceof FooterViewHolder) {
+            FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+            footerViewHolder.normText.setText("60-80");
         }
     }
 
+    //region Override Get ViewHolder
+    @Override
+    protected RecyclerView.ViewHolder getItemView(LayoutInflater inflater, ViewGroup parent) {
+        return new ItemViewHolder(inflater.inflate(R.layout.tutorial_item, parent, false));
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder getHeaderView(LayoutInflater inflater, ViewGroup parent) {
+        return new HeaderViewHolder(inflater.inflate(R.layout.recycler_footer, parent, false));
+    }
+
+    @Override
+    protected RecyclerView.ViewHolder getFooterView(LayoutInflater inflater, ViewGroup parent) {
+        return new FooterViewHolder(inflater.inflate(R.layout.recycler_footer, parent, false));
+    }
+    //endregion
+
+    //region ViewHolder Header and Footer
+    class ItemViewHolder extends RecyclerView.ViewHolder {
+        ImageView img;
+
+        public ItemViewHolder(View itemView) {
+            super(itemView);
+            img = itemView.findViewById(R.id.show_item_image);
+        }
+    }
+
+    class HeaderViewHolder extends RecyclerView.ViewHolder {
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    class FooterViewHolder extends RecyclerView.ViewHolder {
+        TextView normText;
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+            normText = itemView.findViewById(R.id.footer_norm_value);
+        }
+    }
+    //endregion
 }

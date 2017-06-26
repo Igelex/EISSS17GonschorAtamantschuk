@@ -2,92 +2,67 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/show_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.example.android.harvesthand.ShowTutorialActivity"
-    android:id="@+id/show_container">
+    tools:context="com.example.android.harvesthand.ShowTutorialActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/show_current_value_circle"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/circle"
-            app:civ_border_color="@android:color/white"
-            app:civ_border_width="2dp" />
-
-        <TextView
-            android:id="@+id/show_current_value"
-            style="@style/tutorial_text_values"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="25" />
+            android:layout_marginTop="16dp">
 
-        <ImageButton
-            android:id="@+id/show_close_imb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            app:srcCompat="@drawable/close"
-            android:layout_centerVertical="true"/>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/show_current_value_circle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle"
+                app:civ_border_color="@android:color/white"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/show_current_value"
+                style="@style/tutorial_text_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="25" />
+
+            <ImageButton
+                android:id="@+id/show_close_imb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:srcCompat="@drawable/close" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
 
-    <View
-        android:layout_width="4dp"
-        android:layout_height="50dp"
-        android:background="@color/colorMainBackgroud"
-        android:layout_gravity="center"/>
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/show_list"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <View
-        android:layout_width="4dp"
-        android:layout_height="50dp"
-        android:background="@color/colorMainBackgroud"
-        android:layout_gravity="center"/>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <View
+            android:layout_width="4dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@color/colorMainBackgroud" />
 
         <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:background="@drawable/button_bg_rounded"
-            android:layout_centerInParent="true"/>
-
-        <TextView
-            android:id="@+id/show_norm_value"
-            style="@style/tutorial_text_values"
+            android:id="@+id/img"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00-00"
-            android:layout_centerInParent="true"/>
+            android:layout_height="wrap_content" />
 
-    </RelativeLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/show_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+
 
     </LinearLayout>
 
