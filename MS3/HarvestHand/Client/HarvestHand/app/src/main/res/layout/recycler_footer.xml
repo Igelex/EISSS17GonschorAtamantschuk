@@ -16,6 +16,7 @@
         android:layout_height="match_parent">
 
         <ImageView
+            android:id="@+id/footer_img"
             android:layout_width="120dp"
             android:layout_height="50dp"
             android:layout_centerInParent="true"
@@ -28,6 +29,16 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="00-00" />
+
+
+        <ImageButton
+            android:id="@+id/footer_norm_value_ear"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ear_hearing"
+            style="@style/img_button"
+            android:layout_toLeftOf="@+id/footer_img"
+            android:layout_centerInParent="true"/>
 
     </RelativeLayout>
 

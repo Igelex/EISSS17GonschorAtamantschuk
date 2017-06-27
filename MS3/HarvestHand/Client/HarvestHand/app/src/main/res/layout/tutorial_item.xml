@@ -18,23 +18,21 @@
             android:id="@+id/show_item_image"
             android:layout_width="wrap_content"
             android:layout_height="150dp"
-            android:src="@drawable/tutorial_soilmoisture_less_kanne" />
+            android:src="@drawable/tutorial_soilmoisture_less_1" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="8dp"
             android:background="#e7e7e7" />
 
         <ImageButton
-            android:id="@+id/show_item_ear"
+            android:id="@+id/footer_item_ear"
             style="@style/img_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_height="50dp"
             card_view:srcCompat="@drawable/ear_hearing" />
 
     </LinearLayout>

@@ -90,11 +90,37 @@
     <string name="item_speaktext_location">Location:</string>
     <string name="item_speaktext_area">Area:</string>
     <string name="titel_activity_user_profile">Profile</string>
-    <!--Strings for TutorialActivity-->
-    <!--Location-->
-    <string name="tutorial_speaktext_location">Current Location is</string>
-    <string name="tutorial_speaktext_height">Current height above sea level is</string>
+    <!--Strings for EntryTutorialActivity-->
+    <string name="property_airtemp">Air temperature</string>
+    <string name="property_airhumidity">Air humidity</string>
+    <string name="property_soiltemp">Soil temperature</string>
+    <string name="property_soilmoisture">Soil moisture</string>
+    <string name="property_ph">PH-Value</string>
+    <string name="property_soiltype">Type of soil</string>
+    <!--Strings for EntryTutorialActivity-->
+    <string name="tutorial_speaktext_location">Current Location is </string>
+    <string name="tutorial_speaktext_height">Current height above sea level is </string>
     <string name="tutorial_speaktext_mature">Mature in</string>
+    <!--Strings for ShowTutorialActivity-->
+    <string name="show_should_be_value">Value for this Property should be </string>
+    <string name="show_current_value_of">Current value of: </string>
+    <string name="show_current_value_is">is: </string>
+    <!--Description Strings for each Image/Animation/Video in Tutorial-->
+    <!--Description for tutorial_soilmoisture_less_1 Image -->
+    <string name="desc_soilmoisture_less_1_2">Required amount of water for your Field is </string>
+    <string name="desc_soilmoisture_less_1_1">Your Need water</string>
+    <string-array name="desc_array_soilmoisture_less_1">
+        <item>@string/desc_soilmoisture_less_1_1</item>
+        <item>@string/desc_soilmoisture_less_1_2</item>
+    </string-array>
+    <!--Description for tutorial_soilmoisture_less_2 Image -->
+    <string name="desc_soilmoisture_less_2_2">Ko ko ko </string>
+    <string name="desc_soilmoisture_less_2_1">Bla bla bla</string>
+    <string-array name="desc_array_soilmoisture_less_2">
+        <item>@string/desc_soilmoisture_less_2_1</item>
+        <item>@string/desc_soilmoisture_less_2_2</item>
+    </string-array>
+
 
     <!--Cropart spinner Strings-->
     <string name="crop_default">Crop art</string>

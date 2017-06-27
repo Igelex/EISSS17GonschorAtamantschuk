@@ -328,15 +328,16 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
     private void setStartTutorialClickListener(){
         startTutorial(soilMoistureImg, soilMoistureNorm, soilMoistureStatus, soilMoistureCurrentValue,
-                PROPERTY_SOIL_MOISTURE, waterRequire);
+                PROPERTY_SOIL_MOISTURE, waterRequire, soilMoistureDeviation);
 
 
         startTutorial(airTempImg, airTempNorm, airTempStatus, airTempCurrentValue, PROPERTY_AIR_TEMP,
-                0);
+                0, airTepmDeviation);
     }
 
     private void startTutorial(ImageView button, final String norm, final int status,
-                               final int currentValue, final int property, final int waterReq) {
+                               final int currentValue, final int property, final int waterReq,
+                               final int deviation) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -345,6 +346,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 intent.putExtra("status", status);
                 intent.putExtra("currentValue", currentValue);
                 intent.putExtra("property", property);
+                intent.putExtra("deviation", deviation);
                 if (waterReq != 0){
                     intent.putExtra("water_require", waterReq);
                 }

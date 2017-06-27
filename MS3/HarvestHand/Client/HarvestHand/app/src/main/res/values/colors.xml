@@ -3,11 +3,11 @@
     <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#47974b</color>
-    <!-- Background Color for SignIn-Up fragments -->
+    <!-- Background Color -->
     <color name="colorMainBackgroud">#c4c4c4</color>
 
     <!-- Background Color for ShowTutorialActivity -->
-    <color name="colorTutorialBackground">#d1d1d1</color>
+    <color name="colorTutorialBackground">#e6e6e6</color>
 
     <color name="colorFalseState">#fd5656</color>
     <color name="colorHint">#969696</color>

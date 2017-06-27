@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.example.android.harvesthand.ShowTutorialActivity">
+    tools:context="com.example.android.harvesthand.ShowTutorialActivity"
+    android:background="@color/colorTutorialBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,6 +18,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp">
+
+            <ImageButton
+                android:id="@+id/show_current_value_ear"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:srcCompat="@drawable/ear_hearing"
+                style="@style/img_button"
+                android:layout_toLeftOf="@+id/show_current_value_circle"
+                android:layout_centerInParent="true"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/show_current_value_circle"
@@ -41,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="16dp"
                 app:srcCompat="@drawable/close" />
 
 

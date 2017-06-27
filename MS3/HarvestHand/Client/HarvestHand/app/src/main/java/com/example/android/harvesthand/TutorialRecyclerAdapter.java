@@ -1,21 +1,30 @@
 package com.example.android.harvesthand;
 
+import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+
 /**
  * Code von https://github.com/lopspower/HFRecyclerView
  */
 public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
 
     ArrayList<Tutorial> arrayList = new ArrayList<>();
+    Context context;
+    TextToSpeech speaker;
 
     public TutorialRecyclerAdapter(ArrayList<Tutorial> list) {
         //With Footer
@@ -24,21 +33,38 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
             itemViewHolder.img.setImageResource(arrayList.get(position).getmImageId());
+            itemViewHolder.descriptionEarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    speaker.speak(arrayList.get(position).getmDescription(), TextToSpeech.QUEUE_FLUSH, null);
+                }
+            });
         } else if (holder instanceof HeaderViewHolder) {
 
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            footerViewHolder.normText.setText("60-80");
+            if (position == arrayList.size()) {
+                footerViewHolder.normText.setText(arrayList.get(1).getmNorm());
+                footerViewHolder.normEar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    speaker.speak( context.getString(R.string.show_should_be_value) +
+                            arrayList.get(1).getmNorm(), TextToSpeech.QUEUE_FLUSH, null);
+                    }
+                });
+            }
         }
     }
 
     //region Override Get ViewHolder
     @Override
     protected RecyclerView.ViewHolder getItemView(LayoutInflater inflater, ViewGroup parent) {
+        context = parent.getContext();
+        setTextToSpeech();
         return new ItemViewHolder(inflater.inflate(R.layout.tutorial_item, parent, false));
     }
 
@@ -56,10 +82,12 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
     //region ViewHolder Header and Footer
     class ItemViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
+        ImageButton descriptionEarButton;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.show_item_image);
+            descriptionEarButton = itemView.findViewById(R.id.footer_item_ear);
         }
     }
 
@@ -71,10 +99,23 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
 
     class FooterViewHolder extends RecyclerView.ViewHolder {
         TextView normText;
+        ImageButton normEar;
         public FooterViewHolder(View itemView) {
             super(itemView);
             normText = itemView.findViewById(R.id.footer_norm_value);
+            normEar = itemView.findViewById(R.id.footer_norm_value_ear);
         }
     }
     //endregion
+
+    public void setTextToSpeech (){
+        speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    speaker.setLanguage(Locale.getDefault());
+                }
+            }
+        });
+    }
 }
