@@ -21,6 +21,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import static android.content.Context.MODE_PRIVATE;
 import static com.example.android.harvesthand.Contracts.*;
 
@@ -34,6 +36,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
     private Context mContext;
     private TextToSpeech speaker;
     private int userType;
+    private CircleImageView cropImg;
 
     public ListAdapter(@NonNull Context context, @NonNull ArrayList entries) {
         super(context, 0, entries);
@@ -57,12 +60,15 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         }
 
         Entry currentEntry = getItem(position);
+        cropImg = listView.findViewById(R.id.item_image);
+        setCropBackgroundImg(currentEntry.getCropId());
 
         final TextView entryName = listView.findViewById(R.id.name);
-        final TextView entryArea = listView.findViewById(R.id.surface);
+        final TextView entryArea = listView.findViewById(R.id.area);
         final TextView entryLocation = listView.findViewById(R.id.location);
         final String entryId = currentEntry.getEntryId();
 
+        //TextViews in der Liste mit Inhalt füllen
         entryName.setText(currentEntry.getEntryName());
         entryLocation.setText(currentEntry.getLocation());
         entryArea.setText(String.valueOf(currentEntry.getArea()));
@@ -73,7 +79,6 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                 public void onInit(int status) {
                     if (status != TextToSpeech.ERROR) {
                         speaker.setLanguage(Locale.getDefault());
-                        Log.i("local: ", Locale.getDefault().toString());
                     }
                 }
             });
@@ -146,5 +151,18 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void setCropBackgroundImg(int cropID) {
+        switch (cropID) {
+            case 0:
+                cropImg.setImageResource(R.drawable.crop_0_caffe_img);
+                break;
+
+            case 1:
+                cropImg.setImageResource(R.drawable.crop_1_tomato_img);
+                break;
+            /*...*/
+        }
     }
 }

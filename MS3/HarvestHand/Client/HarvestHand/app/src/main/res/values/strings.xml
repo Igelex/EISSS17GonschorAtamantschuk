@@ -51,8 +51,8 @@
     <string name="new_entry_hint_collab">Number</string>
     <string name="label_new_entry">New Entry</string>
     <string name="tutorial_month">Months</string>
-    <string name="add_entry_m_squared">m²</string>
-    <string name="add_entry_meter">m</string>
+    <string name="add_entry_m_squared" translatable="false">m²</string>
+    <string name="add_entry_meter" translatable="false">m</string>
 
     <!--Menu items-->
     <string name="delete_menu_item">Delete</string>
@@ -86,7 +86,7 @@
     <!--TextToSpech Function-->
     <!--String for List Item-->
     <string name="item_speaktext_name">Name:</string>
-    <string name="item_speaktext_coma">,</string>
+    <string name="item_speaktext_coma" translatable="false">,</string>
     <string name="item_speaktext_location">Location:</string>
     <string name="item_speaktext_area">Area:</string>
     <string name="titel_activity_user_profile">Profile</string>
@@ -100,15 +100,15 @@
     <!--Strings for EntryTutorialActivity-->
     <string name="tutorial_speaktext_location">Current Location is </string>
     <string name="tutorial_speaktext_height">Current height above sea level is </string>
-    <string name="tutorial_speaktext_mature">Mature in</string>
+    <string name="tutorial_speaktext_mature">Mature in </string>
     <!--Strings for ShowTutorialActivity-->
     <string name="show_should_be_value">Value for this Property should be </string>
-    <string name="show_current_value_of">Current value of: </string>
-    <string name="show_current_value_is">is: </string>
+    <string name="show_current_value_of">Current value of</string>
+    <string name="show_current_value_is">is </string>
     <!--Description Strings for each Image/Animation/Video in Tutorial-->
     <!--Description for tutorial_soilmoisture_less_1 Image -->
-    <string name="desc_soilmoisture_less_1_2">Required amount of water for your Field is </string>
-    <string name="desc_soilmoisture_less_1_1">Your Need water</string>
+    <string name="desc_soilmoisture_less_1_2">Required amount of liter water for your Field is </string>
+    <string name="desc_soilmoisture_less_1_1">Your Need water.</string>
     <string-array name="desc_array_soilmoisture_less_1">
         <item>@string/desc_soilmoisture_less_1_1</item>
         <item>@string/desc_soilmoisture_less_1_2</item>

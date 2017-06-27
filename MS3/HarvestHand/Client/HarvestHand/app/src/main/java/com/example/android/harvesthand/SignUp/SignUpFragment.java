@@ -66,7 +66,7 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        contracts = new Contracts();
+        contracts = new Contracts(getContext());
 
         // Inflate the layout for this fragment
         inputNumber = view.findViewById(R.id.signup_input_number);

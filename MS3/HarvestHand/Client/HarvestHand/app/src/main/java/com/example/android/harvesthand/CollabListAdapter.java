@@ -39,7 +39,7 @@ public class CollabListAdapter extends ArrayAdapter <String> {
         String currentCollaborator = getItem(position);
 
         TextView collaborator = listView.findViewById(R.id.list_item_collab);
-        collaborator.setText(currentCollaborator.toString());
+        collaborator.setText(currentCollaborator);
 
         ImageButton removeCollaborator = listView.findViewById(R.id.list_item_remove_collab);
         removeCollaborator.setOnClickListener(new View.OnClickListener() {

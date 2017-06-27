@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            /*
+            /**
             * Bilde Uri für Entries - Request
             */
             Uri baseUri = Uri.parse(CURRENT_ENTRIES_URL);
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
     //Request all Entries for user
     public void sendRequest(String url) {
 
-        final Contracts contracts = new Contracts();
+        final Contracts contracts = new Contracts(this);
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reqeustUserId(String URL) {
-        final Contracts contracts = new Contracts();
+        final Contracts contracts = new Contracts(this);
 
         Log.i("URL: ", URL);
 

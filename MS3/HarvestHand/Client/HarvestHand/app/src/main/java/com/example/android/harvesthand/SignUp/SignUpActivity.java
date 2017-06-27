@@ -17,18 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.android.harvesthand.Contracts;
-import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.example.android.harvesthand.Contracts.*;
 

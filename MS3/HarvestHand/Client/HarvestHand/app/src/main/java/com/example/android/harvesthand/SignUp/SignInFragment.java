@@ -80,7 +80,7 @@ public class SignInFragment extends Fragment {
     }
 
     public void sendSignInRequest() {
-        final Contracts contracts = new Contracts();
+        final Contracts contracts = new Contracts(getContext());
         Map<String, String> params = new HashMap<>();
         params.put("phone_number", mNumber);
         URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;

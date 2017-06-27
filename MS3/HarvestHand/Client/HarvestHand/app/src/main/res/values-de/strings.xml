@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HarvestHand</string>
+    <string name="connection_err">Verbindungsproblem</string>
+    <string name="crop_caffe">Kaffee</string>
+    <string name="crop_default">Pflanzenart</string>
+    <string name="desc_soilmoisture_less_1_1">Du brauchst wasser.</string>
+    <string name="desc_soilmoisture_less_1_2">"Benötigte Wassermenge für dein Feld in Liter ist "</string>
+    <string name="item_speaktext_location">Ort:</string>
+    <string name="item_speaktext_name">Name</string>
+    <string name="new_entry_hint_soilmoisture">Bodenfeuchtigkeit</string>
+    <string name="new_entry_hint_airtemp">Lufttemperatur</string>
+    <string name="show_current_value_is">ist</string>
+    <string name="text_crop">Pflanze</string>
+    <string name="text_soil">Boden</string>
+    <string name="tutorial_speaktext_height">"Aktuelle Höhe über dem Meerspiegel ist "</string>
+    <string name="tutorial_speaktext_location">"Ort ist "</string>
+    <string name="tutorial_speaktext_mature">"Reif in "</string>
+    <string name="show_current_value_of">Aktueller Wert von</string>
+    <string name="show_should_be_value">\"Wert für diese Eigenschaft sollte sein \"</string>
+    <string name="tutorial_month">Monate</string>
+    <string name="property_soilmoisture">Bodenfeuchtigkeit</string>
+    <string name="item_speaktext_area">Fläche:</string>
+</resources>

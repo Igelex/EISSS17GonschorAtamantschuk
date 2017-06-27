@@ -36,10 +36,10 @@ public class ShowTutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_tutorial);
 
-        contracts = new Contracts();
+        contracts = new Contracts(this);
 
         container = (LinearLayout) findViewById(R.id.show_container);
-
+        // Lese daten von der EntryTutorialActivity
         Intent intent = getIntent();
         if (intent != null) {
             try {
@@ -94,21 +94,59 @@ public class ShowTutorialActivity extends AppCompatActivity {
     private void switchProperty() {
         switch (property) {
             case 0:
-                switchStatus("soilmoisture");
+                switchStatus("soilmoisture", String.valueOf(waterReq));
                 speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_soilmoisture));
-
+                break;
+            case 1:
+                switchStatus("airtemp", "");
+                speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_airtemp));
+                break;
+            /*Werden nicht implementiert, nur zwei obere Beispiele
+            case 2:
+                switchStatus("soilttemp");
+                speak();
+                break;
+            case 3:
+                switchStatus("airhumidity");
+                speak();
+                break;
+            case 4:
+                switchStatus("ph");
+                speak();
+                break;
+            case 5:
+                switchStatus("soiltype");
+                speak();
+                break;
+            case 6:
+                switchStatus("height");
+                speak();
+                break;*/
         }
     }
 
-    private void switchStatus(String property) {
+    /**
+     * in switchStatus werden die passenden Images in drawables abhängig vom @status gesucht.
+     *@param property - ist die Eigenschaft eines Eintrags, für die ein Tutorial erstellt werden muss.
+     * in drawables wird nach dem vorher definiertem Namen dem Image gesucht.
+     *Alle Namen müssen nach bestimtem Muster gebildet werden(z.B "tutorial_soilmoisture_less_1);
+     * Zur eine @property kann es mehrere Images/Animation/videos geben. Images/Animation/videos zur einem
+     * @property werden am ende des Namens mit einem @i Identifikator bezeichnet.
+     */
+    private void switchStatus(String property, String optional) {
+        String water = "";
         if (status == GREATER) {
             try {
+                //Alle images aus drawable(nicht perfomat)
                 Field[] drawables = R.drawable.class.getFields();
-                int i = 1;
+                int i = 1;//Identifikator
+                //Images für @property nach Namen suchen
                 for (Field f : drawables) {
                     if (f.getName().matches("tutorial_" + property + "_greater(.*)")) {
+                        //Bei der Übereinstimmung Image und zugehörgie Description der Liste
+                        //hinzufügen
                         tutorialList.add(new Tutorial(f.getInt(null), norm,
-                                getDescriptionStrings("desc_array_" + property + "_greater_" + i)));
+                                getDescriptionStrings("desc_array_" + property + "_greater_" + i) + optional));
                         i++;
                     }
                 }
@@ -123,7 +161,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 for (Field f : drawables) {
                     if (f.getName().matches("tutorial_" + property + "_less(.*)")) {
                         tutorialList.add(new Tutorial(f.getInt(null), norm,
-                                getDescriptionStrings("desc_array_" + property + "_less_" + i)));
+                                getDescriptionStrings("desc_array_" + property + "_less_" + i) + optional));
                         i++;
                     }
                 }
@@ -135,11 +173,19 @@ public class ShowTutorialActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Sucht nach dem Array von Strings zur einem Image
+     *
+     * @param arrayName - array-Name, wird von switchStatus() übergeben.
+     * @return - string, description eines Images, wird vorgelesen.
+     */
     private String getDescriptionStrings(String arrayName) {
         String currentString = "";
         try {
+            //Suche array nach Namen
             String[] strings = getResources().getStringArray(this.getResources().getIdentifier(arrayName, "array",
                     this.getPackageName()));
+            // Bilde ein String aus mehreren Strings
             for (String s : strings) {
                 currentString += s;
             }
@@ -151,6 +197,10 @@ public class ShowTutorialActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Visual Feedback zur dem aktuellen Werte der Eigenschaft
+     * @param deviation - die abweichnug des aktuellen Wertes von Norm in Prozetn
+     */
     private void setColor(int deviation) {
         CircleImageView currentValueCircle = (CircleImageView) findViewById(R.id.show_current_value_circle);
         if (deviation <= 10) {
@@ -166,9 +216,17 @@ public class ShowTutorialActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Vorlesefunktion, aktuelle Eigenschaft und derer Wert werden vorgelesen
+     *
+     * @param currentEar   - ImageButton
+     * @param currentValue - aktueller Wert der Eigenschaft
+     * @param property     - aktuelle Eigenschaft
+     */
     private void speak(ImageButton currentEar, final String currentValue, final String property) {
         currentEar.setOnClickListener(new View.OnClickListener() {
             @Override
+            //Vorlese Text wird zusammengesetzt(Z.b Current value of + Air Temp + is + 25)
             public void onClick(View view) {
                 speaker.speak(getString(R.string.show_current_value_of) + property + getString(R.string.show_current_value_is)
                         + currentValue, TextToSpeech.QUEUE_FLUSH, null);
@@ -177,11 +235,11 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onStop() {
         if (speaker != null) {
             speaker.stop();
             speaker.shutdown();
         }
-        super.onDestroy();
+        super.onStop();
     }
 }

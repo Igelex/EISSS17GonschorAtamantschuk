@@ -24,7 +24,7 @@ public class CheckCollaborator {
 
     protected boolean getUser(final Context context, final ProgressBar progressBar, final View container,
                               String url ) {
-        final Contracts contracts = new Contracts();
+        final Contracts contracts = new Contracts(context);
 
         Log.i("URL in CHECK: ", url);
 

@@ -92,7 +92,7 @@ public class AddNewEntry extends AppCompatActivity {
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
 
-        contracts = new Contracts();
+        contracts = new Contracts(this);
 
         geocoder = new Geocoder(this, Locale.getDefault());
 

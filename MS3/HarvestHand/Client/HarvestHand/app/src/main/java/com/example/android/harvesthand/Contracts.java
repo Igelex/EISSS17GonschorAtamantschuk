@@ -1,9 +1,14 @@
 package com.example.android.harvesthand;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 /**
  * Created by Pastuh on 13.06.2017.
@@ -55,17 +60,21 @@ public class Contracts {
     public static int PROPERTY_SOIL_MOISTURE = 0;
     public static int PROPERTY_AIR_TEMP = 1;
     public static int PROPERTY_SOIL_TEMP = 2;
-    public static int PROPERTY_AIR_MOISTURE = 3;
+    public static int PROPERTY_AIR_HUMIDITY = 3;
     public static int PROPERTY_PH = 4;
     public static int PROPERTY_SOIL_TYPE = 5;
     public static int PROPERTY_HEIGHT= 6;
 
+    private Context context;
+    TextToSpeech speaker;
 
-
-    public Contracts() {
+    public Contracts(Context context) {
+        this.context = context;
     }
 
+    //Snackbar zum Anzeigen der System-Messages, universell für alle Klassen
     public void showSnackbar(View view, String msg, Boolean error, Boolean success){
+        speak(msg);
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
         View snackbarView = snackbar.getView();
         TextView snackBarText = (snackbarView.findViewById(android.support.design.R.id.snackbar_text));
@@ -77,4 +86,27 @@ public class Contracts {
         }
         snackbar.show();
     }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void speak(String textToSpeak){
+        speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                Log.i("Speaker Status!!!!!!!:", "" + status);
+                if (status != TextToSpeech.ERROR && status == TextToSpeech.SUCCESS) {
+                    speaker.setLanguage(Locale.getDefault());
+
+                }else {
+                    Log.i("Speaker!!!!!!!!!!!!!!: ", "Initialization failed");
+                }
+            }
+        });
+        speaker.setPitch((float)0.8);
+        speaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+
 }
