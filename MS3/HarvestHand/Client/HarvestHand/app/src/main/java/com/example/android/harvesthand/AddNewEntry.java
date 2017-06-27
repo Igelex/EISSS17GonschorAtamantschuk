@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.TextInputLayout;
@@ -92,7 +93,12 @@ public class AddNewEntry extends AppCompatActivity {
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
 
-        contracts = new Contracts(this);
+        contracts = new Contracts(this, new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+
+            }
+        }));
 
         geocoder = new Geocoder(this, Locale.getDefault());
 

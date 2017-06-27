@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -80,7 +81,12 @@ public class SignInFragment extends Fragment {
     }
 
     public void sendSignInRequest() {
-        final Contracts contracts = new Contracts(getContext());
+        final Contracts contracts = new Contracts(getContext(), new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+
+            }
+        }));
         Map<String, String> params = new HashMap<>();
         params.put("phone_number", mNumber);
         URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;

@@ -7,6 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 import static com.example.android.harvesthand.Contracts.*;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sPrefUser, sPrefIp;
     private String userId;
     private View dialogView;
+    private TextToSpeech speaker;
 
 
     @Override
@@ -65,6 +68,22 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
+
+            speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+                @Override
+                public void onInit(int status) {
+                    Log.i("Speaker Status!!!!!!!:", "" + status);
+                    if (status != TextToSpeech.ERROR && status == TextToSpeech.SUCCESS) {
+                        int lang = speaker.setLanguage(Locale.getDefault());
+                        if (lang == TextToSpeech.LANG_MISSING_DATA || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
+                            Log.e("TTS", "This Language is not supported");
+                        }
+
+                    }else {
+                        Log.i("Speaker!!!!!!!!!!!!!!: ", "Initialization failed");
+                    }
+                }
+            });
 
             container = findViewById(R.id.entries_relativelayout);
 
@@ -165,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
     //Request all Entries for user
     public void sendRequest(String url) {
 
-        final Contracts contracts = new Contracts(this);
+        final Contracts contracts = new Contracts(this,speaker);
 
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
@@ -252,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reqeustUserId(String URL) {
-        final Contracts contracts = new Contracts(this);
+        final Contracts contracts = new Contracts(this, speaker);
 
         Log.i("URL: ", URL);
 

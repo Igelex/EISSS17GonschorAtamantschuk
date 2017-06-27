@@ -1,6 +1,7 @@
 package com.example.android.harvesthand;
 
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -24,7 +25,12 @@ public class CheckCollaborator {
 
     protected boolean getUser(final Context context, final ProgressBar progressBar, final View container,
                               String url ) {
-        final Contracts contracts = new Contracts(context);
+        final Contracts contracts = new Contracts(context, new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+
+            }
+        }));
 
         Log.i("URL in CHECK: ", url);
 

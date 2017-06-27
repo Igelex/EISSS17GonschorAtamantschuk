@@ -36,7 +36,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_tutorial);
 
-        contracts = new Contracts(this);
+        contracts = new Contracts(this, speaker);
 
         container = (LinearLayout) findViewById(R.id.show_container);
         // Lese daten von der EntryTutorialActivity

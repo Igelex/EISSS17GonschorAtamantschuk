@@ -2,6 +2,7 @@ package com.example.android.harvesthand;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -68,8 +69,9 @@ public class Contracts {
     private Context context;
     TextToSpeech speaker;
 
-    public Contracts(Context context) {
+    public Contracts(Context context, TextToSpeech speaker) {
         this.context = context;
+        this.speaker = speaker;
     }
 
     //Snackbar zum Anzeigen der System-Messages, universell für alle Klassen
@@ -92,20 +94,12 @@ public class Contracts {
     }
 
     public void speak(String textToSpeak){
-        speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                Log.i("Speaker Status!!!!!!!:", "" + status);
-                if (status != TextToSpeech.ERROR && status == TextToSpeech.SUCCESS) {
-                    speaker.setLanguage(Locale.getDefault());
-
-                }else {
-                    Log.i("Speaker!!!!!!!!!!!!!!: ", "Initialization failed");
-                }
-            }
-        });
         speaker.setPitch((float)0.8);
-        speaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            speaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
+        }else{
+            speaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null);
+        }
     }
 
 

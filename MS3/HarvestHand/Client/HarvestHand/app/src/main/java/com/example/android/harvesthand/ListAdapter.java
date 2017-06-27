@@ -55,7 +55,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         }
 
         SharedPreferences sPref = mContext.getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
-        if(sPref != null) {
+        if (sPref != null) {
             userType = sPref.getInt(USER_SP_TYPE, -1);
         }
 
@@ -87,14 +87,11 @@ public class ListAdapter extends ArrayAdapter<Entry> {
             earButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    speak(mContext.getString(R.string.item_speaktext_name) +entryName.getText().toString()
+                    speak(mContext.getString(R.string.item_speaktext_name) + entryName.getText().toString()
                             + mContext.getString(R.string.item_speaktext_coma) +
                             mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
-                            + mContext.getString(R.string.item_speaktext_coma)+
+                            + mContext.getString(R.string.item_speaktext_coma) +
                             mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString());
-
-                    Toast.makeText(mContext,"ID: " + entryId, Toast.LENGTH_LONG).show();
-
                 }
             });
         } else {
@@ -130,8 +127,8 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         return listView;
     }
 
-    private void speak(String textToSpeech){
-        speaker.speak(textToSpeech, TextToSpeech.QUEUE_FLUSH,null);
+    private void speak(String textToSpeech) {
+        speaker.speak(textToSpeech, TextToSpeech.QUEUE_FLUSH, null);
     }
 
     private void showDeleteConfirmationDialog() {
