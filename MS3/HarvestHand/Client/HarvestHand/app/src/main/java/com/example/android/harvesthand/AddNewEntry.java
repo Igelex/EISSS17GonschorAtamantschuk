@@ -107,6 +107,7 @@ public class AddNewEntry extends AppCompatActivity {
 
         locationInputLayout = (TextInputLayout) findViewById(R.id.add_inputlayout_entry_location);
 
+        //Spinners zur Auswahl der Pflanzenart und des Bodentypes
         cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
         soilSpinner = (Spinner) findViewById(R.id.spinner_soil);
         cropSpinner.setAdapter(setupSpinner(R.array.crop_spinner_array));
@@ -114,7 +115,7 @@ public class AddNewEntry extends AppCompatActivity {
         soilSpinner.setAdapter(setupSpinner(R.array.soil_spinner_array));
         setupSoilSpinner(soilSpinner);
 
-
+        //Init Inputfelder
         locationEdit = (EditText) findViewById(R.id.add_entry_location);
         nameEdit = (EditText) findViewById(R.id.add_entry_name);
         areaEdit = (EditText) findViewById(R.id.add_entry_area);
@@ -127,9 +128,12 @@ public class AddNewEntry extends AppCompatActivity {
         setOnTouchListener();
 
         addCollab = (EditText) findViewById(R.id.add_entry_collab);
+        //Liste mit als Collaborator eingefügten Usern
         ListView collabList = (ListView) findViewById(R.id.add_entry_collab_list);
         final CollabListAdapter adapter = new CollabListAdapter(this, collabsArray);
         collabList.setAdapter(adapter);
+        //User wird nach der Telefnonummer in der Datenbank gesucht, und falls gefunden der Liste
+        //hinzugefügt
         addCollab.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -146,13 +150,14 @@ public class AddNewEntry extends AppCompatActivity {
             }
         });
 
+        /**
+         * ermitelnn der Koordinaten
+         */
         locationButton = (ImageButton) findViewById(R.id.add_location_button);
-
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                Log.i("LONG LAT", "" + location.getLatitude() + location.getLatitude());
                 contracts.showSnackbar(container, getString(R.string.msg_receive_gps_data), false, true);
                 if (!Geocoder.isPresent()) {
                     contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
@@ -177,7 +182,6 @@ public class AddNewEntry extends AppCompatActivity {
             public void onProviderDisabled(String s) {
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
-
             }
 
         };
@@ -202,7 +206,7 @@ public class AddNewEntry extends AppCompatActivity {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                //Check permissions, erlaubnis zur Ermittlung der GPS-Daten wird abgefragt
                 if (ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_FINE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED &&
                         ActivityCompat.checkSelfPermission(AddNewEntry.this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -216,24 +220,24 @@ public class AddNewEntry extends AppCompatActivity {
                     }
                     return;
                 }
-                Log.i("Push button", "");
+                //Ermitteln der GPS-Daten
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    //Visual feddback, Progressbar wird angezeigt
                     locationPb.setVisibility(View.VISIBLE);
                     locationInputLayout.setHint(getString(R.string.msg_request_location));
                     locationManager.requestLocationUpdates("gps", 1000, 10, locationListener);
                 } else {
                     Toast.makeText(AddNewEntry.this, getString(R.string.msg_can_not_get_location),
                             Toast.LENGTH_SHORT).show();
+                    //Fals GPS aus, wird man zur den Einstellungen navigiert
                     Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(intent);
-                    return;
                 }
 
             }
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -245,20 +249,20 @@ public class AddNewEntry extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_save:
                 if (validateUserInput()){
                     sendRequest(BASE_URL + URL_BASE_ENTRIES);
-                    Log.i("Post entry with URL :", BASE_URL + URL_BASE_ENTRIES);
                 }
                 break;
             case android.R.id.home:
+                //Fals keine Änderungen, zurück in MainActivity
                 if (!change) {
                     NavUtils.navigateUpFromSameTask(AddNewEntry.this);
                     return true;
                 }
+                //Fals Änderungen vorgenommen wurden, wird Dialogfenster angezeigt
+                //Hier wird Aktion für DiscardButton festgelegt(verlassen der Activity)
                 DialogInterface.OnClickListener discardButtonClickListener =
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -273,6 +277,11 @@ public class AddNewEntry extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Helpermethod zur Initialisierung der Spinners
+     * @param strings - array mit Strings
+     * @return - spinner adapter
+     */
     public ArrayAdapter setupSpinner(int strings) {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 strings, android.R.layout.simple_spinner_item);
@@ -280,25 +289,25 @@ public class AddNewEntry extends AppCompatActivity {
         return adapter;
     }
 
+    /**
+     * Sende POST Request mit eingegebenen Daten
+     * @param URL - die POST-URL, http://ip:3001/entries
+     */
     public void sendRequest(String URL) {
-
-        Log.i("URL: ", URL);
-
         JSONObject object = createJsonObject();
-
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, object,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         //progressBar.setVisibility(View.INVISIBLE);
                         try {
+                            //Response vom Server; (msg: saved/notsaved, res: true/false
                             String msgResponse = response.getString("msg");
                             Boolean statusResponse = response.getBoolean("res");
                             if (statusResponse) {
                                 Toast.makeText(AddNewEntry.this, msgResponse, Toast.LENGTH_SHORT).show();
                                 finish();
                             }
-                            Log.i("Status: ", statusResponse.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                             contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
@@ -326,12 +335,17 @@ public class AddNewEntry extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    /**
+     * Ermitteln der Stadt, des Landes, und des ISO-Codes nach Koordinaten
+     * @param lat - Koordinaten
+     * @param lon - Koordinaten
+     */
     private void findGeocoder(Double lat, Double lon) {
-        Log.i("REQUEST ADRESS", "");
         final int maxResults = 1;
         List<Address> addresses;
         locationPb.setVisibility(View.GONE);
         locationInputLayout.setHint(getString(R.string.new_entry_hint_location));
+        //Ermitteln der Adresse
         try {
             addresses = geocoder.getFromLocation(lat, lon, maxResults);
             if (addresses != null || addresses.size() != 0) {
@@ -355,7 +369,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     }
 
-    /*
+    /**
     * Die Usereingaben werden dem JSONOBject hinzugefügt
     * */
     private JSONObject createJsonObject() {
@@ -363,10 +377,12 @@ public class AddNewEntry extends AppCompatActivity {
         JSONObject entryObject = new JSONObject();
         JSONObject locationObject = new JSONObject();
         try {
+            //Location als Json-Object
             locationObject.put("name", locationName);
             locationObject.put("countryISOCode", countryISOCode);
             locationObject.put("city", city);
 
+            //User-Eingaben im Json-Object gespeichert
             entryObject.put("entry_name", nameEdit.getText().toString().trim());
             entryObject.put("area", Integer.valueOf(areaEdit.getText().toString().trim()));
             entryObject.put("air_temp", Integer.valueOf(airtempEdit.getText().toString().trim()));
@@ -377,12 +393,11 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
             entryObject.put("collaborators", new JSONArray(collabsArray));
             entryObject.put("owner_id", sPrefUser.getString(USER_SP_ID, null));
+            //Wird vom Server eingefügt
             entryObject.put("tutorial_id", "");
             entryObject.put("crop_id", cropId);
             entryObject.put("soil", soilId);
             entryObject.put("location", locationObject);
-
-            Log.i("Entry Object: ", entryObject.toString());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -394,6 +409,10 @@ public class AddNewEntry extends AppCompatActivity {
         return entryObject;
     }
 
+    /**
+     * CropSpinner Eingabe
+     * @param cropSpinner - Pflanzenart-Spinner
+     */
     private void setupCropSpinner(Spinner cropSpinner) {
         cropSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -424,6 +443,10 @@ public class AddNewEntry extends AppCompatActivity {
         });
     }
 
+    /**
+     * Auswahl der Bodenart
+     * @param soilSpinner - Bodenart-Spinner
+     */
     private void setupSoilSpinner(Spinner soilSpinner) {
         soilSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -451,30 +474,43 @@ public class AddNewEntry extends AppCompatActivity {
         });
     }
 
+    /**
+     * URL zur Request der Collaborators(Users) wird gebildet.
+     * @return - URL, http://ip:3001/users/?phone_number=...
+     */
     private String buildURL(){
         Uri baseUri = Uri.parse(BASE_URL + URL_BASE_USERS);
         Uri.Builder uriBuilder = baseUri.buildUpon();
+        //Parameter werden an die URL angehängt, hier die Telefonnummer
         uriBuilder.appendQueryParameter(URL_PARAMS_PHONE_NUMBER, addCollab.getText().toString().trim());
-        Log.i("COLLAB URL:", uriBuilder.toString());
-        URL = uriBuilder.toString();
-        return URL;
+        return uriBuilder.toString();
     }
+
+    /**
+     * Helpermethode, Validation aller Benutzereingaben
+     * @return - true, falls alle Eingaben valide
+     */
     private boolean validateUserInput(){
-        if (validation(nameEdit) && validation(locationEdit) && validateSpinners(cropSpinner)
-                && validateSpinners(soilSpinner) && validation(areaEdit) && validation(heightEdit)
-                && validation(airtempEdit) && validation(airmoistureEdit) && validation(soiltempEdit)
-                && validation(soilmoistureEdit) && validation(phEdit)){
+        if (validationEditText(nameEdit) && validationEditText(locationEdit) && validateSpinners(cropSpinner)
+                && validateSpinners(soilSpinner) && validationEditText(areaEdit) && validationEditText(heightEdit)
+                && validationEditText(airtempEdit) && validationEditText(airmoistureEdit) && validationEditText(soiltempEdit)
+                && validationEditText(soilmoistureEdit) && validationEditText(phEdit)){
             return true;
         }
         return false;
     }
 
+    /**
+     * Validiert Spnner
+     * @param spinner - Spinner zur Überprüfung
+     * @return - true, falls Eingabe valide
+     */
     private boolean validateSpinners(Spinner spinner){
         if (spinner.getSelectedItemPosition() != DEFAULT_SELECTION){
-            Log.i("Spinner validation: ", String.valueOf(spinner.getSelectedItemPosition()));
             return true;
         }
         View selectedView = spinner.getSelectedView();
+        //Visual Feedback
         if (selectedView != null && selectedView instanceof TextView) {
             TextView selectedTextView = (TextView) selectedView;
             selectedTextView.setError(getString(R.string.errmsg_valid_input_required));
@@ -483,7 +519,13 @@ public class AddNewEntry extends AppCompatActivity {
         return false;
     }
 
-    private boolean validation(EditText input) {
+    /**
+     * Helpermethode, Validiere User Eingaben, alle InputFelder werden hier validiert, wenn @false,
+     * wird auf den Fehler hingewiesen
+     * @param input - Inputfeld
+     * @return true, falls alle Eingaben valide
+     */
+    private boolean validationEditText(EditText input) {
         if (!input.getText().toString().trim().isEmpty()){
             return true;
         }
@@ -491,6 +533,9 @@ public class AddNewEntry extends AppCompatActivity {
         return false;
     }
 
+    /**
+     * Helpermethode, OnTouchListener registriert die Berührung der Inputfelder
+     */
     private void setOnTouchListener(){
         locationEdit.setOnTouchListener(mTouchListener);
         nameEdit.setOnTouchListener(mTouchListener);
@@ -503,6 +548,11 @@ public class AddNewEntry extends AppCompatActivity {
         phEdit.setOnTouchListener(mTouchListener);
     }
 
+    /**
+     * Falls Änderungen in Eingaben gemacht wurden und die Activity verlassen wird, wird erst
+     * Dialogfenster angezeigt
+     * @param discardButtonClickListener
+     */
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -521,6 +571,7 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     private void stopRequestLocation() {
+        //Locationupdates werden angehalten
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
@@ -534,6 +585,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        //TextToSpeech wird angehalten
         if (speaker != null){
             speaker.stop();
             speaker.shutdown();

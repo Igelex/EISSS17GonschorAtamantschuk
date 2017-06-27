@@ -86,6 +86,7 @@ public class SignInFragment extends Fragment {
         InitTTS tts = new InitTTS(getContext());
         speaker = tts.initTTS();
         final Contracts contracts = new Contracts(speaker);
+
         Map<String, String> params = new HashMap<>();
         params.put("phone_number", mNumber);
         URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;
