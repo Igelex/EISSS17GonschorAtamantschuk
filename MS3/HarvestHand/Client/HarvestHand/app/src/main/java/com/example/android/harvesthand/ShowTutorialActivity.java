@@ -36,9 +36,11 @@ public class ShowTutorialActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_tutorial);
 
-        contracts = new Contracts(this, speaker);
-
+        InitTTS tts = new InitTTS(this);
+        speaker = tts.initTTS();
+        contracts = new Contracts(speaker);
         container = (LinearLayout) findViewById(R.id.show_container);
+
         // Lese daten von der EntryTutorialActivity
         Intent intent = getIntent();
         if (intent != null) {
@@ -56,15 +58,6 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setHasFixedSize(true);
-
-                speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(int status) {
-                        if (status != TextToSpeech.ERROR) {
-                            speaker.setLanguage(Locale.getDefault());
-                        }
-                    }
-                });
 
                 currentValueEar = (ImageButton) findViewById(R.id.show_current_value_ear);
 
@@ -217,8 +210,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     /**
-     * Vorlesefunktion, aktuelle Eigenschaft und derer Wert werden vorgelesen
-     *
+     * Vorlesefunktion, aktuelle Eigenschaft und derer Wert werden vorgelesen     *
      * @param currentEar   - ImageButton
      * @param currentValue - aktueller Wert der Eigenschaft
      * @param property     - aktuelle Eigenschaft

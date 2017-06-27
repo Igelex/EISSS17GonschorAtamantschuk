@@ -66,11 +66,9 @@ public class Contracts {
     public static int PROPERTY_SOIL_TYPE = 5;
     public static int PROPERTY_HEIGHT= 6;
 
-    private Context context;
-    TextToSpeech speaker;
+    private TextToSpeech speaker;
 
-    public Contracts(Context context, TextToSpeech speaker) {
-        this.context = context;
+    public Contracts(TextToSpeech speaker) {
         this.speaker = speaker;
     }
 
@@ -89,8 +87,8 @@ public class Contracts {
         snackbar.show();
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setSpeaker(TextToSpeech speaker) {
+        this.speaker = speaker;
     }
 
     public void speak(String textToSpeak){

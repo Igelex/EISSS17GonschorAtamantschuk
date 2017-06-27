@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.harvesthand.Contracts;
+import com.example.android.harvesthand.InitTTS;
 import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
 
@@ -50,6 +51,7 @@ public class SignInFragment extends Fragment {
     private String mNumber;
     private ProgressBar progressBar;
     private SharedPreferences sPref;
+    TextToSpeech speaker;
 
     public SignInFragment() {
         // Required empty public constructor
@@ -81,12 +83,9 @@ public class SignInFragment extends Fragment {
     }
 
     public void sendSignInRequest() {
-        final Contracts contracts = new Contracts(getContext(), new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-
-            }
-        }));
+        InitTTS tts = new InitTTS(getContext());
+        speaker = tts.initTTS();
+        final Contracts contracts = new Contracts(speaker);
         Map<String, String> params = new HashMap<>();
         params.put("phone_number", mNumber);
         URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;
@@ -161,6 +160,15 @@ public class SignInFragment extends Fragment {
         editor.apply();
         Log.i("Save User_id: ", id);
         Log.i("Save User_type: ", ""+type);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (speaker != null){
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onDestroy();
     }
 
 }

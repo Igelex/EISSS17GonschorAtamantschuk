@@ -72,6 +72,7 @@ public class AddNewEntry extends AppCompatActivity {
     private int cropId, soilId;
     private Spinner cropSpinner, soilSpinner;
     private Boolean change = false;
+    private TextToSpeech speaker;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -93,12 +94,9 @@ public class AddNewEntry extends AppCompatActivity {
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
 
-        contracts = new Contracts(this, new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-
-            }
-        }));
+        InitTTS tts = new InitTTS(this);
+        speaker = tts.initTTS();
+        contracts = new Contracts(speaker);
 
         geocoder = new Geocoder(this, Locale.getDefault());
 
@@ -328,12 +326,6 @@ public class AddNewEntry extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopRequestLocation();
-    }
-
     private void findGeocoder(Double lat, Double lon) {
         Log.i("REQUEST ADRESS", "");
         final int maxResults = 1;
@@ -532,5 +524,20 @@ public class AddNewEntry extends AppCompatActivity {
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopRequestLocation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (speaker != null){
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onDestroy();
     }
 }

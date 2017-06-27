@@ -61,7 +61,9 @@ public class EntryTutorialActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        contracts = new Contracts(this, speaker);
+        InitTTS tts = new InitTTS(this);
+        speaker = tts.initTTS();
+        contracts = new Contracts(speaker);
 
         if (networkInfo != null && networkInfo.isConnected()) {
 

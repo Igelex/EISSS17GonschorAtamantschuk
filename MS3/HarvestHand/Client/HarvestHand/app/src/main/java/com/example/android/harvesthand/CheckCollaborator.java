@@ -24,13 +24,9 @@ public class CheckCollaborator {
     }
 
     protected boolean getUser(final Context context, final ProgressBar progressBar, final View container,
-                              String url ) {
-        final Contracts contracts = new Contracts(context, new TextToSpeech(context, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-
-            }
-        }));
+                              String url) {
+        InitTTS tts = new InitTTS(context);
+        final Contracts contracts = new Contracts(tts.initTTS());
 
         Log.i("URL in CHECK: ", url);
 
@@ -52,7 +48,7 @@ public class CheckCollaborator {
                                 contracts.showSnackbar(container, context.getString(R.string.msg_error), true, false);
                                 userExist = false;
                             }
-                        }else{
+                        } else {
                             contracts.showSnackbar(container,
                                     context.getString(R.string.msg_user_not_found), true, false);
                             userExist = false;

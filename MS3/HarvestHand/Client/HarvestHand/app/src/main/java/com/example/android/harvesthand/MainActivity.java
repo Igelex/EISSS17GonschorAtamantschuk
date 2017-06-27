@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private String userId;
     private View dialogView;
     private TextToSpeech speaker;
+    private Contracts contracts;
 
 
     @Override
@@ -68,22 +69,9 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-
-            speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-                @Override
-                public void onInit(int status) {
-                    Log.i("Speaker Status!!!!!!!:", "" + status);
-                    if (status != TextToSpeech.ERROR && status == TextToSpeech.SUCCESS) {
-                        int lang = speaker.setLanguage(Locale.getDefault());
-                        if (lang == TextToSpeech.LANG_MISSING_DATA || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                            Log.e("TTS", "This Language is not supported");
-                        }
-
-                    }else {
-                        Log.i("Speaker!!!!!!!!!!!!!!: ", "Initialization failed");
-                    }
-                }
-            });
+            InitTTS tts = new InitTTS(this);
+            speaker = tts.initTTS();
+            contracts = new Contracts(speaker);
 
             container = findViewById(R.id.entries_relativelayout);
 
@@ -183,9 +171,6 @@ public class MainActivity extends AppCompatActivity {
 
     //Request all Entries for user
     public void sendRequest(String url) {
-
-        final Contracts contracts = new Contracts(this,speaker);
-
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -271,8 +256,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reqeustUserId(String URL) {
-        final Contracts contracts = new Contracts(this, speaker);
-
         Log.i("URL: ", URL);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
@@ -375,6 +358,15 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(IP_SP_IP, ip);
         editor.apply();
         Log.i("Save IP Address: ", ip);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (speaker != null){
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onDestroy();
     }
 }
 

@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.android.harvesthand.Contracts;
+import com.example.android.harvesthand.InitTTS;
 import com.example.android.harvesthand.MainActivity;
 import com.example.android.harvesthand.R;
 
@@ -55,7 +56,8 @@ public class SignUpFragment extends Fragment {
     private Button mSignUpButton;
     private TextInputLayout mNumberTextInput;
     private ProgressBar progressBar;
-    Contracts contracts;
+    private Contracts contracts;
+    private TextToSpeech speaker;
 
 
     public SignUpFragment() {
@@ -67,12 +69,9 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
-        contracts = new Contracts(getContext(), new TextToSpeech(getContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-
-            }
-        }));
+        InitTTS tts = new InitTTS(getContext());
+        speaker = tts.initTTS();
+        contracts = new Contracts(speaker);
 
         // Inflate the layout for this fragment
         inputNumber = view.findViewById(R.id.signup_input_number);
@@ -202,5 +201,14 @@ public class SignUpFragment extends Fragment {
         editor.apply();
         Log.i("Save User_id: ", id);
         Log.i("Save User_type: ", String.valueOf(type));
+    }
+
+    @Override
+    public void onDestroy() {
+        if (speaker != null){
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onDestroy();
     }
 }
