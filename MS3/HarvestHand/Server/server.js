@@ -58,6 +58,8 @@ app.get('/', function (req, res) {
     res.send('Hallo, World!!!');
 });
 
+
+app.get('/airtemp', weather.getAirTemp);
 //////////////////////////Users
 
 app.post('/signup', controller_user.registerUser);
@@ -78,9 +80,7 @@ app.delete('/users/:id', controller_user.deleteUser);
 
 app.get('/entries', controller_entry.getEntries);
 
-app.get('/entries/:id', function (req, res) {
-    controller_entry.getEntryById(req, res);
-});
+app.get('/entries/:id',  controller_entry.getEntryById);
 
 app.post('/entries', function (req, res) {
     controller_entry.addEntry(req, res);

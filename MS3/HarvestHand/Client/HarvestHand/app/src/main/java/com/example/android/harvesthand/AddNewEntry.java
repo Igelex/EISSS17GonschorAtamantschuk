@@ -139,6 +139,7 @@ public class AddNewEntry extends AppCompatActivity {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
+                        //Request in der CheckCollaborator Klasse wird gesendet
                         if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())){
                             collabsArray.add(0, addCollab.getText().toString().trim());
                             adapter.notifyDataSetChanged();

@@ -26,7 +26,7 @@ module.exports.getPrecipitationForWeek = function (country, city) {
                     console.log(forecastArray[i].qpf_allday.mm);
                     weekPrecipitation += forecastArray[i].qpf_allday.mm;
                 }
-                /*
+                /**
                  * 1 mm Niederschlag == 1 Liter/m^2
                  * */
                 console.log('Precipitation week : ' + weekPrecipitation);
@@ -41,4 +41,34 @@ module.exports.getPrecipitationForWeek = function (country, city) {
             analyzer.analyseValues(weekPrecipitation);
         }
     });
+};
+/**
+ * Request Wetterdaten (Temperatur und Luftfeuchtigkeit nach Location.
+ * @param req
+ * @param res
+ */
+module.exports.getAirTemp = function (req, res) {
+    var url = 'http://api.wunderground.com/api/' + key + '/conditions/q/DE/Remscheid.json';
+    request(url, function (err, response, body) {
+        console.log('Air temp status : ' + response.status);
+        if (err){
+            res.status(501).send(err);
+        }
+        if (response.statusCode == 200) {
+            var result = JSON.parse(body);
+            //console.log('Air temp body : ' + body);
+            var hymidity = result.current_observation.relative_humidity;
+            console.log('Humidyty befor: ' + hymidity);
+            console.log('Hymidity after: ' + hymidity.slice(-hymidity.length,-1));
+            var clima ={
+                temp: result.current_observation.temp_c,
+                //Feuchtigkeit kommt als String, %-Zeichen wird abgetrennt und String zu Int konvertiert
+                hymidity: parseInt(hymidity.slice(-hymidity.length,-1))
+            };
+            res.status(200).send(clima);
+        } else {
+            res.status(response.statusCode).send();
+        }
+
+    })
 };

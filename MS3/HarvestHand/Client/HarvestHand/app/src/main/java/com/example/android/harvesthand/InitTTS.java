@@ -11,8 +11,8 @@ import java.util.Locale;
  */
 
 public class InitTTS {
-    TextToSpeech speaker;
-    Context context;
+    private TextToSpeech speaker;
+    private Context context;
 
     public InitTTS(Context context) {
         this.context = context;
@@ -26,13 +26,12 @@ public class InitTTS {
         speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                Log.i("Speaker Status!!!!!!!:", "" + status);
                 if (status != TextToSpeech.ERROR && status == TextToSpeech.SUCCESS) {
+                    //Systemsprache ermitteln
                     int lang = speaker.setLanguage(Locale.getDefault());
                     if (lang == TextToSpeech.LANG_MISSING_DATA || lang == TextToSpeech.LANG_NOT_SUPPORTED) {
-                        Log.e("TTS", "This Language is not supported");
+                        Log.e("Speaker!!!!!!!!!!!!!!!!", "No LANG");
                     }
-
                 } else {
                     Log.i("Speaker!!!!!!!!!!!!!!: ", "Initialization failed");
                 }
