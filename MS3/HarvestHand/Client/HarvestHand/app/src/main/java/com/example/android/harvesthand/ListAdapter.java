@@ -2,6 +2,7 @@ package com.example.android.harvesthand;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
@@ -17,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -36,6 +39,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
     private Context mContext;
     private TextToSpeech speaker;
     private int userType;
+    private static final int UPDATE_MODE = 1;
     private CircleImageView cropImg;
 
     public ListAdapter(@NonNull Context context, @NonNull ArrayList entries) {
@@ -59,7 +63,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
             userType = sPref.getInt(USER_SP_TYPE, -1);
         }
 
-        Entry currentEntry = getItem(position);
+        final Entry currentEntry = getItem(position);
         cropImg = listView.findViewById(R.id.item_image);
         setCropBackgroundImg(currentEntry.getCropId());
 
@@ -106,13 +110,13 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
-
                             switch (menuItem.getItemId()) {
                                 case R.id.action_item_delete:
                                     showDeleteConfirmationDialog();
                                     break;
                                 case R.id.action_item_edit:
                                     Toast.makeText(mContext, "EDIT", Toast.LENGTH_LONG).show();
+                                    onEditMenuClick(entryId);
                                     break;
                             }
 
@@ -161,5 +165,13 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                 break;
             /*...*/
         }
+    }
+
+    private void onEditMenuClick(String entryId) {
+        Intent intent = new Intent(getContext(), AddNewEntry.class);
+        intent.putExtra("method", Request.Method.PUT);
+        Log.e("ENTRYID!!!!", entryId);
+        intent.putExtra("entry_id", entryId);
+        getContext().startActivity(intent);
     }
 }

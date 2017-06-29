@@ -15,35 +15,32 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by Pastuh on 28.06.2017.
+ * Helperclass, request Wetterdaten, wird in AddNewEntry aufgerufen
  */
 
 public class requestAirData {
     public requestAirData() {
     }
-    protected void requestData(final Context context, final ProgressBar progressBar, final View container,
+
+    /**
+     * @param context
+     * @param progressBar
+     * @param container - View, in der Snackbar angezeigt wird
+     * @param url - request-url
+     * @param callback - um die Daten an UI zu übergeben
+     */
+    protected void requestData(final Context context, int method, final ProgressBar progressBar, final View container,
                                String url,
                                final AddNewEntry.ServerCallback callback) {
         final Contracts contracts = new Contracts(null);
         Log.i("URL in CHECK: ", url);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(method, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        if (response!= null && response.length() > 0) {
-                            try {
-                                int airTemp = response.getInt("temp");
-                                int airHumidity = response.getInt("humidity");
-                                callback.onSuccess(airTemp, airHumidity);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                contracts.showSnackbar(container, context.getString(R.string.msg_error), true, false);
-                            }
-                        } else {
-                            contracts.showSnackbar(container, context.getString(R.string.msg_no_data_available), true, false);
-                        }
+                        progressBar.setVisibility(View.GONE);
+                        callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {

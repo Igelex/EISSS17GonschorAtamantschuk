@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static android.os.Build.VERSION_CODES.M;
 import static com.example.android.harvesthand.Contracts.*;
 
@@ -59,7 +60,7 @@ public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private ImageButton locationButton, airTempAutofillButton, airHumidityAutofillButton;
-    private ProgressBar locationPb, collabPb, airTempPb, airHumidityPb;
+    private ProgressBar locationPb, collabPb, airTempPb, airHumidityPb, progBar;
     private EditText locationEdit, nameEdit, areaEdit, heightEdit, airtempEdit, airhumidityEdit;
     private EditText soiltempEdit, soilmoistureEdit, phEdit, addCollab;
     private Geocoder geocoder;
@@ -67,15 +68,14 @@ public class AddNewEntry extends AppCompatActivity {
     private Contracts contracts;
     private requestAirData request = new requestAirData();
     private TextInputLayout locationInputLayout;
-    private String countryISOCode, city, locationName, URL;
+    private String countryISOCode, city, locationName, entryId, ownerId = null, tutorialId = null;
     private SharedPreferences sPrefUser;
     private ArrayList collabsArray;
     private int cropId, soilId;
+    private int requestMethod = Request.Method.POST;
     private Spinner cropSpinner, soilSpinner;
     private Boolean change = false;
     private TextToSpeech speaker;
-    JSONObject response = new JSONObject();
-
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -104,6 +104,7 @@ public class AddNewEntry extends AppCompatActivity {
 
         container = (ScrollView) findViewById(R.id.add_new_entry_container);
 
+        progBar = (ProgressBar) findViewById(R.id.add_new_entry_pb);
         locationPb = (ProgressBar) findViewById(R.id.add_new_entry_location_pb);
         collabPb = (ProgressBar) findViewById(R.id.add_new_entry_collab_pb);
         airTempPb = (ProgressBar) findViewById(R.id.add_new_entry_airtemp_pb);
@@ -152,7 +153,7 @@ public class AddNewEntry extends AppCompatActivity {
                         if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())) {
                             collabsArray.add(0, addCollab.getText().toString().trim());
                             adapter.notifyDataSetChanged();
-                            addCollab.setText("");
+                            addCollab.setText(null);
                             return true;
                         }
                     }
@@ -160,8 +161,8 @@ public class AddNewEntry extends AppCompatActivity {
             }
         });
 
-        /**
-         * ermitelnn der Koordinaten
+        /*
+         * ermitteln der Koordinaten
          */
         locationButton = (ImageButton) findViewById(R.id.add_location_button);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -196,6 +197,14 @@ public class AddNewEntry extends AppCompatActivity {
 
         };
         setButton();
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("entry_id")) {
+            entryId = intent.getStringExtra("entry_id");
+            requestMethod = intent.getIntExtra("method", Request.Method.POST);
+            requestEntryToUpdate();
+        }
+
     }
 
     @Override
@@ -262,7 +271,13 @@ public class AddNewEntry extends AppCompatActivity {
         switch (id) {
             case R.id.action_save:
                 if (validateUserInput()) {
-                    sendRequest(BASE_URL + URL_BASE_ENTRIES);
+                    progBar.setVisibility(View.VISIBLE);
+                    if (entryId == null) {
+                        sendRequest(BASE_URL + URL_BASE_ENTRIES, requestMethod);
+                    }
+                    Log.i("PUT URL", BASE_URL + URL_BASE_ENTRIES + entryId);
+                    Log.i("Method", String.valueOf(requestMethod));
+                    sendRequest(BASE_URL + URL_BASE_ENTRIES + entryId, requestMethod);
                 }
                 break;
             case android.R.id.home:
@@ -305,20 +320,22 @@ public class AddNewEntry extends AppCompatActivity {
      *
      * @param URL - die POST-URL, http://ip:3001/entries
      */
-    public void sendRequest(String URL) {
+    public void sendRequest(String URL, int method) {
         JSONObject object = createJsonObject();
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL, object,
+        JsonObjectRequest request = new JsonObjectRequest(method, URL, object,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //progressBar.setVisibility(View.INVISIBLE);
+                        progBar.setVisibility(View.GONE);
                         try {
-                            //Response vom Server; (msg: saved/notsaved, res: true/false
+                            //Response vom Server; ({msg: saved/notsaved, res: true/false})
                             String msgResponse = response.getString("msg");
                             Boolean statusResponse = response.getBoolean("res");
                             if (statusResponse) {
                                 Toast.makeText(AddNewEntry.this, msgResponse, Toast.LENGTH_SHORT).show();
                                 finish();
+                            } else {
+                                contracts.showSnackbar(container, msgResponse, true, false);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -329,7 +346,7 @@ public class AddNewEntry extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        //progressBar.setVisibility(View.INVISIBLE);
+                        progBar.setVisibility(View.GONE);
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:
@@ -405,9 +422,19 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
             entryObject.put("collaborators", new JSONArray(collabsArray));
-            entryObject.put("owner_id", sPrefUser.getString(USER_SP_ID, null));
-            //Wird vom Server eingefügt
-            entryObject.put("tutorial_id", "");
+
+            if (ownerId != null) {
+                //wenn Update modus
+                entryObject.put("owner_id", ownerId);
+            } else {
+                entryObject.put("owner_id", sPrefUser.getString(USER_SP_ID, null));
+            }
+            if (tutorialId != null) {
+                //wenn Update modus
+                entryObject.put("tutorial_id", tutorialId);
+            } else {
+                entryObject.put("tutorial_id", "");
+            }
             entryObject.put("crop_id", cropId);
             entryObject.put("soil", soilId);
             entryObject.put("location", locationObject);
@@ -613,14 +640,28 @@ public class AddNewEntry extends AppCompatActivity {
                     uriBuilder.appendQueryParameter("coutryISOCOde", countryISOCode);
                     uriBuilder.appendQueryParameter("city", city);
                     //Request wird in der externen Klasse
-                    request.requestData(AddNewEntry.this, pb, container,
+                    request.requestData(AddNewEntry.this, Request.Method.GET, pb, container,
                             uriBuilder.toString(),
                             new ServerCallback() {
                                 @Override
-                                public void onSuccess(int airTemp, int airHumidity) {
-                                    airtempEdit.setText(String.valueOf(airTemp));
-                                    airhumidityEdit.setText(String.valueOf(airHumidity));
-
+                                public void onSuccess(JSONObject response) {
+                                    Log.i("HOP HEY", "REQUeSt Weather");
+                                    if (response != null) {
+                                        try {
+                                            int airTemp = response.getInt("temp");
+                                            int airHumidity = response.getInt("humidity");
+                                            airtempEdit.setText(String.valueOf(airTemp));
+                                            airhumidityEdit.setText(String.valueOf(airHumidity));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                                        } catch (NullPointerException e) {
+                                            e.printStackTrace();
+                                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                                        }
+                                    } else {
+                                        contracts.showSnackbar(container, getString(R.string.msg_no_data_available), true, false);
+                                    }
                                 }
                             });
                 } else {
@@ -631,8 +672,68 @@ public class AddNewEntry extends AppCompatActivity {
         });
     }
 
+    private void requestEntryToUpdate() {
+        progBar.setVisibility(View.VISIBLE);
+        request.requestData(this, Request.Method.GET, progBar, container, BASE_URL + URL_BASE_ENTRIES + entryId,
+                new ServerCallback() {
+                    @Override
+                    public void onSuccess(JSONObject response) {
+                        if (response != null) {
+                            try {
+                                String name = response.getString("entry_name");
+                                tutorialId = response.getString("tutorial_id");
+                                ownerId = response.getString("owner_id");
+                                int cropId = response.getInt("crop_id");
+                                int soilType = response.getInt("soil");
+                                int airTemp = response.getInt("air_temp");
+                                int airHumidity = response.getInt("air_moisture");
+                                int soilTemp = response.getInt("soil_temp");
+                                int soilMoisture = response.getInt("soil_moisture");
+                                int ph = response.getInt("ph_value");
+                                int height = response.getInt("height_meter");
+                                int area = response.getInt("area");
+                                JSONArray array = response.getJSONArray("collaborators");
+                                for (int i = 0; i < array.length(); i++) {
+                                    collabsArray.add(array.getString(i));
+                                }
+
+
+                                JSONObject locationObject = response.getJSONObject("location");
+                                String locName = locationObject.getString("name");
+                                String locationISOCode = locationObject.getString("countryISOCode");
+                                String locationCity = locationObject.getString("city");
+                                countryISOCode = locationISOCode;
+                                city = locationCity;
+                                locationName = locName;
+
+                                nameEdit.setText(name);
+                                locationEdit.setText(locName);
+                                airtempEdit.setText(String.valueOf(airTemp));
+                                airhumidityEdit.setText(String.valueOf(airHumidity));
+                                phEdit.setText(String.valueOf(ph));
+                                soiltempEdit.setText(String.valueOf(soilTemp));
+                                soilmoistureEdit.setText(String.valueOf(soilMoisture));
+                                heightEdit.setText(String.valueOf(height));
+                                areaEdit.setText(String.valueOf(area));
+                                cropSpinner.setSelection(cropId);
+                                soilSpinner.setSelection(soilType);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                            } catch (NullPointerException e) {
+                                e.printStackTrace();
+                                contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                            }
+                        } else {
+                            contracts.showSnackbar(container, getString(R.string.msg_no_data_available), true, false);
+                        }
+                    }
+                });
+    }
+
     public interface ServerCallback {
-        void onSuccess(int temp, int humidity);
+        void onSuccess(JSONObject result);
     }
 
     private void stopRequestLocation() {
