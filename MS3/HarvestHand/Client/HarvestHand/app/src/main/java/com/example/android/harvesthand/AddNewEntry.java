@@ -65,7 +65,7 @@ public class AddNewEntry extends AppCompatActivity {
     private Geocoder geocoder;
     private ScrollView container;
     private Contracts contracts;
-    private SendRequest request = new SendRequest();
+    private requestAirData request = new requestAirData();
     private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, URL;
     private SharedPreferences sPrefUser;
@@ -590,42 +590,37 @@ public class AddNewEntry extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Die Luftdaten werden vom System automatisch ermittelt, hier wird request an den Server geschickt,
+     * aktuelle Lokation wird als queryparamter übergeben, der server Fragt Wetter(Lufttemperatur und
+     * Luftfeuchtigkeit ab) ab gibt Daten zurück an Client. Die entsprechenden Inputfelder werden mit
+     * den jeweiligen daten gefüllt.
+     *
+     * @param autoFillButton - der angeklickte Button
+     * @param pb             - Progressbar des jeweiligen Inputfeldes
+     */
     private void airDataAutoFill(ImageButton autoFillButton, final ProgressBar pb) {
-        response = new JSONObject();
         autoFillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Visual feedback
                 pb.setVisibility(View.VISIBLE);
+                //Prüfe ob location verfügbar
                 if (countryISOCode != null && city != null) {
-                    Log.i("LOCATION:", countryISOCode + ", " + city);
+                    //Hänge parameter an die URL an
                     Uri baseUri = Uri.parse(BASE_URL + URL_BASE_WEATHER);
                     Uri.Builder uriBuilder = baseUri.buildUpon();
-                    //Parameter werden an die URL angehängt
                     uriBuilder.appendQueryParameter("coutryISOCOde", countryISOCode);
                     uriBuilder.appendQueryParameter("city", city);
-
-                    request.requestJsonObject(AddNewEntry.this, Request.Method.GET, pb, container,
+                    //Request wird in der externen Klasse
+                    request.requestData(AddNewEntry.this, pb, container,
                             uriBuilder.toString(),
                             new ServerCallback() {
                                 @Override
-                                public void onSuccess(JSONObject response) {
-                                    Log.i("HOP HEY", "REQUeSt Weather");
-                                    if (response!= null) {
-                                        try {
-                                            int airTemp = response.getInt("temp");
-                                            int airHumidity = response.getInt("humidity");
-                                            airtempEdit.setText(String.valueOf(airTemp));
-                                            airhumidityEdit.setText(String.valueOf(airHumidity));
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
-                                        } catch (NullPointerException e) {
-                                            e.printStackTrace();
-                                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
-                                        }
-                                    } else {
-                                        contracts.showSnackbar(container, getString(R.string.msg_no_data_available), true, false);
-                                    }
+                                public void onSuccess(int airTemp, int airHumidity) {
+                                    airtempEdit.setText(String.valueOf(airTemp));
+                                    airhumidityEdit.setText(String.valueOf(airHumidity));
+
                                 }
                             });
                 } else {
@@ -637,7 +632,7 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     public interface ServerCallback {
-        void onSuccess(JSONObject result);
+        void onSuccess(int temp, int humidity);
     }
 
     private void stopRequestLocation() {
