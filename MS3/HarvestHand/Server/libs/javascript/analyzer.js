@@ -67,7 +67,7 @@ module.exports.analyseData = function (currentEntry) {
         },
         function (err, norm) {
             if (err) {
-                console.log("GetNorm DB Error:" + err);
+                console.error("GetNorm DB Error:" + err);
             } else {
                 if (norm) {
                     currentNorm = norm;
@@ -75,7 +75,7 @@ module.exports.analyseData = function (currentEntry) {
                     fetchWeatherData(entry.location.countryISOCode, entry.location.city);
                 }
                 else {
-                    console.log("Cant save Tutorila, NORM is: " + currentNorm);
+                    console.error("Cant save Tutorila, NORM is: " + currentNorm);
                 }
             }
 

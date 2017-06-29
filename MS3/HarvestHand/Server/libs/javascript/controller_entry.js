@@ -85,21 +85,22 @@ module.exports.updateEntryTutorialId = function (id, tutorial_id) {
     });
 };
 
-module.exports.updateEntryHop = function (req, res) {
-    Entry.findByIdAndUpdate(req.params.id, function (err, result) {
+module.exports.updateEntry = function (req, res) {
+    console.error('IN update Entry...........');
+    Entry.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
         if (err) {
             console.error("DB error: " + err);
             res.status(500).type('application/json').send({msg: "DB error: " + err, res: false});
         } else {
             if (result) {
+                console.error('UPdated entry tutorial: ');
                 controller_tutorial.deleteTutorial(result.tutorial_id);
-                console.log("Update Entry tutorial_id: " + result._id);
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + result._id + ' updated',
                     res: true
                 });
                 console.error("Ready to analyze: ")
-                //analyzer.analyseData(result);
+                analyzer.analyseData(result);
             } else {
                 console.error('Entry tutorial_id not updated');
                 res.status(200).type('application/json').send({

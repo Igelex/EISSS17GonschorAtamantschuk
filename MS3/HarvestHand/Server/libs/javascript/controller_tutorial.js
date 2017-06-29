@@ -74,15 +74,16 @@ module.exports.getTutorialById = function (req, res) {
 };
 
 module.exports.deleteTutorial = function (id) {
+    console.log("DELETE Tutorial ID: " + id);
     Tutorial.findByIdAndRemove(id, function (err, result) {
         console.info(result);
         if (err) {
-            res.status(500).type('text').write("DB error: " + err);
+            console.log("DELETE Tutorial: " + err);
         } else {
             if (result) {
-                res.status(200).send('Tutorial with id: ' + result._id + ' succesfully deleted');
+                console.log("DELETE Tutorial deleted with ID: " + result._id);
             } else {
-                res.status(204 ).send('Tutorial with id: ' + id + ' not found');
+                console.log("DELETE Tutorial not found with ID: " + result._id);
             }
         }
 

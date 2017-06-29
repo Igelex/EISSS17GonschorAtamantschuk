@@ -75,7 +75,7 @@ app.delete('/users/:id', controller_user.deleteUser);
 
 //////////////////////////Entries
 
-app.put('/entries/:id' , controller_entry.updateEntryHop);
+app.put('/entries/:id' , controller_entry.updateEntry);
 app.get('/entries', controller_entry.getEntries);
 app.get('/entries/:id',  controller_entry.getEntryById);
 app.post('/entries', controller_entry.addEntry);
