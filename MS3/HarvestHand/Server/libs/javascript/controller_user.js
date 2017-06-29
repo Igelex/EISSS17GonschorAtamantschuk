@@ -87,7 +87,7 @@ module.exports.updateUser = function (req, res) {
     User.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
         console.info(result);
         if (err) {
-            res.status(500).type('text').write("DB error: " + err);
+            res.status(500).type('text').send("DB error: " + err);
         } else {
             if (result) {
                 res.status(200).type('application/json').send({msg: 'User with id: ' + result._id + ' successfully updated', res: true});

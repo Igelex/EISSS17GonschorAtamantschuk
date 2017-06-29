@@ -73,16 +73,16 @@ module.exports.getTutorialById = function (req, res) {
     });
 };
 
-module.exports.deleteTutorial = function (req, res) {
-    Tutorial.findByIdAndRemove(req.params.id, function (err, result) {
+module.exports.deleteTutorial = function (id) {
+    Tutorial.findByIdAndRemove(id, function (err, result) {
         console.info(result);
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
             if (result) {
-                res.status(200).type('text').send('Tutorial with id: ' + result._id + ' succesfully deleted');
+                res.status(200).send('Tutorial with id: ' + result._id + ' succesfully deleted');
             } else {
-                res.status(204 ).type('text').send('Tutorial with id: ' + req.params.id + ' not found');
+                res.status(204 ).send('Tutorial with id: ' + id + ' not found');
             }
         }
 

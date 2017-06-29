@@ -67,30 +67,21 @@ app.post('/signin', controller_user.logIn);
     function (req, res) {
         res.status(200).send({_id: req.user._id, user_type: req.user.user_type});
     });*/
-
+app.put('/users/:id', controller_user.updateUser);
 app.get('/users/:id', controller_user.getUserById);
 app.get('/users', controller_user.getUsers);
 app.delete('/users/:id', controller_user.deleteUser);
 //////////////////////////Users
 
-
 //////////////////////////Entries
 
+app.put('/entries/:id' , controller_entry.updateEntryHop);
 app.get('/entries', controller_entry.getEntries);
-
 app.get('/entries/:id',  controller_entry.getEntryById);
-
-app.post('/entries', function (req, res) {
-    controller_entry.addEntry(req, res);
-});
-
-app.put('/entries/:id', function (req, res) {
-    controller_entry.updateEntry(req, res);
-});
-
-app.delete('/entries/:id', function (req, res) {
-    controller_entry.deleteEntry(req, res);
-});
+app.post('/entries', controller_entry.addEntry);
+app.delete('/entries/:id', controller_entry.deleteEntry);
+//Hole Tutorial zum bestimmten Eintrag
+app.get('/entries/:id/tutorial/:id', controller_tutorial.getTutorialById);
 
 //////////////////////////Entries
 
@@ -101,11 +92,6 @@ app.post('/norms', function (req, res) {
 app.get('/norms/:id', function (req, res) {
     controller_norm.getNormById(req, res);
 });
-
-//Hole Tutorial zum bestimmten Eintrag
-app.get('/entries/:id/tutorial/:id', controller_tutorial.getTutorialById);
-
-
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 app.get('/norms', function (req, res) {

@@ -42,14 +42,14 @@ module.exports.getEntries = function (req, res) {
                 res.status(500).type('text').send({msg: 'DB Error', res: false});
             } else {
                 if (result.length > 0) {
-                    console.log("Found Entries: " + result);
+                    console.log("Get Entries ====================================== " );
                     res.status(200).type('application/json').send(result);
                 }
                 else {
                     res.status(204).type('application/json').send({msg: 'No Entries found', res: false});
                 }
             }
-    })
+        })
 };
 
 //Bestimmten Entry anzeigen
@@ -63,32 +63,9 @@ module.exports.getEntryById = function (req, res) {
                 res.status(200).type('application/json').send(result);
             }
             else {
-                res.status(200).type('application/json').send({msg: 'No Entry found', res: false});
+                res.status(204).type('application/json').send();
             }
         }
-    });
-};
-
-//Daten aktualisieren
-module.exports.updateEntry = function (req, res) {
-    Entry.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
-        console.info(result);
-        if (err) {
-            res.status(500).type('text').send({msg: 'DB Error', res: false});
-        } else {
-            if (result) {
-                res.status(200).type('application/json').send({
-                    msg: 'Entry with id: ' + result._id + ' successfully updated',
-                    res: true
-                });
-            } else {
-                res.status(204).type('application/json').send({
-                    msg: 'Entry with id: ' + req.params.id + ' not found',
-                    res: false
-                });
-            }
-        }
-
     });
 };
 
@@ -102,6 +79,33 @@ module.exports.updateEntryTutorialId = function (id, tutorial_id) {
                 console.log("Update Entry tutorial_id: " + result._id);
             } else {
                 console.error('Entry tutorial_id not updated');
+            }
+        }
+
+    });
+};
+
+module.exports.updateEntryHop = function (req, res) {
+    Entry.findByIdAndUpdate(req.params.id, function (err, result) {
+        if (err) {
+            console.error("DB error: " + err);
+            res.status(500).type('application/json').send({msg: "DB error: " + err, res: false});
+        } else {
+            if (result) {
+                controller_tutorial.deleteTutorial(result.tutorial_id);
+                console.log("Update Entry tutorial_id: " + result._id);
+                res.status(200).type('application/json').send({
+                    msg: 'Entry with id: ' + result._id + ' updated',
+                    res: true
+                });
+                console.error("Ready to analyze: ")
+                //analyzer.analyseData(result);
+            } else {
+                console.error('Entry tutorial_id not updated');
+                res.status(200).type('application/json').send({
+                    msg: 'Entry with id: ' + req.params.id + ' not found',
+                    res: false
+                });
             }
         }
 
