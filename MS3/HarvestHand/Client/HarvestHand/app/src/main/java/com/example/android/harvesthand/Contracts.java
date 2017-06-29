@@ -20,13 +20,14 @@ public class Contracts {
     public static String URL_PORT = ":3001/";
     public static String URL_IP = "";
     public static String URL_IP_BASE = "192.168..";
-    public static String URL_BASE_ENTRIES = "entries/";
     public static String BASE_URL ;
 
     public static String URL_BASE_USERS = "users/";
     public static String URL_BASE_SIGNIN = "signin";
     public static String URL_BASE_SIGNUP = "signup";
     public static String URL_BASE_TUTORIAL = "/tutorial/";
+    public static String URL_BASE_ENTRIES = "entries/";
+    public static String URL_BASE_WEATHER = "weather/";
 
     public static String URL_PARAMS_OWNER_ID = "owner_id";
     public static String URL_PARAMS_COLLAB_ID = "collab_id";
@@ -74,7 +75,9 @@ public class Contracts {
 
     //Snackbar zum Anzeigen der System-Messages, universell für alle Klassen
     public void showSnackbar(View view, String msg, Boolean error, Boolean success){
-        speak(msg);
+        if(speaker != null){
+            speak(msg);
+        }
         Snackbar snackbar = Snackbar.make(view, msg, Snackbar.LENGTH_LONG);
         View snackbarView = snackbar.getView();
         TextView snackBarText = (snackbarView.findViewById(android.support.design.R.id.snackbar_text));

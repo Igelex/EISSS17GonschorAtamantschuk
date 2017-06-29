@@ -35,9 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 import static com.example.android.harvesthand.Contracts.*;
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_ENTRIES;

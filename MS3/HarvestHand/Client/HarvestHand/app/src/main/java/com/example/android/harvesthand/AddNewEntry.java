@@ -58,13 +58,14 @@ import static com.example.android.harvesthand.Contracts.*;
 public class AddNewEntry extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private ImageButton locationButton;
-    private ProgressBar locationPb, collabPb;
-    private EditText locationEdit, nameEdit, areaEdit, heightEdit, airtempEdit, airmoistureEdit;
-    private EditText soiltempEdit, soilmoistureEdit, phEdit, addCollab ;
+    private ImageButton locationButton, airTempAutofillButton, airHumidityAutofillButton;
+    private ProgressBar locationPb, collabPb, airTempPb, airHumidityPb;
+    private EditText locationEdit, nameEdit, areaEdit, heightEdit, airtempEdit, airhumidityEdit;
+    private EditText soiltempEdit, soilmoistureEdit, phEdit, addCollab;
     private Geocoder geocoder;
     private ScrollView container;
     private Contracts contracts;
+    private SendRequest request = new SendRequest();
     private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, URL;
     private SharedPreferences sPrefUser;
@@ -73,6 +74,7 @@ public class AddNewEntry extends AppCompatActivity {
     private Spinner cropSpinner, soilSpinner;
     private Boolean change = false;
     private TextToSpeech speaker;
+    JSONObject response = new JSONObject();
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -104,8 +106,15 @@ public class AddNewEntry extends AppCompatActivity {
 
         locationPb = (ProgressBar) findViewById(R.id.add_new_entry_location_pb);
         collabPb = (ProgressBar) findViewById(R.id.add_new_entry_collab_pb);
+        airTempPb = (ProgressBar) findViewById(R.id.add_new_entry_airtemp_pb);
+        airHumidityPb = (ProgressBar) findViewById(R.id.add_new_entry_airhumidity_pb);
 
         locationInputLayout = (TextInputLayout) findViewById(R.id.add_inputlayout_entry_location);
+
+        airTempAutofillButton = (ImageButton) findViewById(R.id.add_entry_imb_airtemp_autofill);
+        airHumidityAutofillButton = (ImageButton) findViewById(R.id.add_entry_imb_airhumidity_autofill);
+        airDataAutoFill(airTempAutofillButton, airTempPb);
+        airDataAutoFill(airHumidityAutofillButton, airHumidityPb);
 
         //Spinners zur Auswahl der Pflanzenart und des Bodentypes
         cropSpinner = (Spinner) findViewById(R.id.spinner_crop);
@@ -121,7 +130,7 @@ public class AddNewEntry extends AppCompatActivity {
         areaEdit = (EditText) findViewById(R.id.add_entry_area);
         heightEdit = (EditText) findViewById(R.id.add_entry_height);
         airtempEdit = (EditText) findViewById(R.id.add_entry_airtemp);
-        airmoistureEdit = (EditText) findViewById(R.id.add_entry_airmoisture);
+        airhumidityEdit = (EditText) findViewById(R.id.add_entry_airmoisture);
         soiltempEdit = (EditText) findViewById(R.id.add_entry_soiltemp);
         soilmoistureEdit = (EditText) findViewById(R.id.add_entry_soilmoisture);
         phEdit = (EditText) findViewById(R.id.add_entry_ph);
@@ -140,7 +149,7 @@ public class AddNewEntry extends AppCompatActivity {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
                         //Request in der CheckCollaborator Klasse wird gesendet
-                        if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())){
+                        if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())) {
                             collabsArray.add(0, addCollab.getText().toString().trim());
                             adapter.notifyDataSetChanged();
                             addCollab.setText("");
@@ -222,7 +231,7 @@ public class AddNewEntry extends AppCompatActivity {
                     return;
                 }
                 //Ermitteln der GPS-Daten
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     //Visual feddback, Progressbar wird angezeigt
                     locationPb.setVisibility(View.VISIBLE);
                     locationInputLayout.setHint(getString(R.string.msg_request_location));
@@ -252,7 +261,7 @@ public class AddNewEntry extends AppCompatActivity {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_save:
-                if (validateUserInput()){
+                if (validateUserInput()) {
                     sendRequest(BASE_URL + URL_BASE_ENTRIES);
                 }
                 break;
@@ -280,6 +289,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * Helpermethod zur Initialisierung der Spinners
+     *
      * @param strings - array mit Strings
      * @return - spinner adapter
      */
@@ -292,6 +302,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * Sende POST Request mit eingegebenen Daten
+     *
      * @param URL - die POST-URL, http://ip:3001/entries
      */
     public void sendRequest(String URL) {
@@ -338,6 +349,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * Ermitteln der Stadt, des Landes, und des ISO-Codes nach Koordinaten
+     *
      * @param lat - Koordinaten
      * @param lon - Koordinaten
      */
@@ -371,8 +383,8 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     /**
-    * Die Usereingaben werden dem JSONOBject hinzugefügt
-    * */
+     * Die Usereingaben werden dem JSONOBject hinzugefügt
+     */
     private JSONObject createJsonObject() {
 
         JSONObject entryObject = new JSONObject();
@@ -387,7 +399,7 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("entry_name", nameEdit.getText().toString().trim());
             entryObject.put("area", Integer.valueOf(areaEdit.getText().toString().trim()));
             entryObject.put("air_temp", Integer.valueOf(airtempEdit.getText().toString().trim()));
-            entryObject.put("air_moisture", Integer.valueOf(airmoistureEdit.getText().toString().trim()));
+            entryObject.put("air_moisture", Integer.valueOf(airhumidityEdit.getText().toString().trim()));
             entryObject.put("soil_moisture", Integer.valueOf(soilmoistureEdit.getText().toString().trim()));
             entryObject.put("soil_temp", Integer.valueOf(soiltempEdit.getText().toString().trim()));
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
@@ -412,6 +424,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * CropSpinner Eingabe
+     *
      * @param cropSpinner - Pflanzenart-Spinner
      */
     private void setupCropSpinner(Spinner cropSpinner) {
@@ -446,6 +459,7 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * Auswahl der Bodenart
+     *
      * @param soilSpinner - Bodenart-Spinner
      */
     private void setupSoilSpinner(Spinner soilSpinner) {
@@ -477,9 +491,10 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * URL zur Request der Collaborators(Users) wird gebildet.
+     *
      * @return - URL, http://ip:3001/users/?phone_number=...
      */
-    private String buildURL(){
+    private String buildURL() {
         Uri baseUri = Uri.parse(BASE_URL + URL_BASE_USERS);
         Uri.Builder uriBuilder = baseUri.buildUpon();
         //Parameter werden an die URL angehängt, hier die Telefonnummer
@@ -488,14 +503,15 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     /**
-     * Helpermethode, Validation aller Benutzereingaben
+     * Helpermethode, Validation aller Benutzereingaben     *
+     *
      * @return - true, falls alle Eingaben valide
      */
-    private boolean validateUserInput(){
+    private boolean validateUserInput() {
         if (validationEditText(nameEdit) && validationEditText(locationEdit) && validateSpinners(cropSpinner)
                 && validateSpinners(soilSpinner) && validationEditText(areaEdit) && validationEditText(heightEdit)
-                && validationEditText(airtempEdit) && validationEditText(airmoistureEdit) && validationEditText(soiltempEdit)
-                && validationEditText(soilmoistureEdit) && validationEditText(phEdit)){
+                && validationEditText(airtempEdit) && validationEditText(airhumidityEdit) && validationEditText(soiltempEdit)
+                && validationEditText(soilmoistureEdit) && validationEditText(phEdit)) {
             return true;
         }
         return false;
@@ -503,11 +519,12 @@ public class AddNewEntry extends AppCompatActivity {
 
     /**
      * Validiert Spnner
+     *
      * @param spinner - Spinner zur Überprüfung
      * @return - true, falls Eingabe valide
      */
-    private boolean validateSpinners(Spinner spinner){
-        if (spinner.getSelectedItemPosition() != DEFAULT_SELECTION){
+    private boolean validateSpinners(Spinner spinner) {
+        if (spinner.getSelectedItemPosition() != DEFAULT_SELECTION) {
             return true;
         }
         View selectedView = spinner.getSelectedView();
@@ -523,11 +540,12 @@ public class AddNewEntry extends AppCompatActivity {
     /**
      * Helpermethode, Validiere User Eingaben, alle InputFelder werden hier validiert, wenn @false,
      * wird auf den Fehler hingewiesen
+     *
      * @param input - Inputfeld
      * @return true, falls alle Eingaben valide
      */
     private boolean validationEditText(EditText input) {
-        if (!input.getText().toString().trim().isEmpty()){
+        if (!input.getText().toString().trim().isEmpty()) {
             return true;
         }
         input.setError(getString(R.string.errmsg_valid_input_required));
@@ -537,11 +555,11 @@ public class AddNewEntry extends AppCompatActivity {
     /**
      * Helpermethode, OnTouchListener registriert die Berührung der Inputfelder
      */
-    private void setOnTouchListener(){
+    private void setOnTouchListener() {
         locationEdit.setOnTouchListener(mTouchListener);
         nameEdit.setOnTouchListener(mTouchListener);
         airtempEdit.setOnTouchListener(mTouchListener);
-        airmoistureEdit.setOnTouchListener(mTouchListener);
+        airhumidityEdit.setOnTouchListener(mTouchListener);
         soiltempEdit.setOnTouchListener(mTouchListener);
         soilmoistureEdit.setOnTouchListener(mTouchListener);
         areaEdit.setOnTouchListener(mTouchListener);
@@ -552,6 +570,7 @@ public class AddNewEntry extends AppCompatActivity {
     /**
      * Falls Änderungen in Eingaben gemacht wurden und die Activity verlassen wird, wird erst
      * Dialogfenster angezeigt
+     *
      * @param discardButtonClickListener
      */
     private void showUnsavedChangesDialog(
@@ -571,6 +590,56 @@ public class AddNewEntry extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void airDataAutoFill(ImageButton autoFillButton, final ProgressBar pb) {
+        response = new JSONObject();
+        autoFillButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pb.setVisibility(View.VISIBLE);
+                if (countryISOCode != null && city != null) {
+                    Log.i("LOCATION:", countryISOCode + ", " + city);
+                    Uri baseUri = Uri.parse(BASE_URL + URL_BASE_WEATHER);
+                    Uri.Builder uriBuilder = baseUri.buildUpon();
+                    //Parameter werden an die URL angehängt
+                    uriBuilder.appendQueryParameter("coutryISOCOde", countryISOCode);
+                    uriBuilder.appendQueryParameter("city", city);
+
+                    request.requestJsonObject(AddNewEntry.this, Request.Method.GET, pb, container,
+                            uriBuilder.toString(),
+                            new ServerCallback() {
+                                @Override
+                                public void onSuccess(JSONObject response) {
+                                    Log.i("HOP HEY", "REQUeSt Weather");
+                                    if (response!= null) {
+                                        try {
+                                            int airTemp = response.getInt("temp");
+                                            int airHumidity = response.getInt("humidity");
+                                            airtempEdit.setText(String.valueOf(airTemp));
+                                            airhumidityEdit.setText(String.valueOf(airHumidity));
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                                        } catch (NullPointerException e) {
+                                            e.printStackTrace();
+                                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                                        }
+                                    } else {
+                                        contracts.showSnackbar(container, getString(R.string.msg_no_data_available), true, false);
+                                    }
+                                }
+                            });
+                } else {
+                    contracts.showSnackbar(container, getString(R.string.msg_add_location), true, false);
+                }
+
+            }
+        });
+    }
+
+    public interface ServerCallback {
+        void onSuccess(JSONObject result);
+    }
+
     private void stopRequestLocation() {
         //Locationupdates werden angehalten
         if (locationManager != null) {
@@ -587,7 +656,7 @@ public class AddNewEntry extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         //TextToSpeech wird angehalten
-        if (speaker != null){
+        if (speaker != null) {
             speaker.stop();
             speaker.shutdown();
         }

@@ -11,8 +11,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.android.harvesthand.CheckCollaborator.userExist;
 
@@ -21,42 +25,31 @@ import static com.example.android.harvesthand.CheckCollaborator.userExist;
  */
 
 public class SendRequest {
+    private JSONObject responseObject = null;
+    private JSONArray responseArray = null;
 
-    protected boolean requestJsonObject(final Context context, final ProgressBar progressBar, final View container,
-                              String url) {
-        InitTTS tts = new InitTTS(context);
-        final Contracts contracts = new Contracts(tts.initTTS());
+    public SendRequest() {
+    }
 
+    protected void requestJsonObject(final Context context, final int method, final ProgressBar progressBar, final View container,
+                                           String url,
+                                           final AddNewEntry.ServerCallback callback) {
+        final Contracts contracts = new Contracts(null);
         Log.i("URL in CHECK: ", url);
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(method, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.i("HEAY HOP", "RESPONSE Weather");
                         progressBar.setVisibility(View.INVISIBLE);
-                        if (response != null && response.length() > 0) {
-                            try {
-                                Log.i("CHecke USER:", response.getString("_id"));
-                                String userId = response.getString("_id");
-                                if (userId != null && userId.length() > 0) {
-                                    userExist = true;
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                contracts.showSnackbar(container, context.getString(R.string.msg_error), true, false);
-                                userExist = false;
-                            }
-                        } else {
-                            contracts.showSnackbar(container,
-                                    context.getString(R.string.msg_user_not_found), true, false);
-                            userExist = false;
-                        }
+                        callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e("HEAY HOP", "RESPONSE Weather ERROR!!!!", error);
                         progressBar.setVisibility(View.INVISIBLE);
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
@@ -76,7 +69,6 @@ public class SendRequest {
                     }
                 });
         Volley.newRequestQueue(context).add(request);
-        return userExist;
     }
 }
 

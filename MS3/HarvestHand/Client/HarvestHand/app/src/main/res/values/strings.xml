@@ -42,11 +42,11 @@
     <string name="new_entry_hint_location">Location</string>
     <string name="new_entry_hint_area">Land area</string>
     <string name="new_entry_hint_height">Height</string>
-    <string name="new_entry_hint_airtemp">Air temp</string>
+    <string name="new_entry_hint_airtemp">Air temp. ℃</string>
     <string name="new_entry_hint_ph">PH</string>
-    <string name="new_entry_hint_airmoisture">Air moisture</string>
-    <string name="new_entry_hint_soiltemperature">Soil temperature</string>
-    <string name="new_entry_hint_soilmoisture">Soil moisture</string>
+    <string name="new_entry_hint_airmoisture">Air humidity % </string>
+    <string name="new_entry_hint_soiltemperature">Soil temp. ℃</string>
+    <string name="new_entry_hint_soilmoisture">Soil moisture %</string>
     <string name="new_entry_add_collabs">Add collaborators</string>
     <string name="new_entry_hint_collab">Number</string>
     <string name="label_new_entry">New Entry</string>
@@ -146,6 +146,8 @@
     </string-array>
 
     <string name="settings_menu_item">settings</string>
+    <string name="msg_no_data_available">No data available!</string>
+    <string name="msg_add_location">Please add location!</string>
 
 
 </resources>

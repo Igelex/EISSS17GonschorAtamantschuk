@@ -31,8 +31,6 @@ db.once('open', function () {
 
 require('./libs/javascript/passport');
 
-app.get("/weather", weather.getPrecipitationForWeek);
-
 //all environments
 app.set('port', process.env.PORT || port);
 app.use(bodyParser.json());
@@ -58,8 +56,8 @@ app.get('/', function (req, res) {
     res.send('Hallo, World!!!');
 });
 
+app.get("/weather", weather.getAirTemp);
 
-app.get('/airtemp', weather.getAirTemp);
 //////////////////////////Users
 
 app.post('/signup', controller_user.registerUser);

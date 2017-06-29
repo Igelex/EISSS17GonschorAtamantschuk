@@ -48,23 +48,33 @@ module.exports.getPrecipitationForWeek = function (country, city) {
  * @param res
  */
 module.exports.getAirTemp = function (req, res) {
-    var url = 'http://api.wunderground.com/api/' + key + '/conditions/q/DE/Remscheid.json';
+    console.log("AIR temp params: " + req.params);
+    console.log("AIR temp query params: " + req.query.params);
+    console.log("AIR temp query: " + req.query.city);
+    var url = 'http://api.wunderground.com/api/' + key + '/conditions/q/' + req.query.countryISOCode
+        + '/' + req.query.city + '.json';
+    console.log('Air temp URL : ' + url);
     request(url, function (err, response, body) {
         console.log('Air temp status : ' + response.status);
         if (err){
-            res.status(501).send(err);
+            res.status(500).send(err);
         }
         if (response.statusCode == 200) {
             var result = JSON.parse(body);
             //console.log('Air temp body : ' + body);
-            var hymidity = result.current_observation.relative_humidity;
-            console.log('Humidyty befor: ' + hymidity);
-            console.log('Hymidity after: ' + hymidity.slice(-hymidity.length,-1));
-            var clima ={
-                temp: result.current_observation.temp_c,
-                //Feuchtigkeit kommt als String, %-Zeichen wird abgetrennt und String zu Int konvertiert
-                hymidity: parseInt(hymidity.slice(-hymidity.length,-1))
-            };
+            try {
+                var hymidity = result.current_observation.relative_humidity;
+                console.log('Humidyty befor: ' + hymidity);
+                console.log('Hymidity after: ' + hymidity.slice(-hymidity.length,-1));
+                var clima ={
+                    temp: result.current_observation.temp_c,
+                    //Feuchtigkeit kommt als String, %-Zeichen wird abgetrennt und String zu Int konvertiert
+                    humidity: parseInt(hymidity.slice(-hymidity.length,-1))
+                };
+            } catch (e){
+                console.error("JSON ERROR: " + e);
+            }
+
             res.status(200).send(clima);
         } else {
             res.status(response.statusCode).send();

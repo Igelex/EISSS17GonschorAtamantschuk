@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -146,7 +147,7 @@ public class SignUpFragment extends Fragment {
 
         Log.i("Params: ", params.toString());
 
-        final JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(params),
+        final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,new JSONObject(params),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
