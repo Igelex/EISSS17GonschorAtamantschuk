@@ -39,14 +39,14 @@ public class SendRequest {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        progressBar.setVisibility(View.GONE);
+                        if (progressBar != null) progressBar.setVisibility(View.GONE);
                         callback.onSuccess(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.INVISIBLE);
+                        if (progressBar != null) progressBar.setVisibility(View.GONE);
                         if (error.networkResponse != null) {
                             switch (error.networkResponse.statusCode) {
                                 case 500:

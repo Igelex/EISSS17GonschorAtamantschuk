@@ -16,11 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -39,8 +44,9 @@ public class ListAdapter extends ArrayAdapter<Entry> {
     private Context mContext;
     private TextToSpeech speaker;
     private int userType;
-    private static final int UPDATE_MODE = 1;
     private CircleImageView cropImg;
+    private Contracts contracts = new Contracts(null);
+    private View listView;
 
     public ListAdapter(@NonNull Context context, @NonNull ArrayList entries) {
         super(context, 0, entries);
@@ -51,7 +57,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View listView = convertView;
+        listView = convertView;
 
         if (listView == null) {
             listView = LayoutInflater.from(getContext()).inflate(R.layout.list_item,
@@ -96,7 +102,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                             mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
                             + mContext.getString(R.string.item_speaktext_coma) +
                             mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString()
-                    + mContext.getString(R.string.add_entry_m_squared));
+                            + mContext.getString(R.string.add_entry_m_squared));
                 }
             });
         } else {
@@ -107,16 +113,14 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                 public void onClick(View view) {
                     PopupMenu popupMenu = new PopupMenu(getContext(), menuButton);
                     popupMenu.inflate(R.menu.item_menu);
-
                     popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch (menuItem.getItemId()) {
                                 case R.id.action_item_delete:
-                                    showDeleteConfirmationDialog();
+                                    showDeleteConfirmationDialog(listView, currentEntry.getEntryId());
                                     break;
                                 case R.id.action_item_edit:
-                                    Toast.makeText(mContext, "EDIT", Toast.LENGTH_LONG).show();
                                     onEditMenuClick(entryId);
                                     break;
                             }
@@ -136,12 +140,31 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         speaker.speak(textToSpeech, TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    private void showDeleteConfirmationDialog() {
+    private void showDeleteConfirmationDialog(final View conainer, final String currentId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.button_delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(mContext, "DELETE", Toast.LENGTH_LONG).show();
+                final SendRequest request = new SendRequest();
+                request.requestData(getContext(), Request.Method.DELETE, null, conainer, BASE_URL + URL_BASE_ENTRIES + currentId,
+                        new AddNewEntry.ServerCallback() {
+                            @Override
+                            public void onSuccess(JSONObject result) {
+                                try {
+                                    boolean deleted = result.getBoolean("res");
+                                    if (deleted) {
+                                        contracts.showSnackbar(conainer, mContext.getString(R.string.msg_entry_deleted),
+                                                false, true);
+                                    } else {
+                                        contracts.showSnackbar(conainer, mContext.getString(R.string.msg_entry_not_found),
+                                                true, false);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+
+                                }
+                            }
+                        });
             }
         });
         builder.setNegativeButton(R.string.dialog_button_cancel, new DialogInterface.OnClickListener() {

@@ -120,6 +120,7 @@ module.exports.deleteEntry = function (req, res) {
             res.status(500).type('application/json').send({msg: "DB error: " + err, res: false});
         } else {
             if (result) {
+                controller_tutorial.deleteTutorial(result.tutorial_id);
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + result._id + ' successfully deleted',
                     res: true
