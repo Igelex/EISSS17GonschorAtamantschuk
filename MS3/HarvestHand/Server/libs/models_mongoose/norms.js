@@ -14,7 +14,7 @@ var normsSchema = mongoose.Schema({
         max: Number,
         min: Number
     },
-    air_moisture: {
+    air_humidity: {
         max: Number,
         min: Number
     },

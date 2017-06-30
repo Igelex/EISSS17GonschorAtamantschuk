@@ -1,19 +1,26 @@
 /**
  * Created by Pastuh on 02.05.2017.
  */
-var Norm = require('../models_mongoose/norms');
+var Norm = require('../models_mongoose/norms'),
+    fs = require('fs');
 
-module.exports.addNorm = function (req, res) {
-    var newNorm = new Norm(req.body);
-    newNorm.save(function (err, result) {
-        if (err) {
-            console.log(err);
-            res.status(500).type('text').send('Norm not saved :' + err);
-        } else {
-            console.log('Norm saved');
-            res.status(200).type('text').send(result);
-        }
-    });
+//Norm Daten werden eingelesen und in der DB gespeichert
+module.exports.addNorm = function () {
+    console.log('Read Norms file ...');
+    var norms = JSON.parse(fs.readFileSync('crops_norms.json', 'utf8'));
+    console.log('Read result: ' + norms[1].name);
+    for (var i in norms){
+        var newNorm = new Norm(norms[i]);
+        newNorm.save(function (err, result) {
+            if (err) {
+                console.error(err);
+                //res.status(500).type('text').send('Norm not saved :' + err);
+            } else {
+                console.log('Norms saved ' + result);
+                //res.status(200).type('text').send(result);
+            }
+        });
+    }
 };
 
 module.exports.getNormById = function (req, res) {
@@ -63,7 +70,6 @@ module.exports.getNorm = function (crop_id) {
             }
 
         })
-
 };
 
 //For debugging

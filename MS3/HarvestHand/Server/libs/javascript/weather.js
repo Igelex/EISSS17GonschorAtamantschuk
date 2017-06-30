@@ -9,9 +9,9 @@ var request = require('request'),
 /*var requestUrl2 = 'http://api.wunderground.com/api/' + key + /forecast10day/q/zmw:94125.1.99999.json'
  var requestUrl1 = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/DE/Gummersbach.json'*/
 
-module.exports.getPrecipitationForWeek = function (country, city) {
+module.exports.getPrecipitationForWeek = function (countryISOCode, city) {
     var weekPrecipitation = 0;
-    var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/' + country + '/'
+    var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/' + countryISOCode + '/'
         + city + '.json';
     console.log('Send request...');
     request(requestUrl, function (error, response, body) {
@@ -68,7 +68,7 @@ module.exports.getAirTemp = function (req, res) {
                 console.log('Hymidity after: ' + hymidity.slice(-hymidity.length,-1));
                 var clima ={
                     temp: result.current_observation.temp_c,
-                    //Feuchtigkeit kommt als String, %-Zeichen wird abgetrennt und String zu Int konvertiert
+                    //Feuchtigkeit kommt als String, %-Zeichen wird abgetrennt und String zu Int konvertiert(70% -> 70)
                     humidity: parseInt(hymidity.slice(-hymidity.length,-1))
                 };
             } catch (e){
@@ -79,6 +79,5 @@ module.exports.getAirTemp = function (req, res) {
         } else {
             res.status(response.statusCode).send();
         }
-
     })
 };

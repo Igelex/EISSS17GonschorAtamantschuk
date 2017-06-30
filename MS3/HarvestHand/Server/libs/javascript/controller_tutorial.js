@@ -12,10 +12,10 @@ module.exports.addTutorial = function (tutorial, entry_id) {
             deviation: newTutorial.air_temp.deviation,
             norm: newTutorial.air_temp.norm
         },
-        air_moisture: {
-            status: newTutorial.air_moisture.status,
-            deviation: newTutorial.air_moisture.deviation,
-            norm: newTutorial.air_moisture.norm
+        air_humidity: {
+            status: newTutorial.air_humidity.status,
+            deviation: newTutorial.air_humidity.deviation,
+            norm: newTutorial.air_humidity.norm
         },
         /!*Wasserbedarf l/m^2/Woche*!/
         soil_moisture: {

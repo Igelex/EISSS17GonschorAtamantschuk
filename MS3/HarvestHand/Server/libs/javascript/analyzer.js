@@ -106,18 +106,18 @@ module.exports.analyseValues = function (weekPrecipitation) {
     newTutorial.air_temp.norm = currentNorm.air_temp.min + "-" + currentNorm.air_temp.max;
 
     /*Air moisture Analyse*/
-    if (entry.air_moisture < currentNorm.air_moisture.min) {
-        newTutorial.air_moisture.deviation = calculateDeviation(currentNorm.air_moisture.min, entry.air_moisture);
-        newTutorial.air_moisture.status = LESS;
-    } else if (entry.air_moisture > currentNorm.air_moisture.max) {
-        newTutorial.air_moisture.deviation = calculateDeviation(entry.air_moisture, currentNorm.air_moisture.max);
-        newTutorial.air_moisture.status = GREATER;
+    if (entry.air_humidity < currentNorm.air_humidity.min) {
+        newTutorial.air_humidity.deviation = calculateDeviation(currentNorm.air_humidity.min, entry.air_humidity);
+        newTutorial.air_humidity.status = LESS;
+    } else if (entry.air_humidity > currentNorm.air_humidity.max) {
+        newTutorial.air_humidity.deviation = calculateDeviation(entry.air_humidity, currentNorm.air_humidity.max);
+        newTutorial.air_humidity.status = GREATER;
     } else {
-        newTutorial.air_moisture.deviation = 0;
-        newTutorial.air_moisture.status = NORM
+        newTutorial.air_humidity.deviation = 0;
+        newTutorial.air_humidity.status = NORM
     }
-    newTutorial.air_moisture.currentValue = entry.air_moisture;
-    newTutorial.air_moisture.norm = currentNorm.air_moisture.min + "-" + currentNorm.air_moisture.max;
+    newTutorial.air_humidity.currentValue = entry.air_humidity;
+    newTutorial.air_humidity.norm = currentNorm.air_humidity.min + "-" + currentNorm.air_humidity.max;
 
     /*Soil temperature Analyse*/
     if (entry.soil_temp < currentNorm.soil_temp.min) {

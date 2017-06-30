@@ -32,7 +32,7 @@ var entrySchema = mongoose.Schema({
     air_temp: Number,
     soil_temp: Number,
     soil_moisture: Number,
-    air_moisture: Number,
+    air_humidity: Number,
     ph_value: Number,
     /*Anbauhöhe über dem Meerspiegel*/
     height_meter: Number

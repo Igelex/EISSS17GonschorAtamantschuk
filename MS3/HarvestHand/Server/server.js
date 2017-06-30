@@ -14,7 +14,6 @@ var express = require('express'),
     controller_norm = require('./libs/javascript/controller_norms'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
     controller_user = require('./libs/javascript/controller_user'),
-    routes = require('./libs/routes/index'),
     weather = require('./libs/javascript/weather'),
     port = 3001;
 
@@ -26,6 +25,7 @@ mongoose.connect('mongodb://localhost/db');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
+    controller_norm.addNorm();
     console.log('DB connected');
 });
 
@@ -85,23 +85,11 @@ app.get('/entries/:id/tutorial/:id', controller_tutorial.getTutorialById);
 
 //////////////////////////Entries
 
-app.post('/norms', function (req, res) {
-    controller_norm.addNorm(req, res);
-});
-
-app.get('/norms/:id', function (req, res) {
-    controller_norm.getNormById(req, res);
-});
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-app.get('/norms', function (req, res) {
-    controller_norm.getAllNorms(req, res);
-});
-
-app.get('/tutorials', function (req, res) {
-    controller_tutorial.getAllTutorials(req, res);
-});
-
+app.get('/norms/:id', controller_norm.getNormById);
+app.delete('/norms/:id', controller_norm.deleteNorm);
+app.get('/norms', controller_norm.getAllNorms);
+app.get('/tutorials',controller_tutorial.getAllTutorials);
 //Debugging!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 app.listen(app.get('port'), function () {
