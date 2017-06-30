@@ -16,6 +16,8 @@ import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static android.R.id.list;
+
 
 /**
  * Code von https://github.com/lopspower/HFRecyclerView
@@ -47,16 +49,21 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
 
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
-            if (position == arrayList.size()) {
-                footerViewHolder.normText.setText(arrayList.get(1).getmNorm());
-                footerViewHolder.normEar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                    speaker.speak( context.getString(R.string.show_should_be_value) +
-                            arrayList.get(1).getmNorm(), TextToSpeech.QUEUE_FLUSH, null);
-                    }
-                });
+            try {
+                if (position == arrayList.size()) {
+                    footerViewHolder.normText.setText(arrayList.get(0).getmNorm());
+                    footerViewHolder.normEar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            speaker.speak( context.getString(R.string.show_should_be_value) +
+                                    arrayList.get(0).getmNorm(), TextToSpeech.QUEUE_FLUSH, null);
+                        }
+                    });
+                }
+            }catch (IndexOutOfBoundsException e){
+                Log.e("Tutorial list", "" + e);
             }
+
         }
     }
 

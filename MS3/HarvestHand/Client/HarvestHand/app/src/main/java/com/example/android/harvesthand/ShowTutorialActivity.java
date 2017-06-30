@@ -210,7 +210,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     /**
-     * Vorlesefunktion, aktuelle Eigenschaft und derer Wert werden vorgelesen     *
+     * Vorlesefunktion, aktuelle Eigenschaft und derer Wert werden vorgelesen
      * @param currentEar   - ImageButton
      * @param currentValue - aktueller Wert der Eigenschaft
      * @param property     - aktuelle Eigenschaft

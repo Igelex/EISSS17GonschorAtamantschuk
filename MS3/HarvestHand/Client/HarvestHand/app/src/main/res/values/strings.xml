@@ -113,6 +113,17 @@
         <item>@string/desc_soilmoisture_less_1_1</item>
         <item>@string/desc_soilmoisture_less_1_2</item>
     </string-array>
+    <!--Description for tutorial_airtemp_less_1 Image -->
+    <string name="desc_airtemp_less_1_1">It is to cold maaaan. Do something!!! Brrrr </string>
+    <string-array name="desc_array_airtemp_less_1">
+        <item>@string/desc_airtemp_less_1_1</item>
+    </string-array>
+    <!--Description for tutorial_airtemp_greater_1 Image -->
+    <string name="desc_airtemp_greater_1_1">It is to hot maaaan. Do something!!! </string>
+    <string-array name="desc_array_airtemp_greater_1">
+        <item>@string/desc_airtemp_greater_1_1</item>
+    </string-array>
+
     <!--Description for tutorial_soilmoisture_less_2 Image -->
     <string name="desc_soilmoisture_less_2_2">Ko ko ko </string>
     <string name="desc_soilmoisture_less_2_1">Bla bla bla</string>

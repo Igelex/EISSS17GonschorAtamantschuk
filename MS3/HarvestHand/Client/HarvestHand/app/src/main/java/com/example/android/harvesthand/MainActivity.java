@@ -39,12 +39,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import static android.R.id.empty;
 import static com.example.android.harvesthand.Contracts.*;
-import static com.example.android.harvesthand.Contracts.BASE_URL;
-import static com.example.android.harvesthand.Contracts.URL_BASE_ENTRIES;
-import static com.example.android.harvesthand.Contracts.URL_PARAMS_OWNER_ID;
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
@@ -57,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sPrefUser, sPrefIp;
     private String userId;
     private View dialogView;
-    private TextToSpeech speaker;
     private Contracts contracts;
     private RelativeLayout emptyView;
 
@@ -72,9 +66,7 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            InitTTS tts = new InitTTS(this);
-            speaker = tts.initTTS();
-            contracts = new Contracts(speaker);
+            contracts = new Contracts(null);
 
             container = findViewById(R.id.entries_relativelayout);
 
@@ -370,15 +362,6 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(IP_SP_IP, ip);
         editor.apply();
         Log.i("Save IP Address: ", ip);
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (speaker != null){
-            speaker.stop();
-            speaker.shutdown();
-        }
-        super.onDestroy();
     }
 }
 

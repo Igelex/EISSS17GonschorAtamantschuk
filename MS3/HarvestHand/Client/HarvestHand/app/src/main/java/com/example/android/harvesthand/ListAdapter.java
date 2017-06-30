@@ -95,7 +95,8 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                             + mContext.getString(R.string.item_speaktext_coma) +
                             mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
                             + mContext.getString(R.string.item_speaktext_coma) +
-                            mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString());
+                            mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString()
+                    + mContext.getString(R.string.add_entry_m_squared));
                 }
             });
         } else {
