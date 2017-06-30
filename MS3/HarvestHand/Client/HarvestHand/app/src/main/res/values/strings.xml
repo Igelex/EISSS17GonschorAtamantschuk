@@ -4,7 +4,7 @@
 
     <!--Signup-->
     <string name="signup">Sign up</string>
-    <string name="signin">Sign in</string>
+    <string name="signin">Log in</string>
     <string name="input_your_number">Your Phone Number</string>
     <string name="welcome_to_harvesthand">Welcome to HarvestHand</string>
     <string name="about">About us</string>
@@ -125,14 +125,14 @@
     <!--Cropart spinner Strings-->
     <string name="crop_default">Crop art</string>
     <string name="crop_caffe">Caffe</string>
-    <string name="crop_tomato">Tomato</string>
-    <string name="crop_rise">Rice</string>
+    <string name="crop_cacao">Cacao</string>
+    <string name="crop_banana">Banana</string>
 
     <string-array name="crop_spinner_array">
         <item>@string/crop_default</item>
         <item>@string/crop_caffe</item>
-        <item>@string/crop_tomato</item>
-        <item>@string/crop_rise</item>
+        <item>@string/crop_cacao</item>
+        <item>@string/crop_banana</item>
     </string-array>
 
     <!--Soilart spinner Strings-->

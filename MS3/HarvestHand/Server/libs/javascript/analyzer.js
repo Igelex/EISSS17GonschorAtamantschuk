@@ -19,7 +19,7 @@ var newTutorial = {
         currentValue: Number,
         norm: String
     },
-    air_moisture: {
+    air_humidity: {
         status: Number,
         deviation: Number,
         norm: String
@@ -185,7 +185,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
     newTutorial.soil_moisture.water_requirements = currentNorm.water_requirements * entry.area - weekPrecipitation;
     newTutorial.mature_after_month = currentNorm.mature_after_month;
 
-    console.log("New Tutorial erstellt: " + newTutorial.toString());
+    console.log("New Tutorial erstellt: " + newTutorial.air_humidity.currentValue);
     controller_tutorial.addTutorial(newTutorial, entry._id);
 }
 

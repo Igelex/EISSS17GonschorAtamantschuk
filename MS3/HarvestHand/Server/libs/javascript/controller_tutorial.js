@@ -6,45 +6,7 @@ var Tutorial = require('../models_mongoose/tutorial'),
 
 //Tutorial wird angelegt in DB
 module.exports.addTutorial = function (tutorial, entry_id) {
-    var newTutorial = new Tutorial(tutorial);/*({
-        air_temp: {
-            status: newTutorial.air_temp.status,
-            deviation: newTutorial.air_temp.deviation,
-            norm: newTutorial.air_temp.norm
-        },
-        air_humidity: {
-            status: newTutorial.air_humidity.status,
-            deviation: newTutorial.air_humidity.deviation,
-            norm: newTutorial.air_humidity.norm
-        },
-        /!*Wasserbedarf l/m^2/Woche*!/
-        soil_moisture: {
-            status: newTutorial.soil_moisture.status,
-            deviation: newTutorial.soil_moisture.deviation,
-            water_requirements: newTutorial.soil_moisture.water_requirements,
-            norm: newTutorial.soil_moisture.water_requirements
-        },
-        soil: {
-            status: newTutorial.soil.status,
-            norm: newTutorial.soil.norm
-        },
-        soil_temp: {
-            status: newTutorial.soil_temp.status,
-            deviation: newTutorial.soil_temp.deviation,
-            norm: newTutorial.soil_temp.norm
-        },
-        ph_value: {
-            status: newTutorial.ph_value.status,
-            deviation: newTutorial.ph_value.deviation,
-            norm: newTutorial.ph_value.norm
-        },
-        height_meter: {
-            status: newTutorial.height_meter.status,
-            deviation: newTutorial.height_meter.deviation,
-            norm: newTutorial.height_meter.norm
-        },
-        mature_after_month: newTutorial.mature_after_month
-    });*/
+    var newTutorial = new Tutorial(tutorial);
     newTutorial.save(function (err, result) {
         if (err) {
             console.log(err);

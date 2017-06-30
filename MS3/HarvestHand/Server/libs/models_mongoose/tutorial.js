@@ -12,7 +12,7 @@ var tutorialSchema = mongoose.Schema({
         currentValue: Number,
         norm: String
     },
-    air_moisture: {
+    air_humidity: {
         status: Number,
         deviation: Number,
         currentValue: Number,

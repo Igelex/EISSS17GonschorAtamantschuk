@@ -6,30 +6,29 @@ var Norm = require('../models_mongoose/norms'),
 
 //Norm Daten werden eingelesen und in der DB gespeichert
 module.exports.addNorm = function () {
-    console.log('Read Norms file ...');
-    var norms = JSON.parse(fs.readFileSync('crops_norms.json', 'utf8'));
-    console.log('Read result: ' + norms[1].name);
-    for (var i in norms){
-        var newNorm = new Norm(norms[i]);
-        newNorm.save(function (err, result) {
-            if (err) {
-                console.error(err);
-                //res.status(500).type('text').send('Norm not saved :' + err);
-            } else {
-                console.log('Norms saved ' + result);
-                //res.status(200).type('text').send(result);
-            }
-        });
-    }
+    fs.readFile('crops_norms.json', 'utf8', function (err, data) {
+        if (err){
+            console.error('Error readFile: ' + err);
+        }
+        var norms = JSON.parse(data);
+        for (var i in norms){
+            var newNorm = new Norm(norms[i]);
+            newNorm.save(function (err, result) {
+                if (err) {
+                    console.error('Error, already exist');
+                } else {
+                    console.log('Norm saved: ' + result[1].name);
+                }
+            });
+        }
+    });
 };
 
 module.exports.getNormById = function (req, res) {
-    console.info('In getNormById: ' + req.params.id);
     Norm.findOne({art_id: req.params.id}, function (err, result) {
         if (err) {
             res.status(500).type('text').send('DB error :' + err);
         } else {
-            console.log('NORMNORM : ' + result);
             res.status(200).type('text').send(result);
         }
     });
@@ -41,8 +40,8 @@ module.exports.deleteNorm = function (req, res) {
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
-            if (result != null) {
-                res.status(200).type('text').send('Norm with id: ' + result._id + ' successfully deleted');
+            if (result) {
+                res.status(200).type('text').send('Norm with id: ' + result._id + ' successful deleted');
             } else {
                 res.status(200).type('text').send('Norm with id: ' + req.params.id + ' not found');
             }
@@ -50,7 +49,7 @@ module.exports.deleteNorm = function (req, res) {
 
     });
 };
-
+//For debugging
 module.exports.getNorm = function (crop_id) {
     Norm.findOne({
             crop_id: crop_id
@@ -80,10 +79,10 @@ module.exports.getAllNorms = function (req, res) {
             res.status(500).type('text').send('DB error :' + err);
         } else {
             if (Object.keys(result).length > 0) {
-                res.status(200).type('application/json').send(result);
+                res.status(200).send(result);
             }
             else {
-                res.status(200).type('text').send('No Norms found');
+                res.status(200).send('No Norms found');
             }
         }
     })

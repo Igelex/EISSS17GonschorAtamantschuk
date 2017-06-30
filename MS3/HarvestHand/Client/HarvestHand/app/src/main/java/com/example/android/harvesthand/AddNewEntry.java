@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
 import static android.os.Build.VERSION_CODES.M;
 import static com.example.android.harvesthand.Contracts.*;
 
@@ -66,7 +65,7 @@ public class AddNewEntry extends AppCompatActivity {
     private Geocoder geocoder;
     private ScrollView container;
     private Contracts contracts;
-    private requestAirData request = new requestAirData();
+    private SendRequest request = new SendRequest();
     private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, entryId, ownerId = null, tutorialId = null;
     private SharedPreferences sPrefUser;
@@ -96,9 +95,9 @@ public class AddNewEntry extends AppCompatActivity {
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
 
-        InitTTS tts = new InitTTS(this);
-        speaker = tts.initTTS();
-        contracts = new Contracts(speaker);
+        /*InitTTS tts = new InitTTS(this);
+        speaker = tts.initTTS();*/
+        contracts = new Contracts(null);
 
         geocoder = new Geocoder(this, Locale.getDefault());
 
@@ -416,7 +415,7 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("entry_name", nameEdit.getText().toString().trim());
             entryObject.put("area", Integer.valueOf(areaEdit.getText().toString().trim()));
             entryObject.put("air_temp", Integer.valueOf(airtempEdit.getText().toString().trim()));
-            entryObject.put("air_moisture", Integer.valueOf(airhumidityEdit.getText().toString().trim()));
+            entryObject.put("air_humidity", Integer.valueOf(airhumidityEdit.getText().toString().trim()));
             entryObject.put("soil_moisture", Integer.valueOf(soilmoistureEdit.getText().toString().trim()));
             entryObject.put("soil_temp", Integer.valueOf(soiltempEdit.getText().toString().trim()));
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
@@ -460,19 +459,19 @@ public class AddNewEntry extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        cropId = NOT_SELECTED;
+                        cropId = DEFAULT_SELECTION;
                         break;
                     case 1:
                         cropId = CROP_ID_CAFFE;
                         break;
                     case 2:
-                        cropId = CROP_ID_TOMATO;
+                        cropId = CROP_ID_CACAO;
                         break;
                     case 3:
-                        cropId = CROP_ID_RICE;
+                        cropId = CROP_ID_BANANA;
                         break;
                     default:
-                        cropId = NOT_SELECTED;
+                        cropId = DEFAULT_SELECTION;
                         break;
                 }
             }
@@ -495,7 +494,7 @@ public class AddNewEntry extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        soilId = NOT_SELECTED;
+                        soilId = DEFAULT_SELECTION;
                         break;
                     case 1:
                         soilId = SOIL_ID_SAND;
@@ -504,7 +503,7 @@ public class AddNewEntry extends AppCompatActivity {
                         soilId = SOIL_ID_CLAY;
                         break;
                     default:
-                        soilId = NOT_SELECTED;
+                        soilId = DEFAULT_SELECTION;
                         break;
                 }
             }
@@ -576,6 +575,7 @@ public class AddNewEntry extends AppCompatActivity {
             return true;
         }
         input.setError(getString(R.string.errmsg_valid_input_required));
+        input.requestFocus();
         return false;
     }
 
@@ -630,10 +630,10 @@ public class AddNewEntry extends AppCompatActivity {
         autoFillButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Visual feedback
-                pb.setVisibility(View.VISIBLE);
                 //Prüfe ob location verfügbar
                 if (countryISOCode != null && city != null) {
+                    //Visual feedback
+                    pb.setVisibility(View.VISIBLE);
                     //Hänge parameter an die URL an
                     Uri baseUri = Uri.parse(BASE_URL + URL_BASE_WEATHER);
                     Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -686,7 +686,7 @@ public class AddNewEntry extends AppCompatActivity {
                                 int cropId = response.getInt("crop_id");
                                 int soilType = response.getInt("soil");
                                 int airTemp = response.getInt("air_temp");
-                                int airHumidity = response.getInt("air_moisture");
+                                int airHumidity = response.getInt("air_humidity");
                                 int soilTemp = response.getInt("soil_temp");
                                 int soilMoisture = response.getInt("soil_moisture");
                                 int ph = response.getInt("ph_value");

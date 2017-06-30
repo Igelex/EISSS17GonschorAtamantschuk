@@ -5,7 +5,6 @@ var User = require('../models_mongoose/user');
 
 //Neuen User anlegen
 module.exports.registerUser = function (req, res) {
-
     //Überprüfen ob User bereits existiert
     User.findOne({phone_number: req.body.phone_number}, function (err, result) {
         if (err) {
@@ -21,18 +20,15 @@ module.exports.registerUser = function (req, res) {
         } else {
             //Es existiert kein user mit der angegeben Email
             var newUser = new User(req.body);
-
             //User Speichern
             newUser.save(function (err, result) {
-
                 if (err) {
                     //Fehler bei der Datenbankabfrage
                     res.status(500).send({msg: 'DB Error'});
                     console.error(err);
-                    return;
                 }
                 console.error(result);
-                res.status(200).type('application/json').send({_id: result._id, user_type: result.user_type});
+                res.status(200).type('application/json').send(result);
             });
         }
     });
@@ -58,17 +54,15 @@ module.exports.logIn = function (req, res) {
 
 //Bestimmten User anzeigen
 module.exports.getUserById = function (req, res) {
-    console.info(req.params.id);
+    console.info('request user for login with id: ' + req.params.id);
     User.findById(req.params.id, function (err, result) {
         if (err) {
-            res.status(500).type('text').send("DB error: " + err);
+            res.status(500).send("DB error: " + err);
         } else {
             if (result) {
                 var currentUser = {
                     user_id: result._id,
-                    name: result.name,
                     user_type: result.user_type,
-                    pass: result.pass,
                     phone_number: result.phone_number
                 };
                 console.log('In get User by Id: ' + currentUser);
@@ -76,7 +70,7 @@ module.exports.getUserById = function (req, res) {
             }
             else {
                 console.log('No user found: ' + result);
-                res.status(204).type('application/json').send();
+                res.status(200).type('application/json').send({});
             }
         }
     });

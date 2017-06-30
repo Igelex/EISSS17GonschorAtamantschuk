@@ -46,7 +46,7 @@ module.exports.getEntries = function (req, res) {
                     res.status(200).type('application/json').send(result);
                 }
                 else {
-                    res.status(204).type('application/json').send({msg: 'No Entries found', res: false});
+                    res.status(200).type('application/json').send([]);
                 }
             }
         })

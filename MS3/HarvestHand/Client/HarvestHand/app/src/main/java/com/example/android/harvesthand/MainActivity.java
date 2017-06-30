@@ -15,11 +15,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,6 +39,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.R.id.empty;
 import static com.example.android.harvesthand.Contracts.*;
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_ENTRIES;
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private View dialogView;
     private TextToSpeech speaker;
     private Contracts contracts;
+    private RelativeLayout emptyView;
 
 
     @Override
@@ -119,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return;
             }
+
+            emptyView = (RelativeLayout) findViewById(R.id.empty_state_container);
+            entryList.setEmptyView(emptyView);
 
             /**
             * Bilde Uri für Entries - Request
@@ -200,6 +208,8 @@ public class MainActivity extends AppCompatActivity {
                     entryList.setAdapter(adapter);
                     defineOnItemClickListener();
                 } else {
+                    Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.fadein);
+                    emptyView.startAnimation(animation);
                     contracts.showSnackbar(container, getString(R.string.msg_no_data), true, false);
                 }
             }
@@ -254,24 +264,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reqeustUserId(String URL) {
-        Log.i("URL: ", URL);
-
+        Log.i("URL request user: ", URL);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         progressBar.setVisibility(View.INVISIBLE);
+                        if (response == null || response.length() == 0){
+                            startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+                            Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
                         try {
                             Log.i("CHecke USER:", response.getString("user_id"));
                             userId = response.getString("user_id");
-                            if (!userId.equals(sPrefUser.getString(USER_SP_ID, null))) {
+                            if (userId == null || !userId.equals(sPrefUser.getString(USER_SP_ID, null))) {
                                 startActivity(new Intent(MainActivity.this, SignUpActivity.class));
                                 Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
                                         Toast.LENGTH_SHORT).show();
                                 finish();
                                 return;
-                            } else {
-                                contracts.showSnackbar(container, getString(R.string.welcome_to_harvesthand), false, true);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

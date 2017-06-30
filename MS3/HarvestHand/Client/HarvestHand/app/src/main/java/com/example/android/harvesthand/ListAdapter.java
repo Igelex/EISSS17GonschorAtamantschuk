@@ -156,12 +156,15 @@ public class ListAdapter extends ArrayAdapter<Entry> {
 
     private void setCropBackgroundImg(int cropID) {
         switch (cropID) {
-            case 0:
+            case 1:
                 cropImg.setImageResource(R.drawable.crop_0_caffe_img);
                 break;
 
-            case 1:
-                cropImg.setImageResource(R.drawable.crop_1_tomato_img);
+            case 2:
+                cropImg.setImageResource(R.drawable.crop_1_cacao_img);
+                break;
+            case 3:
+                cropImg.setImageResource(R.drawable.crop_2_banane_img);
                 break;
             /*...*/
         }
@@ -170,7 +173,6 @@ public class ListAdapter extends ArrayAdapter<Entry> {
     private void onEditMenuClick(String entryId) {
         Intent intent = new Intent(getContext(), AddNewEntry.class);
         intent.putExtra("method", Request.Method.PUT);
-        Log.e("ENTRYID!!!!", entryId);
         intent.putExtra("entry_id", entryId);
         getContext().startActivity(intent);
     }

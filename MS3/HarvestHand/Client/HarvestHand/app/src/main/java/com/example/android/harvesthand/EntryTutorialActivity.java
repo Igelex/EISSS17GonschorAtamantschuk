@@ -156,11 +156,11 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         airTepmDeviation = airTempObject.getInt("deviation");
                         airTempNorm = airTempObject.getString("norm");
 
-                        JSONObject airMoistureObject = response.getJSONObject("air_moisture");
-                        airMoistureCurrentValue = airMoistureObject.getInt("currentValue");
-                        airMoistureStatus = airMoistureObject.getInt("status");
-                        airMoistureDeviation = airMoistureObject.getInt("deviation");
-                        airMoistureNorm = airMoistureObject.getString("norm");
+                        JSONObject airHumidityObject = response.getJSONObject("air_humidity");
+                        airMoistureCurrentValue = airHumidityObject.getInt("currentValue");
+                        airMoistureStatus = airHumidityObject.getInt("status");
+                        airMoistureDeviation = airHumidityObject.getInt("deviation");
+                        airMoistureNorm = airHumidityObject.getString("norm");
 
                         JSONObject soilMoistureObject = response.getJSONObject("soil_moisture");
                         soilMoistureCurrentValue = soilMoistureObject.getInt("currentValue");
@@ -238,11 +238,11 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
     private void setSoilBackgroundImg(int soilId) {
         switch (soilId) {
-            case 0:
+            case 1:
                 soilImg.setImageResource(R.drawable.soil_0_sand_img);
                 break;
 
-            case 1:
+            case 2:
                 soilImg.setImageResource(R.drawable.soil_1_clay_img);
                 break;
             /*...*/
@@ -251,12 +251,15 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
     private void setCropBackgroundImg(int cropID) {
         switch (cropID) {
-            case 0:
+            case 1:
                 cropImg.setImageResource(R.drawable.crop_0_caffe_img);
                 break;
 
-            case 1:
-                cropImg.setImageResource(R.drawable.crop_1_tomato_img);
+            case 2:
+                cropImg.setImageResource(R.drawable.crop_1_cacao_img);
+                break;
+            case 3:
+                cropImg.setImageResource(R.drawable.crop_2_banane_img);
                 break;
             /*...*/
         }

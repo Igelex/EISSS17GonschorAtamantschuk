@@ -7,17 +7,6 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.harvesthand.MainActivity">
 
-
-    <ProgressBar
-        android:id="@+id/progressBar_main"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        android:visibility="invisible" />
-
-
     <ListView
         android:id="@+id/entry_list"
         android:layout_width="match_parent"
@@ -37,6 +26,43 @@
         app:fabSize="normal"
         app:srcCompat="@drawable/ic_add_white_24dp" />
 
+    <RelativeLayout
+        android:id="@+id/empty_state_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorMainBackgroud" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/empty_state_img"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/msg_no_data"
+            android:textColor="#717171"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/empty_state_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/list_empty_state" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar_main"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:visibility="invisible" />
 </RelativeLayout>
 

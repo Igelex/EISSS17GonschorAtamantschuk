@@ -45,16 +45,15 @@ public class Contracts {
     * Arten der Pflanzen nach ID intialisiert
     * */
     public static int DEFAULT_SELECTION = 0;
-    public static int NOT_SELECTED = -1;
-    public static int CROP_ID_CAFFE = 0;
-    public static int CROP_ID_TOMATO = 1;
-    public static int CROP_ID_RICE = 2;/*...*/
+    public static int CROP_ID_CAFFE = 1;
+    public static int CROP_ID_CACAO = 2;
+    public static int CROP_ID_BANANA = 3;/*...*/
 
     /*
     * Bodenarten nach ID intialisiert
     * */
-    public static int SOIL_ID_SAND = 0;
-    public static int SOIL_ID_CLAY= 1;/*...*/
+    public static int SOIL_ID_SAND = 1;
+    public static int SOIL_ID_CLAY= 2;/*...*/
 
     /*
     * Id der Eigenschaft für Tutorial
