@@ -75,6 +75,7 @@ public class AddNewEntry extends AppCompatActivity {
     private Spinner cropSpinner, soilSpinner;
     private Boolean change = false;
     private TextToSpeech speaker;
+    double lat, lon;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -174,6 +175,8 @@ public class AddNewEntry extends AppCompatActivity {
                     stopRequestLocation();
                     return;
                 }
+                lat = location.getLatitude();
+                lon = location.getLongitude();
                 findGeocoder(location.getLatitude(), location.getLongitude());
                 stopRequestLocation();
             }
@@ -391,7 +394,7 @@ public class AddNewEntry extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
             contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
-        } catch (IllegalArgumentException e) {
+        } catch (IndexOutOfBoundsException e) {
             e.printStackTrace();
             contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
         }
@@ -637,7 +640,7 @@ public class AddNewEntry extends AppCompatActivity {
                     //Hänge parameter an die URL an
                     Uri baseUri = Uri.parse(BASE_URL + URL_BASE_WEATHER);
                     Uri.Builder uriBuilder = baseUri.buildUpon();
-                    uriBuilder.appendQueryParameter("coutryISOCOde", countryISOCode);
+                    uriBuilder.appendQueryParameter("countryISOCode", countryISOCode);
                     uriBuilder.appendQueryParameter("city", city);
                     //Request wird in der externen Klasse
                     request.requestData(AddNewEntry.this, Request.Method.GET, pb, container,

@@ -48,11 +48,11 @@ module.exports.getPrecipitationForWeek = function (countryISOCode, city) {
  * @param res
  */
 module.exports.getAirTemp = function (req, res) {
-    console.log("AIR temp params: " + req.params);
-    console.log("AIR temp query params: " + req.query.params);
+    console.log("AIR temp ISO: " + req.query.countryISOCode);
     console.log("AIR temp query: " + req.query.city);
+    var city = req.query.city.replace(/ /g, "_");
     var url = 'http://api.wunderground.com/api/' + key + '/conditions/q/' + req.query.countryISOCode
-        + '/' + req.query.city + '.json';
+        + '/' + city + '.json';
     console.log('Air temp URL : ' + url);
     request(url, function (err, response, body) {
         console.log('Air temp status : ' + response.status);
