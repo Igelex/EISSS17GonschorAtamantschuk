@@ -161,6 +161,9 @@
     <string name="msg_add_location">Please add location!</string>
     <string name="msg_entry_deleted">Entry deleted</string>
     <string name="msg_entry_not_found">Entry not found</string>
+    <string name="msg_data_saved">Data saved</string>
+    <string name="msg_no_changes">No changes</string>
+    <string name="msg_collaborator_added">Collaborator added</string>
 
 
 </resources>

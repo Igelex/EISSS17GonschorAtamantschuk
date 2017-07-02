@@ -147,7 +147,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
             public void onClick(DialogInterface dialog, int id) {
                 final SendRequest request = new SendRequest();
                 request.requestData(getContext(), Request.Method.DELETE, null, conainer, BASE_URL + URL_BASE_ENTRIES + currentId,
-                        new AddNewEntry.ServerCallback() {
+                        null, new AddNewEntry.ServerCallback() {
                             @Override
                             public void onSuccess(JSONObject result) {
                                 try {

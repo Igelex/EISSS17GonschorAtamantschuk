@@ -78,18 +78,42 @@ module.exports.getUserById = function (req, res) {
 
 //Daten aktualisieren
 module.exports.updateUser = function (req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
-        console.info(result);
-        if (err) {
-            res.status(500).type('text').send("DB error: " + err);
-        } else {
-            if (result) {
-                res.status(200).type('application/json').send({msg: 'User with id: ' + result._id + ' successfully updated', res: true});
-            } else {
-                res.status(204).type('application/json').send({msg: 'User with id: ' + req.params.id + ' not found', res: false});
-            }
-        }
+    console.log('in update User: ' + req.body.phone_number);
 
+    User.findOne({phone_number: req.body.phone_number}, function (err, result) {
+        if (err) {
+            res.status(500).type('application/json').send({msg: 'DB Error'});
+            console.error(err);
+            return;
+        }
+        if (result) {
+            //Es existiert bereits ein user mit der angegeben Email existiert
+            console.log('User already exists');
+            res.status(409).type('application/json').send({msg: 'User already exists', res: false});
+
+        } else {
+            User.findByIdAndUpdate(req.params.id, {phone_number: req.body.phone_number}, function (err, result) {
+                console.info(result);
+                if (err) {
+                    res.status(500).type('text').send("DB error: " + err);
+                } else {
+                    if (result) {
+                        console.log('in update User, result: ' + result);
+                        res.status(200).type('application/json').send({
+                            msg: 'User with id: ' + result._id + ' successful updated',
+                            res: true
+                        });
+                    } else {
+                        res.status(200).type('application/json').send({
+                            msg: 'User with id: ' + req.params.id + ' not found',
+                            res: false
+                        });
+                    }
+                }
+
+            });
+
+        }
     });
 };
 
@@ -99,29 +123,32 @@ module.exports.deleteUser = function (req, res) {
         if (err) {
             res.status(500).type('text').write("DB error: " + err);
         } else {
-            if (result != null) {
-                res.status(200).type('application/json').send({msg: 'User with id: ' + result._id + ' successfully deleted', res: true});
+            if (result) {
+                res.status(200).type('application/json').send({
+                    msg: 'User with id: ' + result._id + ' successful deleted',
+                    res: true
+                });
             } else {
-                res.status(204).type('text').send({msg: 'User with id: ' + req.params.id + ' not found', res: false});
+                res.status(200).type('text').send({msg: 'User with id: ' + req.params.id + ' not found', res: false});
             }
         }
     });
 };
 
-module.exports.getUsers = function (req, res){
+module.exports.getUsers = function (req, res) {
     User.findOne({'phone_number': req.query.phone_number},
-        {'_id' : true},function (err, result) {
-        if (err){
-            res.status(500).send("DB error: " + err);
-        }else {
-            if (result){
-                console.log('Get Collab: ' + result);
-                res.status(200).send(result);
-            }else {
-                console.log('No Collab: ' + result);
-                res.status(204).send();
+        {'_id': true}, function (err, result) {
+            if (err) {
+                res.status(500).send("DB error: " + err);
+            } else {
+                if (result) {
+                    console.log('Get Collab: ' + result);
+                    res.status(200).send({collab_id: result._id, res: true});
+                } else {
+                    console.log('No Collab: ' + result);
+                    res.status(200).type('text').send({msg: 'User with number: ' + req.params.id + ' not found', res: false});
+                }
             }
-        }
 
-    })
+        })
 };

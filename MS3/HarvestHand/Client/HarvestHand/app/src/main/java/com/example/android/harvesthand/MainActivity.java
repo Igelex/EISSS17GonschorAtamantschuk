@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import static com.example.android.harvesthand.Contracts.*;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
@@ -50,10 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private ListView entryList;
     private ListAdapter adapter;
     private SharedPreferences sPrefUser, sPrefIp;
-    private String userId;
     private View dialogView;
     private Contracts contracts;
     private RelativeLayout emptyView;
+    private TextToSpeech speaker;
 
 
     @Override
@@ -66,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            contracts = new Contracts(null);
+            InitTTS tts = new InitTTS(this);
+            speaker = tts.initTTS();
+            contracts = new Contracts(speaker);
 
             container = findViewById(R.id.entries_relativelayout);
 
@@ -78,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             sPrefIp = getSharedPreferences(IP_ADDRESS_SHARED_PREFS, Context.MODE_PRIVATE);
             /*Check, ob ip bereits vorhanden*/
             if (!(sPrefIp.getString(IP_SP_IP, null) == null)) {
-                /*Wenn IP bereits in SharedPreferences, gespeichert, füg die in URL ein, ansonsten
+                /*Wenn IP bereits in SharedPreferences gespeichert, füge die in URL ein, ansonsten
                 dialogfenster anzeigen*/
                 URL_IP = sPrefIp.getString(IP_SP_IP, null);
                 BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
@@ -92,13 +95,18 @@ public class MainActivity extends AppCompatActivity {
             sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             if (sPrefUser != null) {
                 if (sPrefUser.getString(USER_SP_ID, null) != null) {
+                    USER_ID = sPrefUser.getString(USER_SP_ID, null);
+                    USER_NUMBER = sPrefUser.getString(USER_SP_NUMBER, null);
+                    //Flas user_id vorhanden, prüfe, ob der user in DB exestiert
                     reqeustUserId(BASE_URL + URL_BASE_USERS + sPrefUser.getString(USER_SP_ID, null));
                 } else {
+                    //Falls nicht --> Login
                     startActivity(new Intent(this, SignUpActivity.class));
                     Toast.makeText(this, getString(R.string.msg_please_login), Toast.LENGTH_SHORT).show();
                     finish();
                     return;
                 }
+                //Fals user_type = Alphabet, PlusButton anzeigen
                 if (sPrefUser.getInt(USER_SP_TYPE, -1) == 0) {
                     FloatingActionButton fb = (FloatingActionButton) findViewById(R.id.fb_add_new_entry);
                     fb.setVisibility(View.VISIBLE);
@@ -109,29 +117,16 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
-
             } else {
+                //User_id nicht SharedPreferences --> Login
                 startActivity(new Intent(this, SignUpActivity.class));
                 Toast.makeText(this, getString(R.string.msg_please_login), Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
-
+            //Emptystate, Falls keine Entries gefunden
             emptyView = (RelativeLayout) findViewById(R.id.empty_state_container);
             entryList.setEmptyView(emptyView);
-
-            /**
-            * Bilde Uri für Entries - Request
-            */
-            Uri baseUri = Uri.parse(CURRENT_ENTRIES_URL);
-            Uri.Builder uriBuilder = baseUri.buildUpon();
-            uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, sPrefUser.getString(USER_SP_ID, null));
-            uriBuilder.appendQueryParameter(URL_PARAMS_PHONE_NUMBER, sPrefUser.getString(USER_SP_NUMBER, null));
-            CURRENT_ENTRIES_URL = uriBuilder.toString();
-            Log.i("URI: ", CURRENT_ENTRIES_URL);
-            //Helper methode
-            sendRequest(CURRENT_ENTRIES_URL);
-
         } else {
             Toast.makeText(this, getString(R.string.msg_no_internet_connection), Toast.LENGTH_LONG).show();
         }
@@ -155,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 if (adapter != null) {
                     adapter.clear();
                 }
-                sendRequest(CURRENT_ENTRIES_URL);
+                requestEntries(CURRENT_ENTRIES_URL);
                 break;
             case R.id.action_person:
                 startActivity(new Intent(this, UserProfile.class));
@@ -167,8 +162,64 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    public void reqeustUserId(String URL) {
+        Log.i("URL request user: ", URL);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        if (response == null || response.length() == 0) {
+                            startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+                            Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
+                                    Toast.LENGTH_SHORT).show();
+                            finish();
+                            return;
+                        }
+                        try {
+                            Log.i("Checke USER:", response.getString("user_id"));
+                            USER_ID = response.getString("user_id");
+                            if (USER_ID == null || !USER_ID.equals(sPrefUser.getString(USER_SP_ID, null))) {
+                                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
+                                Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
+                                        Toast.LENGTH_SHORT).show();
+                                finish();
+                                return;
+                            } else {
+                                requestEntries(buildUri());
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        if (error.networkResponse != null) {
+                            switch (error.networkResponse.statusCode) {
+                                case 500:
+                                    contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
+                                    error.printStackTrace();
+                                    break;
+                                case 404:
+                                    contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
+                                    error.printStackTrace();
+                                    break;
+                            }
+                        } else {
+                            contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
+                            error.printStackTrace();
+                        }
+                    }
+                });
+        Volley.newRequestQueue(this).add(request);
+    }
+
     //Request all Entries for user
-    public void sendRequest(String url) {
+    public void requestEntries(String url) {
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
@@ -255,60 +306,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void reqeustUserId(String URL) {
-        Log.i("URL request user: ", URL);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        if (response == null || response.length() == 0){
-                            startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-                            Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
-                                    Toast.LENGTH_SHORT).show();
-                            finish();
-                            return;
-                        }
-                        try {
-                            Log.i("CHecke USER:", response.getString("user_id"));
-                            userId = response.getString("user_id");
-                            if (userId == null || !userId.equals(sPrefUser.getString(USER_SP_ID, null))) {
-                                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-                                Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
-                                        Toast.LENGTH_SHORT).show();
-                                finish();
-                                return;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.INVISIBLE);
-                        if (error.networkResponse != null) {
-                            switch (error.networkResponse.statusCode) {
-                                case 500:
-                                    contracts.showSnackbar(container, getString(R.string.msg_internal_error), true, false);
-                                    error.printStackTrace();
-                                    break;
-                                case 404:
-                                    contracts.showSnackbar(container, getString(R.string.msg_404_error), true, false);
-                                    error.printStackTrace();
-                                    break;
-                            }
-                        } else {
-                            contracts.showSnackbar(container, getString(R.string.connection_err), true, false);
-                            error.printStackTrace();
-                        }
-                    }
-                });
-        Volley.newRequestQueue(this).add(request);
-    }
-
     private void showIPdialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
         dialogView = getLayoutInflater().inflate(R.layout.ipaddress_custom_dialog, null);
@@ -362,6 +359,28 @@ public class MainActivity extends AppCompatActivity {
         editor.putString(IP_SP_IP, ip);
         editor.apply();
         Log.i("Save IP Address: ", ip);
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (speaker != null) {
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onDestroy();
+    }
+
+    /**
+     * Bilde Uri für Entries - Request
+     */
+    private String buildUri() {
+        Uri baseUri = Uri.parse(CURRENT_ENTRIES_URL);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+        uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, USER_ID);
+        uriBuilder.appendQueryParameter(URL_PARAMS_COLLAB_ID, USER_ID);
+        CURRENT_ENTRIES_URL = uriBuilder.toString();
+        Log.i("URI: ", CURRENT_ENTRIES_URL);
+        return CURRENT_ENTRIES_URL;
     }
 }
 

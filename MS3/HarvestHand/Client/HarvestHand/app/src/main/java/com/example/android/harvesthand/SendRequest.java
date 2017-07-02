@@ -30,12 +30,12 @@ public class SendRequest {
      * @param callback - um die Daten an UI zu übergeben
      */
     protected void requestData(final Context context, int method, final ProgressBar progressBar, final View container,
-                               String url,
+                               String url, JSONObject jsonObject,
                                final AddNewEntry.ServerCallback callback) {
         final Contracts contracts = new Contracts(null);
         Log.i("URL in CHECK: ", url);
 
-        JsonObjectRequest request = new JsonObjectRequest(method, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(method, url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -54,6 +54,9 @@ public class SendRequest {
                                     break;
                                 case 404:
                                     contracts.showSnackbar(container, context.getString(R.string.msg_404_error), true, false);
+                                    break;
+                                case 409:
+                                    contracts.showSnackbar(container, context.getString(R.string.msg_number_exist), true, false);
                                     break;
                             }
                         } else {

@@ -25,9 +25,9 @@ module.exports.addEntry = function (req, res) {
 //Alle Entries anzeigen eisen Users anzeigen
 module.exports.getEntries = function (req, res) {
     console.log("Get Entries owner_id: " + req.query.owner_id);
-    console.log("Get Entries number: " + req.query.phone_number);
+    console.log("Get Entries collab_id: " + req.query.collab_id);
     Entry.find({
-            $or: [{owner_id: req.query.owner_id}, {collaborators: req.query.phone_number}]
+            $or: [{owner_id: req.query.owner_id}, {collaborators_id: req.query.collab_id}]
         },
         {
             "entry_name": true,

@@ -37,6 +37,8 @@ import java.util.Map;
 
 import static com.example.android.harvesthand.Contracts.BASE_URL;
 import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNUP;
+import static com.example.android.harvesthand.Contracts.USER_ID;
+import static com.example.android.harvesthand.Contracts.USER_NUMBER;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
 import static com.example.android.harvesthand.Contracts.USER_SP_ID;
 import static com.example.android.harvesthand.Contracts.USER_SP_NUMBER;
@@ -197,8 +199,10 @@ public class SignUpFragment extends Fragment {
         SharedPreferences sPref = getActivity().getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
         editor.putString(USER_SP_ID, id);
+        USER_ID = id;
         editor.putInt(USER_SP_TYPE, type);
         editor.putString(USER_SP_NUMBER, number);
+        USER_NUMBER = number;
         editor.apply();
         Log.i("Save User_id: ", id);
         Log.i("Save User_type: ", String.valueOf(type));

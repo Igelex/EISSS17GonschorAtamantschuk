@@ -4,12 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,15 +20,29 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.example.android.harvesthand.SignUp.SignUpActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static android.R.attr.type;
 import static com.example.android.harvesthand.Contracts.*;
 
 public class UserProfile extends AppCompatActivity {
     private Animation animation;
     private Boolean change = false;
+    private SendRequest request;
+    private ProgressBar pb;
+    private ConstraintLayout container;
+    private SharedPreferences sPrefUser;
+    private TextView number;
+    private EditText inputNumber;
+    private Contracts contracts;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -41,14 +57,34 @@ public class UserProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
 
+        contracts = new Contracts(null);
+
+        request = new SendRequest();
+
+        pb = (ProgressBar) findViewById(R.id.profile_pb);
+        pb.setVisibility(View.VISIBLE);
+
+        sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
+
+        container= (ConstraintLayout) findViewById(R.id.profile_container);
+
         animation = AnimationUtils.loadAnimation(this, R.anim.fadein);
 
-        final TextView email = (TextView) findViewById(R.id.profile_email);
-        final TextView number = (TextView) findViewById(R.id.profile_number);
+        number = (TextView) findViewById(R.id.profile_number);
+
+        requestUserData();
 
         final Button saveButton = (Button) findViewById(R.id.profile_save_button);
-        saveButton.setEnabled(false);
-        saveButton.setAlpha(.5f);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(inputIsValid()) {
+                    updateUserData();
+                }
+            }
+        });
+
         final Button logoutButton = (Button) findViewById(R.id.profile_logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,23 +94,31 @@ public class UserProfile extends AppCompatActivity {
                     sPref.edit().remove(USER_SP_ID).apply();
                     startActivity(new Intent(UserProfile.this, SignUpActivity.class));
                 }
+            }
+        });
+
+        final ImageButton editNumber = (ImageButton) findViewById(R.id.profile_edit_number_button);
+        final ImageButton closeNumber = (ImageButton) findViewById(R.id.profile_close_number_button);
+
+        inputNumber = (EditText) findViewById(R.id.profile_input_number);
+        inputNumber.setOnTouchListener(mTouchListener);
+
+        editNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickHide(editNumber, closeNumber, number, null, inputNumber, null);
 
             }
         });
 
-        final ImageButton editEmail = (ImageButton) findViewById(R.id.profile_edit_email_button);
-        final ImageButton editNumber = (ImageButton) findViewById(R.id.profile_edit_number_button);
-        final ImageButton closeEmail = (ImageButton) findViewById(R.id.profile_close_email_button);
-        final ImageButton closeNumber = (ImageButton) findViewById(R.id.profile_close_number_button);
+        closeNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickHide(closeNumber, editNumber, null, number, null, inputNumber);
+            }
+        });
 
-        final EditText inputEmail = (EditText) findViewById(R.id.profile_input_email);
-        inputEmail.setText(email.getText());
-        inputEmail.setOnTouchListener(mTouchListener);
-        final EditText inputNumber = (EditText) findViewById(R.id.profile_input_number);
-        inputNumber.setText(number.getText());
-        inputNumber.setOnTouchListener(mTouchListener);
-
-        inputEmail.addTextChangedListener(new TextWatcher() {
+        inputNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -91,42 +135,13 @@ public class UserProfile extends AppCompatActivity {
 
             }
         });
-
-        editEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickHide(editEmail, closeEmail, email, null, inputEmail, null);
-
-            }
-        });
-
-        closeEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickHide(closeEmail, editEmail, null, email, null, inputEmail);
-            }
-        });
-
-        editNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickHide(editNumber, closeNumber, number, null, inputNumber, null);
-
-            }
-        });
-
-        closeNumber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickHide(closeNumber, editNumber, null, number, null, inputNumber);
-            }
-        });
     }
 
-    private void onClickHide(ImageButton buttonToHide, ImageButton buttonToShow, TextView textToHide, TextView textToShow, EditText inputToShow, EditText inputToHide) {
-        buttonToHide.setVisibility(View.GONE);
+    private void onClickHide(ImageButton buttonToHide, ImageButton buttonToShow, TextView textToHide,
+                             TextView textToShow, EditText inputToShow, EditText inputToHide) {
+        buttonToHide.setVisibility(View.INVISIBLE);
         if (textToHide != null) {
-            textToHide.setVisibility(View.GONE);
+            textToHide.setVisibility(View.INVISIBLE);
         }
         if (textToShow != null) {
             textToShow.setVisibility(View.VISIBLE);
@@ -139,7 +154,7 @@ public class UserProfile extends AppCompatActivity {
         }
 
         if (inputToHide != null) {
-            inputToHide.setVisibility(View.GONE);
+            inputToHide.setVisibility(View.INVISIBLE);
         }
         buttonToShow.setVisibility(View.VISIBLE);
         buttonToShow.startAnimation(animation);
@@ -181,5 +196,73 @@ public class UserProfile extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void requestUserData(){
+        request.requestData(this, Request.Method.GET, pb, container, BASE_URL + URL_BASE_USERS
+                + USER_ID, null, new AddNewEntry.ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    number.setText(result.getString("phone_number"));
+                    inputNumber.setText(number.getText());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                }
+            }
+        });
+    }
+
+    private void updateUserData(){
+        pb.setVisibility(View.VISIBLE);
+        JSONObject newUserNumber = new JSONObject();
+        try {
+            newUserNumber.put("phone_number", inputNumber.getText());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+        }
+        request.requestData(this, Request.Method.PUT, pb, container, BASE_URL + URL_BASE_USERS
+                + sPrefUser.getString(USER_SP_ID, null), newUserNumber, new AddNewEntry.ServerCallback() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                try {
+                    if (result.length() > 0 && result.getBoolean("res")){
+                        savePreferences(inputNumber.getText().toString().trim());
+                        Toast.makeText(UserProfile.this, R.string.msg_data_saved, Toast.LENGTH_LONG).show();
+                        finish();
+                    }else {
+                        contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
+                }
+            }
+        });
+    }
+
+    private boolean inputIsValid(){
+        if (!change){
+            contracts.showSnackbar(container, getString(R.string.msg_no_changes), true, false);
+            number.setError(getString(R.string.msg_no_changes));
+            return false;
+        }
+        if (inputNumber.getText().toString().trim().isEmpty()){
+            inputNumber.setError(getString(R.string.errmsg_valid_input_required));
+            inputNumber.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    private void savePreferences(String number) {
+        SharedPreferences sPref = this.getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sPref.edit();
+        editor.putString(USER_SP_NUMBER, number);
+        USER_NUMBER = number;
+        editor.apply();
+        Log.i("Save User_number: ", String.valueOf(number));
     }
 }

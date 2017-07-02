@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.TextInputLayout;
@@ -69,12 +68,11 @@ public class AddNewEntry extends AppCompatActivity {
     private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, entryId, ownerId = null, tutorialId = null;
     private SharedPreferences sPrefUser;
-    private ArrayList collabsArray;
+    private ArrayList listCollabsNumbersArray, entryCollabsIdsArray;
     private int cropId, soilId;
     private int requestMethod = Request.Method.POST;
     private Spinner cropSpinner, soilSpinner;
     private Boolean change = false;
-    private TextToSpeech speaker;
     double lat, lon;
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -90,14 +88,12 @@ public class AddNewEntry extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_entry);
 
-        final CheckCollaborator checkCollaborator = new CheckCollaborator();
+        final SendRequest request = new SendRequest();
 
-        collabsArray = new ArrayList<>();
+        listCollabsNumbersArray = new ArrayList();
+        entryCollabsIdsArray = new ArrayList();
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
-
-        /*InitTTS tts = new InitTTS(this);
-        speaker = tts.initTTS();*/
         contracts = new Contracts(null);
 
         geocoder = new Geocoder(this, Locale.getDefault());
@@ -140,7 +136,7 @@ public class AddNewEntry extends AppCompatActivity {
         addCollab = (EditText) findViewById(R.id.add_entry_collab);
         //Liste mit als Collaborator eingefügten Usern
         ListView collabList = (ListView) findViewById(R.id.add_entry_collab_list);
-        final CollabListAdapter adapter = new CollabListAdapter(this, collabsArray);
+        final CollabListAdapter adapter = new CollabListAdapter(this, listCollabsNumbersArray);
         collabList.setAdapter(adapter);
         //User wird nach der Telefnonummer in der Datenbank gesucht, und falls gefunden der Liste
         //hinzugefügt
@@ -149,13 +145,27 @@ public class AddNewEntry extends AppCompatActivity {
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
-                        //Request in der CheckCollaborator Klasse wird gesendet
-                        if (checkCollaborator.getUser(AddNewEntry.this, collabPb, container, buildURL())) {
-                            collabsArray.add(0, addCollab.getText().toString().trim());
-                            adapter.notifyDataSetChanged();
-                            addCollab.setText(null);
-                            return true;
-                        }
+                        request.requestData(AddNewEntry.this, Request.Method.GET, progBar, container, buildURL(),
+                                null, new ServerCallback() {
+                                    @Override
+                                    public void onSuccess(JSONObject result) {
+                                        if (result != null && result.length() > 0) {
+                                            try {
+                                                if (result.getBoolean("res")) {
+                                                    listCollabsNumbersArray.add(0, addCollab.getText().toString().trim());
+                                                    entryCollabsIdsArray.add(0, result.getString("collab_id"));
+                                                    adapter.notifyDataSetChanged();
+                                                    addCollab.setText(null);
+                                                    Toast.makeText(AddNewEntry.this,
+                                                            getString(R.string.msg_collaborator_added),
+                                                            Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
                     }
                 return false;
             }
@@ -423,7 +433,8 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("soil_temp", Integer.valueOf(soiltempEdit.getText().toString().trim()));
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
-            entryObject.put("collaborators", new JSONArray(collabsArray));
+            entryObject.put("collaborators_id", new JSONArray(entryCollabsIdsArray));
+            entryObject.put("collaborators_number", new JSONArray(listCollabsNumbersArray));
 
             if (ownerId != null) {
                 //wenn Update modus
@@ -644,7 +655,7 @@ public class AddNewEntry extends AppCompatActivity {
                     uriBuilder.appendQueryParameter("city", city);
                     //Request wird in der externen Klasse
                     request.requestData(AddNewEntry.this, Request.Method.GET, pb, container,
-                            uriBuilder.toString(),
+                            uriBuilder.toString(), null,
                             new ServerCallback() {
                                 @Override
                                 public void onSuccess(JSONObject response) {
@@ -678,7 +689,7 @@ public class AddNewEntry extends AppCompatActivity {
     private void requestEntryToUpdate() {
         progBar.setVisibility(View.VISIBLE);
         request.requestData(this, Request.Method.GET, progBar, container, BASE_URL + URL_BASE_ENTRIES + entryId,
-                new ServerCallback() {
+                null, new ServerCallback() {
                     @Override
                     public void onSuccess(JSONObject response) {
                         if (response != null) {
@@ -695,11 +706,15 @@ public class AddNewEntry extends AppCompatActivity {
                                 int ph = response.getInt("ph_value");
                                 int height = response.getInt("height_meter");
                                 int area = response.getInt("area");
-                                JSONArray array = response.getJSONArray("collaborators");
-                                for (int i = 0; i < array.length(); i++) {
-                                    collabsArray.add(array.getString(i));
+                                JSONArray numbersArray = response.getJSONArray("collaborators_number");
+                                for (int i = 0; i < numbersArray.length(); i++) {
+                                    listCollabsNumbersArray.add(numbersArray.getString(i));
                                 }
 
+                                JSONArray idsArray = response.getJSONArray("collaborators_id");
+                                for (int i = 0; i < idsArray.length(); i++) {
+                                    entryCollabsIdsArray.add(idsArray.getString(i));
+                                }
 
                                 JSONObject locationObject = response.getJSONObject("location");
                                 String locName = locationObject.getString("name");
@@ -750,15 +765,5 @@ public class AddNewEntry extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         stopRequestLocation();
-    }
-
-    @Override
-    protected void onDestroy() {
-        //TextToSpeech wird angehalten
-        if (speaker != null) {
-            speaker.stop();
-            speaker.shutdown();
-        }
-        super.onDestroy();
     }
 }

@@ -38,6 +38,10 @@ public class Contracts {
     public static String USER_SP_TYPE = "user_type";
     public static String USER_SP_NUMBER = "phone_number";
 
+    public static String USER_ID = "";
+    public static String USER_NUMBER = "";
+
+
     public static String IP_ADDRESS_SHARED_PREFS = "ipaddress";
     public static String IP_SP_IP = "ip";
 
