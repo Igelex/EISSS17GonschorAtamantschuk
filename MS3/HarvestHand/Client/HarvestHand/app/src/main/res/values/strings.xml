@@ -164,6 +164,7 @@
     <string name="msg_data_saved">Data saved</string>
     <string name="msg_no_changes">No changes</string>
     <string name="msg_collaborator_added">Collaborator added</string>
+    <string name="msg_collaborator_removed">Collaborator removed</string>
 
 
 </resources>

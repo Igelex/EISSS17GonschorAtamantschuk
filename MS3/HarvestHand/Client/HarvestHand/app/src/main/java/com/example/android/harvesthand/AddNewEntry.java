@@ -68,7 +68,7 @@ public class AddNewEntry extends AppCompatActivity {
     private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, entryId, ownerId = null, tutorialId = null;
     private SharedPreferences sPrefUser;
-    private ArrayList listCollabsNumbersArray, entryCollabsIdsArray;
+    private ArrayList <String> listCollabsNumbersArray, entryCollabsIdsArray;
     private int cropId, soilId;
     private int requestMethod = Request.Method.POST;
     private Spinner cropSpinner, soilSpinner;
@@ -135,9 +135,21 @@ public class AddNewEntry extends AppCompatActivity {
 
         addCollab = (EditText) findViewById(R.id.add_entry_collab);
         //Liste mit als Collaborator eingefügten Usern
-        ListView collabList = (ListView) findViewById(R.id.add_entry_collab_list);
+        final ListView collabList = (ListView) findViewById(R.id.add_entry_collab_list);
         final CollabListAdapter adapter = new CollabListAdapter(this, listCollabsNumbersArray);
         collabList.setAdapter(adapter);
+        //OnItemClick wird der collaborator aus der Liste gelöscht
+        collabList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                listCollabsNumbersArray.remove(i);
+                entryCollabsIdsArray.remove(i);
+                Toast.makeText(AddNewEntry.this,
+                        getString(R.string.msg_collaborator_removed),
+                        Toast.LENGTH_SHORT).show();
+                adapter.notifyDataSetChanged();
+            }
+        });
         //User wird nach der Telefnonummer in der Datenbank gesucht, und falls gefunden der Liste
         //hinzugefügt
         addCollab.setOnKeyListener(new View.OnKeyListener() {

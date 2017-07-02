@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity {
             //Emptystate, Falls keine Entries gefunden
             emptyView = (RelativeLayout) findViewById(R.id.empty_state_container);
             entryList.setEmptyView(emptyView);
+            View footer = getLayoutInflater().inflate(R.layout.list_footer, null);
+            entryList.addFooterView(footer, null, false);
         } else {
             Toast.makeText(this, getString(R.string.msg_no_internet_connection), Toast.LENGTH_LONG).show();
         }

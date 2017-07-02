@@ -17,7 +17,6 @@ var entrySchema = mongoose.Schema({
     /*Colaborators, die den Zugriff auf den Eintrag haben*/
     collaborators_id:Array,
     collaborators_number:Array,
-
     /*
     * Properties
     */
