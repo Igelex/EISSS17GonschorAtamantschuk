@@ -38,10 +38,12 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof ItemViewHolder) {
             ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
+            //Image und jeweilige Description werden gesetzt
             itemViewHolder.img.setImageResource(arrayList.get(position).getmImageId());
             itemViewHolder.descriptionEarButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //Description zum Image wird Vorgelesen
                     speaker.speak(arrayList.get(position).getmDescription(), TextToSpeech.QUEUE_FLUSH, null);
                 }
             });
@@ -51,6 +53,7 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             try {
                 if (position == arrayList.size()) {
+                    // Norm-Value der Eigenschaft wird Vorgelesen
                     footerViewHolder.normText.setText(arrayList.get(0).getmNorm());
                     footerViewHolder.normEar.setOnClickListener(new View.OnClickListener() {
                         @Override

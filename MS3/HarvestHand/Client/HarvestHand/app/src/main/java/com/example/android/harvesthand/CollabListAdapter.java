@@ -13,19 +13,15 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Pastuh on 07.06.2017.
+ * ArrayAdapter für Liste der Collaborators, füllt einzelne Listeneinträge mit den Daten
  */
 
 public class CollabListAdapter extends ArrayAdapter <String> {
 
-    private Context mContext;
-
-    public CollabListAdapter(@NonNull Context context, @NonNull ArrayList collaborators) {
+    public CollabListAdapter(@NonNull Context context, @NonNull ArrayList <String> collaborators) {
         super(context, 0, collaborators);
-        this.mContext = context;
 
     }
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -40,15 +36,6 @@ public class CollabListAdapter extends ArrayAdapter <String> {
 
         TextView collaborator = listView.findViewById(R.id.list_item_collab);
         collaborator.setText(currentCollaborator);
-
-        ImageButton removeCollaborator = listView.findViewById(R.id.list_item_remove_collab);
-        removeCollaborator.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
 
         return listView;
     }

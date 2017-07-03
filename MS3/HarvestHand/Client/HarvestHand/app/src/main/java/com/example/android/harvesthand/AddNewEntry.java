@@ -19,7 +19,6 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,7 +67,7 @@ public class AddNewEntry extends AppCompatActivity {
     private TextInputLayout locationInputLayout;
     private String countryISOCode, city, locationName, entryId, ownerId = null, tutorialId = null;
     private SharedPreferences sPrefUser;
-    private ArrayList <String> listCollabsNumbersArray, entryCollabsIdsArray;
+    private ArrayList <String> listCollabsNumbersArray, listCollabsIdsArray;
     private int cropId, soilId;
     private int requestMethod = Request.Method.POST;
     private Spinner cropSpinner, soilSpinner;
@@ -91,7 +90,7 @@ public class AddNewEntry extends AppCompatActivity {
         final SendRequest request = new SendRequest();
 
         listCollabsNumbersArray = new ArrayList();
-        entryCollabsIdsArray = new ArrayList();
+        listCollabsIdsArray = new ArrayList();
 
         sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
         contracts = new Contracts(null);
@@ -143,7 +142,7 @@ public class AddNewEntry extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 listCollabsNumbersArray.remove(i);
-                entryCollabsIdsArray.remove(i);
+                listCollabsIdsArray.remove(i);
                 Toast.makeText(AddNewEntry.this,
                         getString(R.string.msg_collaborator_removed),
                         Toast.LENGTH_SHORT).show();
@@ -155,17 +154,21 @@ public class AddNewEntry extends AppCompatActivity {
         addCollab.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                //Enter wird angecklickt
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
+                        //Reauest, suche den User in DB
                         request.requestData(AddNewEntry.this, Request.Method.GET, progBar, container, buildURL(),
                                 null, new ServerCallback() {
                                     @Override
                                     public void onSuccess(JSONObject result) {
                                         if (result != null && result.length() > 0) {
                                             try {
+                                                //Fals user gefunden, wird seine ID und Telefonnummer
+                                                //in den jeweiligen Listen gespeichert
                                                 if (result.getBoolean("res")) {
                                                     listCollabsNumbersArray.add(0, addCollab.getText().toString().trim());
-                                                    entryCollabsIdsArray.add(0, result.getString("collab_id"));
+                                                    listCollabsIdsArray.add(0, result.getString("collab_id"));
                                                     adapter.notifyDataSetChanged();
                                                     addCollab.setText(null);
                                                     Toast.makeText(AddNewEntry.this,
@@ -220,11 +223,14 @@ public class AddNewEntry extends AppCompatActivity {
             }
 
         };
-        setButton();
-
+        setLocationButton();
+        /**
+         * Update-Modus, falls Intent-Daten vorhanden
+         */
         Intent intent = getIntent();
         if (intent.hasExtra("entry_id")) {
             entryId = intent.getStringExtra("entry_id");
+            //Method = PUT, wenn Fehler -> POST
             requestMethod = intent.getIntExtra("method", Request.Method.POST);
             requestEntryToUpdate();
         }
@@ -232,20 +238,51 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case 10:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    setButton();
-                }
-                break;
-            default:
-                break;
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.new_entry_menu, menu);
+        return true;
     }
 
-    private void setButton() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_save:
+                //Fall Input valide, wird POST oder PUT request gesendet
+                if (validateUserInput()) {
+                    progBar.setVisibility(View.VISIBLE);
+                    if (entryId == null) {
+                        //POST
+                        sendRequest(BASE_URL + URL_BASE_ENTRIES, requestMethod);
+                    }
+                    //PUT
+                    sendRequest(BASE_URL + URL_BASE_ENTRIES + entryId, requestMethod);
+                }
+                break;
+            case android.R.id.home:
+                //Fals keine Änderungen, zurück in MainActivity
+                if (!change) {
+                    NavUtils.navigateUpFromSameTask(AddNewEntry.this);
+                    return true;
+                }
+                //Fals Änderungen vorgenommen wurden, wird Dialogfenster angezeigt
+                //Hier wird Aktion für DiscardButton festgelegt(Verlassen der Activity)
+                DialogInterface.OnClickListener discardButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                NavUtils.navigateUpFromSameTask(AddNewEntry.this);
+                            }
+                        };
+                showUnsavedChangesDialog(discardButtonClickListener);
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void setLocationButton() {
         locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,52 +320,20 @@ public class AddNewEntry extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.new_entry_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.action_save:
-                if (validateUserInput()) {
-                    progBar.setVisibility(View.VISIBLE);
-                    if (entryId == null) {
-                        sendRequest(BASE_URL + URL_BASE_ENTRIES, requestMethod);
-                    }
-                    Log.i("PUT URL", BASE_URL + URL_BASE_ENTRIES + entryId);
-                    Log.i("Method", String.valueOf(requestMethod));
-                    sendRequest(BASE_URL + URL_BASE_ENTRIES + entryId, requestMethod);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 10:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    setLocationButton();
                 }
                 break;
-            case android.R.id.home:
-                //Fals keine Änderungen, zurück in MainActivity
-                if (!change) {
-                    NavUtils.navigateUpFromSameTask(AddNewEntry.this);
-                    return true;
-                }
-                //Fals Änderungen vorgenommen wurden, wird Dialogfenster angezeigt
-                //Hier wird Aktion für DiscardButton festgelegt(verlassen der Activity)
-                DialogInterface.OnClickListener discardButtonClickListener =
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                NavUtils.navigateUpFromSameTask(AddNewEntry.this);
-                            }
-                        };
-                showUnsavedChangesDialog(discardButtonClickListener);
-                return true;
+            default:
+                break;
         }
-
-        return super.onOptionsItemSelected(item);
     }
-
     /**
      * Helpermethod zur Initialisierung der Spinners
-     *
      * @param strings - array mit Strings
      * @return - spinner adapter
      */
@@ -342,9 +347,10 @@ public class AddNewEntry extends AppCompatActivity {
     /**
      * Sende POST Request mit eingegebenen Daten
      *
-     * @param URL - die POST-URL, http://ip:3001/entries
+     * @param URL - die POST/PUT-URL, http://ip:3001/entries/...
      */
     public void sendRequest(String URL, int method) {
+        //Create body
         JSONObject object = createJsonObject();
         JsonObjectRequest request = new JsonObjectRequest(method, URL, object,
                 new Response.Listener<JSONObject>() {
@@ -356,7 +362,8 @@ public class AddNewEntry extends AppCompatActivity {
                             String msgResponse = response.getString("msg");
                             Boolean statusResponse = response.getBoolean("res");
                             if (statusResponse) {
-                                Toast.makeText(AddNewEntry.this, msgResponse, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddNewEntry.this, getString(R.string.msg_data_saved),
+                                        Toast.LENGTH_SHORT).show();
                                 finish();
                             } else {
                                 contracts.showSnackbar(container, msgResponse, true, false);
@@ -402,9 +409,9 @@ public class AddNewEntry extends AppCompatActivity {
         //Ermitteln der Adresse
         try {
             addresses = geocoder.getFromLocation(lat, lon, maxResults);
-            if (addresses != null || addresses.size() != 0) {
+            if (addresses != null || addresses.size() > 0) {
                 Address currentAddress = addresses.get(0);
-                locationEdit.setText(currentAddress.getCountryName() + getString(R.string.item_speaktext_coma)
+                locationEdit.setText(currentAddress.getCountryName() + getString(R.string.item_speaktext_comma)
                         + currentAddress.getLocality());
                 countryISOCode = currentAddress.getCountryCode();
                 city = currentAddress.getLocality();
@@ -412,7 +419,6 @@ public class AddNewEntry extends AppCompatActivity {
             } else {
                 contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             contracts.showSnackbar(container, getString(R.string.msg_can_not_get_location), true, false);
@@ -427,7 +433,6 @@ public class AddNewEntry extends AppCompatActivity {
      * Die Usereingaben werden dem JSONOBject hinzugefügt
      */
     private JSONObject createJsonObject() {
-
         JSONObject entryObject = new JSONObject();
         JSONObject locationObject = new JSONObject();
         try {
@@ -445,14 +450,14 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("soil_temp", Integer.valueOf(soiltempEdit.getText().toString().trim()));
             entryObject.put("ph_value", Integer.valueOf(phEdit.getText().toString().trim()));
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
-            entryObject.put("collaborators_id", new JSONArray(entryCollabsIdsArray));
+            entryObject.put("collaborators_id", new JSONArray(listCollabsIdsArray));
             entryObject.put("collaborators_number", new JSONArray(listCollabsNumbersArray));
 
             if (ownerId != null) {
                 //wenn Update modus
                 entryObject.put("owner_id", ownerId);
             } else {
-                entryObject.put("owner_id", sPrefUser.getString(USER_SP_ID, null));
+                entryObject.put("owner_id", sPrefUser.getString(USER_SHARED_PREFS_ID, null));
             }
             if (tutorialId != null) {
                 //wenn Update modus
@@ -501,10 +506,8 @@ public class AddNewEntry extends AppCompatActivity {
                         break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }
@@ -533,10 +536,8 @@ public class AddNewEntry extends AppCompatActivity {
                         break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }
@@ -560,10 +561,10 @@ public class AddNewEntry extends AppCompatActivity {
      * @return - true, falls alle Eingaben valide
      */
     private boolean validateUserInput() {
-        if (validationEditText(nameEdit) && validationEditText(locationEdit) && validateSpinners(cropSpinner)
-                && validateSpinners(soilSpinner) && validationEditText(areaEdit) && validationEditText(heightEdit)
-                && validationEditText(airtempEdit) && validationEditText(airhumidityEdit) && validationEditText(soiltempEdit)
-                && validationEditText(soilmoistureEdit) && validationEditText(phEdit)) {
+        if (validateEditText(nameEdit) && validateEditText(locationEdit) && validateSpinners(cropSpinner)
+                && validateSpinners(soilSpinner) && validateEditText(areaEdit) && validateEditText(heightEdit)
+                && validateEditText(airtempEdit) && validateEditText(airhumidityEdit) && validateEditText(soiltempEdit)
+                && validateEditText(soilmoistureEdit) && validateEditText(phEdit)) {
             return true;
         }
         return false;
@@ -596,7 +597,7 @@ public class AddNewEntry extends AppCompatActivity {
      * @param input - Inputfeld
      * @return true, falls alle Eingaben valide
      */
-    private boolean validationEditText(EditText input) {
+    private boolean validateEditText(EditText input) {
         if (!input.getText().toString().trim().isEmpty()) {
             return true;
         }
@@ -624,7 +625,7 @@ public class AddNewEntry extends AppCompatActivity {
      * Falls Änderungen in Eingaben gemacht wurden und die Activity verlassen wird, wird erst
      * Dialogfenster angezeigt
      *
-     * @param discardButtonClickListener
+     * @param discardButtonClickListener - Aktion für Discard-Button
      */
     private void showUnsavedChangesDialog(
             DialogInterface.OnClickListener discardButtonClickListener) {
@@ -638,14 +639,13 @@ public class AddNewEntry extends AppCompatActivity {
                 }
             }
         });
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
     /**
      * Die Luftdaten werden vom System automatisch ermittelt, hier wird request an den Server geschickt,
-     * aktuelle Lokation wird als queryparamter übergeben, der server Fragt Wetter(Lufttemperatur und
+     * aktuelle Lokation wird als queryparamter übergeben, der server fragt Wetter(Lufttemperatur und
      * Luftfeuchtigkeit ab) ab gibt Daten zurück an Client. Die entsprechenden Inputfelder werden mit
      * den jeweiligen daten gefüllt.
      *
@@ -665,13 +665,12 @@ public class AddNewEntry extends AppCompatActivity {
                     Uri.Builder uriBuilder = baseUri.buildUpon();
                     uriBuilder.appendQueryParameter("countryISOCode", countryISOCode);
                     uriBuilder.appendQueryParameter("city", city);
-                    //Request wird in der externen Klasse
+                    //Request passiert in der externen Klasse
                     request.requestData(AddNewEntry.this, Request.Method.GET, pb, container,
                             uriBuilder.toString(), null,
                             new ServerCallback() {
                                 @Override
                                 public void onSuccess(JSONObject response) {
-                                    Log.i("HOP HEY", "REQUeSt Weather");
                                     if (response != null) {
                                         try {
                                             int airTemp = response.getInt("temp");
@@ -698,8 +697,13 @@ public class AddNewEntry extends AppCompatActivity {
         });
     }
 
+    /**
+     * Im Update-Modus werden die Daten des existierenden Entrys geholt, die entsprechenden Datenfelder
+     * werden mit den Daten gefüllt.
+     */
     private void requestEntryToUpdate() {
         progBar.setVisibility(View.VISIBLE);
+        //Request in der externen Klasse
         request.requestData(this, Request.Method.GET, progBar, container, BASE_URL + URL_BASE_ENTRIES + entryId,
                 null, new ServerCallback() {
                     @Override
@@ -722,16 +726,15 @@ public class AddNewEntry extends AppCompatActivity {
                                 for (int i = 0; i < numbersArray.length(); i++) {
                                     listCollabsNumbersArray.add(numbersArray.getString(i));
                                 }
-
                                 JSONArray idsArray = response.getJSONArray("collaborators_id");
                                 for (int i = 0; i < idsArray.length(); i++) {
-                                    entryCollabsIdsArray.add(idsArray.getString(i));
+                                    listCollabsIdsArray.add(idsArray.getString(i));
                                 }
-
                                 JSONObject locationObject = response.getJSONObject("location");
                                 String locName = locationObject.getString("name");
                                 String locationISOCode = locationObject.getString("countryISOCode");
                                 String locationCity = locationObject.getString("city");
+                                //Felder mit daten füllen
                                 countryISOCode = locationISOCode;
                                 city = locationCity;
                                 locationName = locName;

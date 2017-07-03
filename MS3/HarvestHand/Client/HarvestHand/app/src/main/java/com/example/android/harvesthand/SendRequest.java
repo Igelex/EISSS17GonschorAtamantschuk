@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Helperclass, request Wetterdaten, wird in AddNewEntry aufgerufen
+ * Helperclass, führt Requests aus
  */
 
 public class SendRequest {
@@ -28,18 +28,19 @@ public class SendRequest {
      * @param container - View, in der Snackbar angezeigt wird
      * @param url - request-url
      * @param callback - um die Daten an UI zu übergeben
+     * @param method - Request-Methode
      */
     protected void requestData(final Context context, int method, final ProgressBar progressBar, final View container,
                                String url, JSONObject jsonObject,
                                final AddNewEntry.ServerCallback callback) {
         final Contracts contracts = new Contracts(null);
-        Log.i("URL in CHECK: ", url);
-
+        Log.i("Current URL: ", url);
         JsonObjectRequest request = new JsonObjectRequest(method, url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         if (progressBar != null) progressBar.setVisibility(View.GONE);
+                        //Gib Repsone zurück
                         callback.onSuccess(response);
                     }
                 },

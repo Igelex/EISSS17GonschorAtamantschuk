@@ -77,7 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
-    /*
+    /**
     * Dialogfenster zur eingabe der IP-Adresse
     * */
     private void showIPdialog() {
@@ -124,6 +124,10 @@ public class SignUpActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * die IP wird permanent in SharedPreferences gespeichert
+     * @param ip - ip vom Dialogfenster
+     */
     private void savePreferences(String ip) {
         SharedPreferences.Editor editor = sPrefIp.edit();
         editor.putString(IP_SP_IP, ip);

@@ -1,7 +1,7 @@
 package com.example.android.harvesthand;
 
 /**
- * Created by Pastuh on 26.06.2017.
+ * Hier Wird ein Tutorial - Eintrag gespeichert
  */
 
 public class Tutorial {

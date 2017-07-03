@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
+            //Initialisiere TextToSpeech
             InitTTS tts = new InitTTS(this);
             speaker = tts.initTTS();
             contracts = new Contracts(speaker);
@@ -94,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
             */
             sPrefUser = getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
             if (sPrefUser != null) {
-                if (sPrefUser.getString(USER_SP_ID, null) != null) {
-                    USER_ID = sPrefUser.getString(USER_SP_ID, null);
-                    USER_NUMBER = sPrefUser.getString(USER_SP_NUMBER, null);
+                if (sPrefUser.getString(USER_SHARED_PREFS_ID, null) != null) {
+                    USER_ID = sPrefUser.getString(USER_SHARED_PREFS_ID, null);
+                    USER_NUMBER = sPrefUser.getString(USER_SHARED_PREFS_NUMBER, null);
                     //Flas user_id vorhanden, prüfe, ob der user in DB exestiert
-                    reqeustUserId(BASE_URL + URL_BASE_USERS + sPrefUser.getString(USER_SP_ID, null));
+                    reqeustUserId(BASE_URL + URL_BASE_USERS + sPrefUser.getString(USER_SHARED_PREFS_ID, null));
                 } else {
                     //Falls nicht --> Login
                     startActivity(new Intent(this, SignUpActivity.class));
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 //Fals user_type = Alphabet, PlusButton anzeigen
-                if (sPrefUser.getInt(USER_SP_TYPE, -1) == 0) {
+                if (sPrefUser.getInt(USER_SHARED_PREFS_TYPE, -1) == USER_TYPE_LITERATE) {
                     FloatingActionButton fb = (FloatingActionButton) findViewById(R.id.fb_add_new_entry);
                     fb.setVisibility(View.VISIBLE);
                     fb.setOnClickListener(new View.OnClickListener() {
@@ -118,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             } else {
-                //User_id nicht SharedPreferences --> Login
+                //User_id nicht in SharedPreferences --> Login
                 startActivity(new Intent(this, SignUpActivity.class));
                 Toast.makeText(this, getString(R.string.msg_please_login), Toast.LENGTH_SHORT).show();
                 finish();
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             //Emptystate, Falls keine Entries gefunden
             emptyView = (RelativeLayout) findViewById(R.id.empty_state_container);
             entryList.setEmptyView(emptyView);
+
             View footer = getLayoutInflater().inflate(R.layout.list_footer, null);
             entryList.addFooterView(footer, null, false);
         } else {
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (id) {
             case R.id.action_refresh:
+                //Aktualisieren der Liste
                 progressBar.setVisibility(View.VISIBLE);
                 if (adapter != null) {
                     adapter.clear();
@@ -155,15 +158,22 @@ public class MainActivity extends AppCompatActivity {
                 requestEntries(CURRENT_ENTRIES_URL);
                 break;
             case R.id.action_person:
+                //Zum User-Profile
                 startActivity(new Intent(this, UserProfile.class));
                 break;
             case R.id.action_settings:
+                //IP eingeben
                 showIPdialog();
                 break;
         }
         return true;
     }
 
+    /**
+     * Falls User_id in SharedPreferences vorhanden, checke ob der User noch in der DB existiert
+     *
+     * @param URL - http://ip:3001/users/id
+     */
     public void reqeustUserId(String URL) {
         Log.i("URL request user: ", URL);
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, URL, null,
@@ -171,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         progressBar.setVisibility(View.INVISIBLE);
+                        //User nicht vorhanden --> Login
                         if (response == null || response.length() == 0) {
                             startActivity(new Intent(MainActivity.this, SignUpActivity.class));
                             Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
@@ -179,17 +190,10 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                         try {
+                            //User existiert --> Request seine Entries
                             Log.i("Checke USER:", response.getString("user_id"));
                             USER_ID = response.getString("user_id");
-                            if (USER_ID == null || !USER_ID.equals(sPrefUser.getString(USER_SP_ID, null))) {
-                                startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-                                Toast.makeText(MainActivity.this, getString(R.string.msg_please_login),
-                                        Toast.LENGTH_SHORT).show();
-                                finish();
-                                return;
-                            } else {
-                                requestEntries(buildUri());
-                            }
+                            requestEntries(buildURL());
                         } catch (JSONException e) {
                             e.printStackTrace();
                             contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
@@ -284,13 +288,17 @@ public class MainActivity extends AppCompatActivity {
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
 
+    /**
+     * Hier wird die Aktion für das Anklicken eines Listeneintrags definiert
+     */
     private void defineOnItemClickListener() {
-
         entryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Entry currentEq = adapter.getItem(position);
-                if (sPrefUser.getInt(USER_SP_TYPE, -1) == 1) {
+                //Fals User Analphabet ist, wird er direkt zum Tutorial navigiert
+                if (sPrefUser.getInt(USER_SHARED_PREFS_TYPE, -1) == USER_TYPE_ILLITERATE) {
+                    //Bestimmte daten werden übergeben
                     Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
                     intent.putExtra("entry_id", currentEq.getEntryId());
                     intent.putExtra("tutorial_id", currentEq.getTutorialId());
@@ -308,17 +316,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Dialogfenster zum eintragen der IP(Nur für Prototype relevant)
+     */
     private void showIPdialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
         dialogView = getLayoutInflater().inflate(R.layout.ipaddress_custom_dialog, null);
         final EditText mIp = dialogView.findViewById(R.id.input_enter_ip);
 
         if (sPrefIp.getString(IP_SP_IP, null) == null) {
+            //wenn IP bereits NICHT in SP, IP-Vorlage (192.168..) als Text im Inputfeld setzen
             mIp.setText(URL_IP_BASE);
         } else {
+            //Ansonsten IP aus SP als Text im Inputfeld setzen
             mIp.setText(sPrefIp.getString(IP_SP_IP, null));
         }
-
         mBuilder.setView(dialogView);
         final AlertDialog dialog = mBuilder.create();
 
@@ -326,13 +338,14 @@ public class MainActivity extends AppCompatActivity {
         mSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Falls IP eingegeben, speichern und BASE_URL aktualiseiren
                 if (!mIp.getText().toString().trim().isEmpty()) {
                     savePreferences(mIp.getText().toString().trim());
                     URL_IP = sPrefIp.getString(IP_SP_IP, null);
                     BASE_URL = URL_PROTOCOL + URL_IP + URL_PORT;
                     Toast.makeText(MainActivity.this, getString(R.string.dialog_ip_saved), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
-                    if ((sPrefUser.getString(USER_SP_ID, null) == null)) {
+                    if ((sPrefUser.getString(USER_SHARED_PREFS_ID, null) == null)) {
                         startActivity(new Intent(MainActivity.this, SignUpActivity.class));
                         finish();
                     }
@@ -352,10 +365,13 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, getString(R.string.dialog_ip_not_changed), Toast.LENGTH_LONG).show();
             }
         });
-
         dialog.show();
     }
 
+    /**
+     * Ip wird gespeichert
+     * @param ip - IP aus dem Dialogfenster
+     */
     private void savePreferences(String ip) {
         SharedPreferences.Editor editor = sPrefIp.edit();
         editor.putString(IP_SP_IP, ip);
@@ -363,19 +379,12 @@ public class MainActivity extends AppCompatActivity {
         Log.i("Save IP Address: ", ip);
     }
 
-    @Override
-    protected void onDestroy() {
-        if (speaker != null) {
-            speaker.stop();
-            speaker.shutdown();
-        }
-        super.onDestroy();
-    }
-
     /**
-     * Bilde Uri für Entries - Request
+     * Bilde URL für Entries - Request, Es werden die Entries requested, die ein User erstellt hat (owner_id)
+     * und in denen er als Collaborator(collab_id) eingetragen ist
+     * Beispiel für URL - http://ip:3001/entries/?owner_id=59562da73bb306153c8d9603&collab_id=59562da73bb306153c8d9603
      */
-    private String buildUri() {
+    private String buildURL() {
         Uri baseUri = Uri.parse(CURRENT_ENTRIES_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
         uriBuilder.appendQueryParameter(URL_PARAMS_OWNER_ID, USER_ID);
@@ -383,6 +392,14 @@ public class MainActivity extends AppCompatActivity {
         CURRENT_ENTRIES_URL = uriBuilder.toString();
         Log.i("URI: ", CURRENT_ENTRIES_URL);
         return CURRENT_ENTRIES_URL;
+    }
+    @Override
+    protected void onDestroy() {
+        if (speaker != null) {
+            speaker.stop();
+            speaker.shutdown();
+        }
+        super.onDestroy();
     }
 }
 

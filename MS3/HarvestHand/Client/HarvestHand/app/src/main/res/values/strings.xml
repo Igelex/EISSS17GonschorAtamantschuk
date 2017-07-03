@@ -31,7 +31,7 @@
     <string name="msg_error">Error!</string>
     <string name="msg_no_data">No data found!</string>
     <string name="msg_can_not_get_location">Can not get location</string>
-    <string name="msg_receive_gps_data">Receive GPS data...</string>
+    <string name="msg_receive_gps_data">GPS data received</string>
     <string name="msg_request_location">Request location...</string>
     <string name="msg_cant_save">Error, cannot save. Please try again</string>
     <string name="msg_user_not_found">User not found</string>
@@ -50,9 +50,9 @@
     <string name="new_entry_add_collabs">Add collaborators</string>
     <string name="new_entry_hint_collab">Number</string>
     <string name="label_new_entry">New Entry</string>
-    <string name="tutorial_month">Months</string>
+    <string name="tutorial_month"> months</string>
     <string name="add_entry_m_squared" translatable="false">m²</string>
-    <string name="add_entry_meter" translatable="false">m</string>
+    <string name="add_entry_meter" translatable="false"> m</string>
 
     <!--Menu items-->
     <string name="delete_menu_item">Delete</string>
@@ -86,7 +86,7 @@
     <!--TextToSpech Function-->
     <!--String for List Item-->
     <string name="item_speaktext_name">Name:</string>
-    <string name="item_speaktext_coma" translatable="false">,</string>
+    <string name="item_speaktext_comma" translatable="false">,</string>
     <string name="item_speaktext_location">Location:</string>
     <string name="item_speaktext_area">Area:</string>
     <string name="titel_activity_user_profile">Profile</string>

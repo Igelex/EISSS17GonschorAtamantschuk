@@ -81,7 +81,7 @@ app.get('/entries/:id',  controller_entry.getEntryById);
 app.post('/entries', controller_entry.addEntry);
 app.delete('/entries/:id', controller_entry.deleteEntry);
 //Hole Tutorial zum bestimmten Eintrag
-app.get('/entries/:id/tutorial/:id', controller_tutorial.getTutorialById);
+app.get('/entries/:id/tutorials/:id', controller_tutorial.getTutorialById);
 
 //////////////////////////Entries
 

@@ -9,23 +9,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -66,7 +62,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
 
         SharedPreferences sPref = mContext.getSharedPreferences(USER_SHARED_PREFS, MODE_PRIVATE);
         if (sPref != null) {
-            userType = sPref.getInt(USER_SP_TYPE, -1);
+            userType = sPref.getInt(USER_SHARED_PREFS_TYPE, -1);
         }
 
         final Entry currentEntry = getItem(position);
@@ -98,9 +94,9 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                 @Override
                 public void onClick(View view) {
                     speak(mContext.getString(R.string.item_speaktext_name) + entryName.getText().toString()
-                            + mContext.getString(R.string.item_speaktext_coma) +
+                            + mContext.getString(R.string.item_speaktext_comma) +
                             mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
-                            + mContext.getString(R.string.item_speaktext_coma) +
+                            + mContext.getString(R.string.item_speaktext_comma) +
                             mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString()
                             + mContext.getString(R.string.add_entry_m_squared));
                 }

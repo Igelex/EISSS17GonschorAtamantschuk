@@ -61,12 +61,13 @@ public class EntryTutorialActivity extends AppCompatActivity {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
-        InitTTS tts = new InitTTS(this);
-        speaker = tts.initTTS();
-        contracts = new Contracts(speaker);
-
         if (networkInfo != null && networkInfo.isConnected()) {
 
+            InitTTS tts = new InitTTS(this);
+            speaker = tts.initTTS();
+            contracts = new Contracts(speaker);
+
+            //Hol entry-Daten von der Parent-Activity
             Intent intent = getIntent();
             if (intent != null) {
                 try {
@@ -87,7 +88,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
             progressBar = (ProgressBar) findViewById(R.id.tutorial_pg);
             progressBar.setVisibility(View.VISIBLE);
-
+            //Init CircleImages, die die einzelnen Werte darstellen
             airTempImg = (CircleImageView) findViewById(R.id.tutorial_airtemp_image);
             airMoistureImg = (CircleImageView) findViewById(R.id.tutorial_airmoisture_image);
             cropImg = (CircleImageView) findViewById(R.id.tutorial_crop_image);
@@ -95,7 +96,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
             phImg = (CircleImageView) findViewById(R.id.tutorial_ph_image);
             soilTempImg = (CircleImageView) findViewById(R.id.tutorial_soiltemp_image);
             soilMoistureImg = (CircleImageView) findViewById(R.id.tutorial_soilmoisture_image);
-
+            //Init TextViews
             location = (TextView) findViewById(R.id.tutorial_loc);
             height = (TextView) findViewById(R.id.tutorial_hight);
             mature = (TextView) findViewById(R.id.tutorial_mature);
@@ -104,22 +105,12 @@ public class EntryTutorialActivity extends AppCompatActivity {
             soilTemp = (TextView) findViewById(R.id.tutorial_text_soil_temp);
             soilMoisture = (TextView) findViewById(R.id.tutorial_text_soil_moisture);
             ph = (TextView) findViewById(R.id.tutorial_text_ph);
-
+            //request Tutorial-Daten
             getTutorial(buildeUrl());
+
         } else {
-            Toast.makeText(EntryTutorialActivity.this, "No Internet Connection", Toast.LENGTH_LONG).show();
+            contracts.showSnackbar(container, getString(R.string.msg_no_internet_connection), true, false );
         }
-
-        speaker = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    speaker.setLanguage(Locale.getDefault());
-                    Log.i("local: ", Locale.getDefault().toString());
-                }
-            }
-        });
-
     }
 
     @Override
@@ -131,8 +122,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.action_speak:
                 speaker.speak("I can speak to you", TextToSpeech.QUEUE_FLUSH, null);
                 break;
@@ -141,7 +131,10 @@ public class EntryTutorialActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Request Tutorial
+    /**
+     * Reuqeust Tutorial Daten und fülle die UI mit entsprechenden Daten
+     * @param url - http://192.168.0.17:3001/entries/entri_id/tutorials/tutorial_id
+     */
     public void getTutorial(String url) {
         JsonObjectRequest jsonRequest = new JsonObjectRequest(
                 Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -193,6 +186,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         heightNorm = heightObject.getString("norm");
                         matureMonth = response.getInt("mature_after_month");
 
+                        //Helpermethods werde aufgerufen
                         setTextView();
                         setBackgroundColor();
                         setCropBackgroundImg(cropID);
@@ -236,6 +230,10 @@ public class EntryTutorialActivity extends AppCompatActivity {
         Volley.newRequestQueue(this.getApplicationContext()).add(jsonRequest);
     }
 
+    /**
+     * Image des Bodenartes wird abhängig von der soilId gesetzt
+     * @param soilId - id des bestimmten Bodenartes im System
+     */
     private void setSoilBackgroundImg(int soilId) {
         switch (soilId) {
             case 1:
@@ -249,6 +247,10 @@ public class EntryTutorialActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Image der Pflanze wird abhängig von der cropID gesetzt
+     * @param cropID - id der bestimmten Pflanze im System
+     */
     private void setCropBackgroundImg(int cropID) {
         switch (cropID) {
             case 1:
@@ -265,7 +267,12 @@ public class EntryTutorialActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * die BackgroundColor der CircleImages wird gesetzt, background ist ein Circle, definiert in
+     * drawables (circle_10.xml ...)
+     */
     private void setBackgroundColor() {
+        //für jeweilige CircleImages wird setColor aufgerufen
         airTempImg.setImageResource(setColor(airTepmDeviation));
         airMoistureImg.setImageResource(setColor(airMoistureDeviation));
         soilTempImg.setImageResource(setColor(soilTempDeviation));
@@ -273,22 +280,30 @@ public class EntryTutorialActivity extends AppCompatActivity {
         phImg.setImageResource(setColor(phDeviation));
     }
 
+    /**
+     * Die Color wird abhängig von @deviation gesetz
+     * @param deviation - prozentuelle Abweichung eines bestimmten Wertes von der Norm
+     * @return - drawable-id
+     */
     private int setColor(int deviation) {
-        int mColor;
+        int mCircle;
         if (deviation <= 10) {
-            mColor = R.drawable.circle_10;
+            mCircle = R.drawable.circle_10;
         } else if (deviation <= 20) {
-            mColor = R.drawable.circle_20;
+            mCircle = R.drawable.circle_20;
         } else if (deviation <= 30) {
-            mColor = R.drawable.circle_30;
+            mCircle = R.drawable.circle_30;
         } else if (deviation <= 40) {
-            mColor = R.drawable.circle_40;
+            mCircle = R.drawable.circle_40;
         } else {
-            mColor = R.drawable.circle_50;
+            mCircle = R.drawable.circle_50;
         }
-        return mColor;
+        return mCircle;
     }
 
+    /**
+     * TextVies werden mit entsprechenden Inhalten gefüllt
+     */
     private void setTextView() {
         location.setText(entryLocationCity);
         height.setText(String.valueOf(heightCurrentValue) + getString(R.string.add_entry_meter));
@@ -300,48 +315,89 @@ public class EntryTutorialActivity extends AppCompatActivity {
         soilMoisture.setText(String.valueOf(soilMoistureCurrentValue));
     }
 
+    /**
+     * Url zur Request des Tutorials wird gebildet
+     * @return - URL
+     */
     private String buildeUrl() {
         Log.i("Tutorila URL :", BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID);
         return BASE_URL + URL_BASE_ENTRIES + entryId + URL_BASE_TUTORIAL + tutorialID;
     }
 
+    /**
+     * Die earButtons werden initialisiert, für die Buttons wird die Methode earButtonsClickListener(...)
+     * aufgerufen
+     */
     private void setSpeaker() {
         ImageButton earLocation = (ImageButton) findViewById(R.id.tutorial_location_ear);
+        //der zu Text zu Vorlesen wird übergeben
         earButtonsClickListener(earLocation, getString(R.string.item_speaktext_location)
                 + entryLocationCity);
         ImageButton earHeight = (ImageButton) findViewById(R.id.tutorial_height_ear);
+        //der zu Text zu Vorlesen wird übergeben
         earButtonsClickListener(earHeight, getString(R.string.tutorial_speaktext_height)
                 + heightCurrentValue);
         ImageButton earMature = (ImageButton) findViewById(R.id.tutorial_mature_ear);
+        //der zu Text zu Vorlesen wird übergeben
         earButtonsClickListener(earMature, getString(R.string.tutorial_speaktext_mature)
                 + matureMonth + getString(R.string.tutorial_month));
     }
 
-    private void speakText(String text) {
-        speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-    }
-
-    private void earButtonsClickListener(ImageButton ear, String text) {
-        final String speakText = text;
+    /**
+     * Die OnClickListener für ear-Buttons werden definiert
+     * @param ear - Button (Location-Button, Height-Button..,)
+     * @param text - Text, der beim Anklicken des jeweiligen Buttons gesprochen wird
+     */
+    private void earButtonsClickListener(ImageButton ear, final String text) {
         ear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                speakText(speakText);
+                //Der Text wird Vorgelesen
+                speakText(text);
             }
         });
     }
 
-    private void setStartTutorialClickListener(){
-        startTutorial(soilMoistureImg, soilMoistureNorm, soilMoistureStatus, soilMoistureCurrentValue,
-                PROPERTY_SOIL_MOISTURE, waterRequire, soilMoistureDeviation);
-
-
-        startTutorial(airTempImg, airTempNorm, airTempStatus, airTempCurrentValue, PROPERTY_AIR_TEMP,
-                0, airTepmDeviation);
+    /**
+     * Vorlesen des Textes
+     * @param text - der Text zum Vorlesen
+     */
+    private void speakText(String text) {
+        speaker.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
+    /**
+     * Bei Anklicken eines CircleImages wird zur jewiligen Eigenschaft die Anbauepmfehlung(Tutorial) angezeigt
+     * Für alle Eigenschaften wird Tutorial gestartet, für die Prototypepräsentation werden nur
+     * @airTemp und @soilMoisture implementiert
+     */
+    private void setStartTutorialClickListener(){
+        //für Tutorial werden für jeweilige Eigenschaft relevante Daten übergeben
+        //@airTemp
+        startTutorial(soilMoistureImg, soilMoistureNorm, soilMoistureStatus, soilMoistureCurrentValue,
+                PROPERTY_SOIL_MOISTURE, waterRequire, soilMoistureDeviation);
+        //@soilMoisture
+        startTutorial(airTempImg, airTempNorm, airTempStatus, airTempCurrentValue, PROPERTY_AIR_TEMP,
+                0, airTepmDeviation);
+        /*        .
+        .
+        .
+        .
+        * */
+    }
+
+    /**
+     * Hier wird ShowTutorialActivity gestartet, die die Tutorials präsentiert
+     * @param button- CircleImage, die angeklickt wurde
+     * @param norm - Norm-Wert der jeweiligen Eingenschaft
+     * @param status - status der jeweiligen Eingenschaft(LESS, GRAETER, NORM)
+     * @param currentValue - aktueller Wert der jeweiligen Eingenschaft
+     * @param propertyId - id der jeweiligen Eingenschaft (PROPERTY_SOIL_MOISTURE, ...)
+     * @param waterReq - Wasserverbrauch, falls vorhanden
+     * @param deviation - die Abweichung von Norm
+     */
     private void startTutorial(ImageView button, final String norm, final int status,
-                               final int currentValue, final int property, final int waterReq,
+                               final int currentValue, final int propertyId, final int waterReq,
                                final int deviation) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,7 +406,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 intent.putExtra("norm", norm);
                 intent.putExtra("status", status);
                 intent.putExtra("currentValue", currentValue);
-                intent.putExtra("property", property);
+                intent.putExtra("property", propertyId);
                 intent.putExtra("deviation", deviation);
                 if (waterReq != 0){
                     intent.putExtra("water_require", waterReq);

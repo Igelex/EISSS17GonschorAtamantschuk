@@ -7,7 +7,7 @@ import android.util.Log;
 import java.util.Locale;
 
 /**
- * Created by Pastuh on 27.06.2017.
+ * Hier wird TextToSpeech initialisiert und in mehreren Klassen verwendet
  */
 
 public class InitTTS {

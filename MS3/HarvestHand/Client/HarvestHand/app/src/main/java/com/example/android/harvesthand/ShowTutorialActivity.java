@@ -20,7 +20,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ShowTutorialActivity extends AppCompatActivity {
     private String norm;
-    private int status, waterReq, property, deviation, currentValue;
+    private int status, waterReq, propertyId, deviation, currentValue;
     private static final int GREATER = 2;
     private Contracts contracts;
     private LinearLayout container;
@@ -48,12 +48,12 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 norm = intent.getStringExtra("norm");
                 status = intent.getIntExtra("status", -1);
                 currentValue = intent.getIntExtra("currentValue", -1);
-                property = intent.getIntExtra("property", -1);
+                propertyId = intent.getIntExtra("property", -1);
                 deviation = intent.getIntExtra("deviation", -1);
                 if (intent.hasExtra("water_require")) {
                     waterReq = intent.getIntExtra("water_require", 0);
                 }
-
+                //Liste, in der die Tutorials generiert werden
                 recyclerView = (RecyclerView) findViewById(R.id.show_list);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 recyclerView.setLayoutManager(layoutManager);
@@ -84,8 +84,12 @@ public class ShowTutorialActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Als erstet wird nach der @propertyId entschieden, welche Anbauempfehlung(Tutorial) angezeigt
+     * werden muss
+     */
     private void switchProperty() {
-        switch (property) {
+        switch (propertyId) {
             case 0:
                 switchStatus("soilmoisture", String.valueOf(waterReq));
                 speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_soilmoisture));
@@ -120,10 +124,10 @@ public class ShowTutorialActivity extends AppCompatActivity {
 
     /**
      * in switchStatus werden die passenden Images in drawables abhängig vom @status gesucht.
-     *@param property - ist die Eigenschaft eines Eintrags, für die ein Tutorial erstellt werden muss.
-     * in drawables wird nach dem vorher definiertem Namen dem Image gesucht.
+     *@param property - ist die Eigenschaft eines Eintrags, für die ein Tutorial erstellt werden muss(z.B. airtemp)
+     * in drawables wird nach dem vorher definiertem Namen des Images gesucht.
      *Alle Namen müssen nach bestimtem Muster gebildet werden(z.B "tutorial_soilmoisture_less_1);
-     * Zur eine @property kann es mehrere Images/Animation/videos geben. Images/Animation/videos zur einem
+     * Zur einer @property kann es mehrere Images/Animation/videos geben. Images/Animation/videos zur einem
      * @property werden am ende des Namens mit einem @i Identifikator bezeichnet.
      */
     private void switchStatus(String property, String optional) {
@@ -167,8 +171,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     /**
-     * Sucht nach dem Array von Strings zur einem Image
-     *
+     * Sucht nach dem Array von Strings zu einem Image
      * @param arrayName - array-Name, wird von switchStatus() übergeben.
      * @return - string, description eines Images, wird vorgelesen.
      */
@@ -191,8 +194,8 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     /**
-     * Visual Feedback zur dem aktuellen Werte der Eigenschaft
-     * @param deviation - die abweichnug des aktuellen Wertes von Norm in Prozetn
+     * Visual Feedback zur dem aktuellen Wert der Eigenschaft
+     * @param deviation - die Abweichnug des aktuellen Wertes von Norm in Prozetn
      */
     private void setColor(int deviation) {
         CircleImageView currentValueCircle = (CircleImageView) findViewById(R.id.show_current_value_circle);

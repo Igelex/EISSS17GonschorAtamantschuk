@@ -30,7 +30,6 @@ import com.example.android.harvesthand.SignUp.SignUpActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.R.attr.type;
 import static com.example.android.harvesthand.Contracts.*;
 
 public class UserProfile extends AppCompatActivity {
@@ -43,6 +42,7 @@ public class UserProfile extends AppCompatActivity {
     private TextView number;
     private EditText inputNumber;
     private Contracts contracts;
+    private Button saveButton;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -74,8 +74,9 @@ public class UserProfile extends AppCompatActivity {
 
         requestUserData();
 
-        final Button saveButton = (Button) findViewById(R.id.profile_save_button);
-
+        saveButton = (Button) findViewById(R.id.profile_save_button);
+        saveButton.setAlpha((float) .5);
+        saveButton.setEnabled(false);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,59 +85,53 @@ public class UserProfile extends AppCompatActivity {
                 }
             }
         });
-
+        //User wird ausgeloggt
         final Button logoutButton = (Button) findViewById(R.id.profile_logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SharedPreferences sPref = getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
                 if (sPref != null){
-                    sPref.edit().remove(USER_SP_ID).apply();
+                    sPref.edit().remove(USER_SHARED_PREFS_ID).apply();
+                    USER_ID = null;
+                    USER_NUMBER = null;
                     startActivity(new Intent(UserProfile.this, SignUpActivity.class));
                 }
             }
         });
 
         final ImageButton editNumber = (ImageButton) findViewById(R.id.profile_edit_number_button);
-        final ImageButton closeNumber = (ImageButton) findViewById(R.id.profile_close_number_button);
+        final ImageButton closeEditNumber = (ImageButton) findViewById(R.id.profile_close_number_button);
 
         inputNumber = (EditText) findViewById(R.id.profile_input_number);
         inputNumber.setOnTouchListener(mTouchListener);
-
+        //Klick auf Edit-Button blendet Input-Feld ein
         editNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickHide(editNumber, closeNumber, number, null, inputNumber, null);
-
+                onClickHide(editNumber, closeEditNumber, number, null, inputNumber, null);
             }
         });
-
-        closeNumber.setOnClickListener(new View.OnClickListener() {
+        //Das umgekehrte
+        closeEditNumber.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickHide(closeNumber, editNumber, null, number, null, inputNumber);
+                onClickHide(closeEditNumber, editNumber, null, number, null, inputNumber);
             }
         });
 
-        inputNumber.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                saveButton.setAlpha(1);
-                saveButton.setEnabled(true);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
     }
 
+    /**
+     * Animattion für Einblenden/Ausblenden des Inputfeldes, unwichtig
+     * @param buttonToHide
+     * @param buttonToShow
+     * @param textToHide
+     * @param textToShow
+     * @param inputToShow
+     * @param inputToHide
+     */
     private void onClickHide(ImageButton buttonToHide, ImageButton buttonToShow, TextView textToHide,
                              TextView textToShow, EditText inputToShow, EditText inputToHide) {
         buttonToHide.setVisibility(View.INVISIBLE);
@@ -164,6 +159,7 @@ public class UserProfile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                //Bei nicht gespeicherten Änderungen Dialog anzeigen
                 if (!change) {
                     NavUtils.navigateUpFromSameTask(UserProfile.this);
                     return true;
@@ -193,12 +189,15 @@ public class UserProfile extends AppCompatActivity {
                 }
             }
         });
-
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 
+    /**
+     * Userdaten(Telefonnummer) wird requested
+     */
     private void requestUserData(){
+        //In der externen Klasse
         request.requestData(this, Request.Method.GET, pb, container, BASE_URL + URL_BASE_USERS
                 + USER_ID, null, new AddNewEntry.ServerCallback() {
             @Override
@@ -206,6 +205,7 @@ public class UserProfile extends AppCompatActivity {
                 try {
                     number.setText(result.getString("phone_number"));
                     inputNumber.setText(number.getText());
+                    onTextChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
@@ -214,6 +214,9 @@ public class UserProfile extends AppCompatActivity {
         });
     }
 
+    /**
+     * PUT-Request, User Telefnonummer wird aktualisiert
+     */
     private void updateUserData(){
         pb.setVisibility(View.VISIBLE);
         JSONObject newUserNumber = new JSONObject();
@@ -223,8 +226,9 @@ public class UserProfile extends AppCompatActivity {
             e.printStackTrace();
             contracts.showSnackbar(container, getString(R.string.msg_error), true, false);
         }
+        //Request in er externen Klasse
         request.requestData(this, Request.Method.PUT, pb, container, BASE_URL + URL_BASE_USERS
-                + sPrefUser.getString(USER_SP_ID, null), newUserNumber, new AddNewEntry.ServerCallback() {
+                + sPrefUser.getString(USER_SHARED_PREFS_ID, null), newUserNumber, new AddNewEntry.ServerCallback() {
             @Override
             public void onSuccess(JSONObject result) {
                 try {
@@ -244,11 +248,6 @@ public class UserProfile extends AppCompatActivity {
     }
 
     private boolean inputIsValid(){
-        if (!change){
-            contracts.showSnackbar(container, getString(R.string.msg_no_changes), true, false);
-            number.setError(getString(R.string.msg_no_changes));
-            return false;
-        }
         if (inputNumber.getText().toString().trim().isEmpty()){
             inputNumber.setError(getString(R.string.errmsg_valid_input_required));
             inputNumber.requestFocus();
@@ -256,13 +255,35 @@ public class UserProfile extends AppCompatActivity {
         }
         return true;
     }
-
+    /**
+     * Aktualisierte Daten werden In SharedPreferences gespeichert
+     * @param number - neue Telefonnummer
+     */
     private void savePreferences(String number) {
         SharedPreferences sPref = this.getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();
-        editor.putString(USER_SP_NUMBER, number);
+        editor.putString(USER_SHARED_PREFS_NUMBER, number);
         USER_NUMBER = number;
         editor.apply();
         Log.i("Save User_number: ", String.valueOf(number));
+    }
+    /**
+     * Fals Änderungen gemacht wurden, wird der Save-Button aktiviert
+     */
+    private void onTextChanged(){
+        inputNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                saveButton.setAlpha(1);
+                saveButton.setEnabled(true);
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 }
