@@ -1,12 +1,11 @@
 package com.example.android.harvesthand;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -126,7 +124,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
      * in switchStatus werden die passenden Images in drawables abhängig vom @status gesucht.
      *@param property - ist die Eigenschaft eines Eintrags, für die ein Tutorial erstellt werden muss(z.B. airtemp)
      * in drawables wird nach dem vorher definiertem Namen des Images gesucht.
-     *Alle Namen müssen nach bestimtem Muster gebildet werden(z.B "tutorial_soilmoisture_less_1);
+     *Alle Namen müssen nach bestimtem Muster gebildet werden(z.B "tutorial_soilmoisture_greater_1);
      * Zur einer @property kann es mehrere Images/Animation/videos geben. Images/Animation/videos zur einem
      * @property werden am ende des Namens mit einem @i Identifikator bezeichnet.
      */
@@ -168,6 +166,26 @@ public class ShowTutorialActivity extends AppCompatActivity {
         }
         adapter = new TutorialRecyclerAdapter(tutorialList);
         recyclerView.setAdapter(adapter);
+    }
+
+    private void generalcoffe(String optional ) {
+        //Alle images aus drawable(nicht perfomat)
+        Field[] drawables = R.drawable.class.getFields();
+        int i = 1;//Identifikator
+        //Images für @property nach Namen suchen
+        for (Field f : drawables) {
+            if (f.getName().matches("general_coffe")) {
+                //Bei der Übereinstimmung Image und zugehörgie Description der Liste
+                //hinzufügen
+                try {
+                    tutorialList.add(new Tutorial(f.getInt(null), norm,
+                            getDescriptionStrings("desc_array_general_coffe" + i) + optional));
+                } catch (IllegalAccessException e1) {
+                    e1.printStackTrace();
+                }
+                i++;
+            }
+        }
     }
 
     /**
