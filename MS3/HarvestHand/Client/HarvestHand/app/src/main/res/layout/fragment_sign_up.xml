@@ -37,14 +37,14 @@
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/rb_profi"
+                android:id="@+id/rb_literate"
                 style="@style/rbSignUpStyle"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:text="@string/profi" />
 
             <RadioButton
-                android:id="@+id/rb_user"
+                android:id="@+id/rb_illiterate"
                 style="@style/rbSignUpStyle"
                 android:layout_height="wrap_content"
                 android:text="@string/user" />

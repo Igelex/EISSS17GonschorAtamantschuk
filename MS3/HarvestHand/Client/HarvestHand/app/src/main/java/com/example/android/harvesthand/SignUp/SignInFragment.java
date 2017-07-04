@@ -83,16 +83,17 @@ public class SignInFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Request zum Login des users
+     */
     public void sendSignInRequest() {
         InitTTS tts = new InitTTS(getContext());
         speaker = tts.initTTS();
         final Contracts contracts = new Contracts(speaker);
-
+        //Phone_number im Body wird gesendet
         Map<String, String> params = new HashMap<>();
         params.put("phone_number", mNumber);
         URL = URL_PROTOCOL + URL_IP + URL_PORT + URL_BASE_SIGNIN;
-        Log.i("Params: ", params.toString());
-        Log.i("URL: ", URL);
 
         JsonObjectRequest request = new JsonObjectRequest(URL, new JSONObject(params),
                 new Response.Listener<JSONObject>() {
@@ -103,10 +104,11 @@ public class SignInFragment extends Fragment {
                             String current_user_id = response.getString("_id");
                             String current_user_number = response.getString("phone_number");
                             int current_user_type = response.getInt("user_type");
-                            Log.i("User_id: ", current_user_id);
-                            Log.i("User_Type: ", "" + current_user_type);
+
                             savePreferences(current_user_id, current_user_type, current_user_number);
+
                             Toast.makeText(getContext(), R.string.msg_login_successful, Toast.LENGTH_SHORT ).show();
+                            //Nach erfolgreichem Login --> MainActivity
                             Intent intent = new Intent(getContext(), MainActivity.class);
                             startActivity(intent);
 
@@ -143,6 +145,10 @@ public class SignInFragment extends Fragment {
         Volley.newRequestQueue(getContext()).add(request);
     }
 
+    /**
+     * Validiert die User-Eingabe
+     * @return - true, fals eingabe vaide
+     */
     private boolean validNumberInput() {
         mNumber = inputNumber.getText().toString().trim();
         if (mNumber.isEmpty()) {
@@ -152,7 +158,9 @@ public class SignInFragment extends Fragment {
         }
         return true;
     }
-
+    /**
+     * User_id, phone_number und user_type werden permanent gespeichert
+     */
     private void savePreferences(String id, int type, String number) {
         sPref = getActivity().getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();

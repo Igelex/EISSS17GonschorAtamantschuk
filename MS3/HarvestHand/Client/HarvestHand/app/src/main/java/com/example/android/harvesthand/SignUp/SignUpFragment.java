@@ -43,21 +43,18 @@ import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS_ID;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS_NUMBER;
 import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS_TYPE;
+import static com.example.android.harvesthand.Contracts.USER_TYPE_ILLITERATE;
+import static com.example.android.harvesthand.Contracts.USER_TYPE_LITERATE;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SignUpFragment extends Fragment {
-    private static String URL;
-    private final static int PROFI = 0;
-    private final static int USER = 1;
     private EditText inputNumber;
     private RadioGroup usertypeRadioGroup;
     private String mNumber;
     private int mUserType;
-    private Button mSignUpButton;
-    private TextInputLayout mNumberTextInput;
     private ProgressBar progressBar;
     private Contracts contracts;
     private TextToSpeech speaker;
@@ -85,7 +82,7 @@ public class SignUpFragment extends Fragment {
 
         mNumber = inputNumber.getText().toString().trim();
 
-        mSignUpButton = view.findViewById(R.id.bt_signup);
+        Button mSignUpButton = view.findViewById(R.id.bt_signup);
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,31 +93,34 @@ public class SignUpFragment extends Fragment {
 
             }
         });
-
+        /**
+         * Auswahl des Usertypes mit Radiobuttons
+         */
         usertypeRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int id) {
                 switch (id) {
-                    case R.id.rb_profi:
-                        mUserType = PROFI;
+                    case R.id.rb_literate:
+                        mUserType = USER_TYPE_LITERATE;
                         break;
-                    case R.id.rb_user:
-                        mUserType = USER;
+                    case R.id.rb_illiterate:
+                        mUserType = USER_TYPE_ILLITERATE;
                         break;
                     default:
                         break;
                 }
             }
         });
-
         return view;
     }
 
-
-
+    /**
+     * Validiere Userinput
+     * @return - true, wenn Eingabe valide
+     */
     private boolean validNumberInput() {
         mNumber = inputNumber.getText().toString().trim();
-        mNumberTextInput = getActivity().findViewById(R.id.signup_inputlayout_number);
+        TextInputLayout mNumberTextInput = getActivity().findViewById(R.id.signup_inputlayout_number);
         if (mNumber.isEmpty()) {
             mNumberTextInput.setErrorEnabled(true);
             mNumberTextInput.setError(getString(R.string.errmsg_number_required));
@@ -132,6 +132,10 @@ public class SignUpFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Prüfe, ob Radiobutton selected ist
+     * @return - true, falls selected
+     */
     private boolean checkRadioButtons() {
         if (usertypeRadioGroup.getCheckedRadioButtonId() == -1) {
             contracts.showSnackbar(getView(), getActivity().getString(R.string.msg_choice_typeandgender), true, false);
@@ -141,12 +145,15 @@ public class SignUpFragment extends Fragment {
         return true;
     }
 
+    /**
+     * Request zum Registrieren im System
+     */
     public void sendSignUpRequest() {
+        //Body
         Map<String, String> params = new HashMap<>();
         params.put("phone_number", mNumber);
         params.put("user_type", Integer.toString(mUserType));
-        URL = BASE_URL + URL_BASE_SIGNUP ;
-
+        String URL = BASE_URL + URL_BASE_SIGNUP;
         Log.i("Params: ", params.toString());
 
         final JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URL,new JSONObject(params),
@@ -154,14 +161,17 @@ public class SignUpFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         progressBar.setVisibility(View.INVISIBLE);
-
                         try {
                             String user_id = response.getString("_id");
                             String user_number = response.getString("phone_number");
                             int user_type = response.getInt("user_type");
+
                             savePreferences(user_id, user_type, user_number);
+
                             Toast.makeText(getContext(), R.string.msg_signup_success, Toast.LENGTH_SHORT).show();
+
                             progressBar.setVisibility(View.INVISIBLE);
+                            //Nach erfolgreicher Registration --> MainActivity
                             startActivity(new Intent(getContext(), MainActivity.class));
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -194,7 +204,9 @@ public class SignUpFragment extends Fragment {
                 });
         Volley.newRequestQueue(getContext()).add(request);
     }
-
+    /**
+     * User_id, phone_number und user_type werden permanent gespeichert
+     */
     private void savePreferences(String id, int type, String number) {
         SharedPreferences sPref = getActivity().getSharedPreferences(USER_SHARED_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();

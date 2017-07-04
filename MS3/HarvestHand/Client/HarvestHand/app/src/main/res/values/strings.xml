@@ -12,13 +12,13 @@
     <string name="logout">logout</string>
 
     <!--Radiobuttons-->
-    <string name="profi">Advanced</string>
-    <string name="user">User</string>
+    <string name="profi">Literate</string>
+    <string name="user">Illiterate</string>
 
     <!--Feedback messages-->
     <string name="errmsg_valid_input_required">Valid input required!</string>
     <string name="errmsg_number_required">Please enter Telephone number</string>
-    <string name="msg_choice_typeandgender">Please select Usertype!</string>
+    <string name="msg_choice_typeandgender">Please select Profiletype!</string>
     <string name="msg_internal_error">Internal Error! Please try again</string>
     <string name="msg_number_exist">This Number already in use!</string>
     <string name="msg_signup_success">Registration successful!</string>
