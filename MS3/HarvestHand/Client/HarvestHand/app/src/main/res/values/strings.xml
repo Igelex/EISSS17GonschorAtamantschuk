@@ -36,6 +36,14 @@
     <string name="msg_cant_save">Error, cannot save. Please try again</string>
     <string name="msg_user_not_found">User not found</string>
     <string name="msg_select_spinners">Please choose  Crop and Soil!</string>
+    <string name="msg_no_data_available">No data available!</string>
+    <string name="msg_add_location">Please add location!</string>
+    <string name="msg_entry_deleted">Entry deleted</string>
+    <string name="msg_entry_not_found">Entry not found</string>
+    <string name="msg_data_saved">Data saved</string>
+    <string name="msg_no_changes">No changes</string>
+    <string name="msg_collaborator_added">Collaborator added</string>
+    <string name="msg_collaborator_removed">Collaborator removed</string>
 
     <!--Add new Entry Activity Strings-->
     <string name="new_entry_hint_name">Name</string>
@@ -105,56 +113,55 @@
     <string name="show_should_be_value">Value for this Property should be </string>
     <string name="show_current_value_of">Current value of</string>
     <string name="show_current_value_is">is </string>
+
     <!--Description Strings for each Image/Animation/Video in Tutorial-->
-    <!--Description for tutorial_soilmoisture_greater_1 Image -->
-    <string name="desc_soilmoisture_less_1_2">Required amount of liter water for your Field is </string>
-    <string name="desc_soilmoisture_less_1_1">Your Need water.</string>
+    <!--Description for tutorial_soilmoisture_less_2 Image -->
+    <string name="desc_soilmoisture_less_2_1">pots of water is required weekly for your Field </string>
+    <string-array name="desc_array_soilmoisture_less_2">
+        <item>@string/desc_soilmoisture_less_2_1</item>
+    </string-array>
+    <!--Description for tutorial_soilmoisture_less_1 Image -->
+    <string name="desc_soilmoisture_less_1_1">If the soil moisture is too low, the plant is dried up
+        and is no longer able to absorb nutrients with the roots.</string>
     <string-array name="desc_array_soilmoisture_less_1">
         <item>@string/desc_soilmoisture_less_1_1</item>
-        <item>@string/desc_soilmoisture_less_1_2</item>
     </string-array>
     <!--Description for tutorial_airtemp_less_1 Image -->
-    <string name="desc_airtemp_less_1_1">It is to cold maaaan. Do something!!! Brrrr </string>
+    <string name="desc_airtemp_less_1_1">It is to cold maaaan. Do something!!! Brrrr</string>
     <string-array name="desc_array_airtemp_less_1">
         <item>@string/desc_airtemp_less_1_1</item>
     </string-array>
     <!--Description for tutorial_airtemp_greater_1 Image -->
     <string name="desc_airtemp_greater_1_1">Coffee plants are shadow plants and are therefore usually
-        planted in mixed forests under shade-providing trees.  </string>
+        planted in mixed forests under shade-providing trees.</string>
     <string-array name="desc_array_airtemp_greater_1">
         <item>@string/desc_airtemp_greater_1_1</item>
     </string-array>
 
-    <!--Description for tutorial_soilmoisture_less_2 Image -->
-    <string name="desc_soilmoisture_less_2_1">If the soil moisture is too low, the plant is dried up
-        and is no longer able to absorb nutrients with the roots. </string>
-    <string-array name="desc_array_soilmoisture_less_2">
-        <item>@string/desc_soilmoisture_less_2_1</item>
-    </string-array>
-
+    <!--Description for tutorial_soilmoisture_greater_1 Image -->
     <string name="desc_soilmoisture_greater_1_1">If the precipitation is sufficiently high with 5
-        liters per square meter, the coffee plants must not be irrigated. </string>
+        liters per square meter, the coffee plants must not be irrigated.</string>
     <string name="desc_soilmoisture_greater_1_2">If the soil moisture is too high, the plants can not
-        absorb enough nutrients via the roots and they are deficient. </string>
-    <string name="desc_soilmoisture_greater_1_3">In consequence, she enters. </string>
+        absorb enough nutrients via the roots and they are deficient.</string>
+    <string name="desc_soilmoisture_greater_1_3">In consequence, she enters.</string>
     <string-array name="desc_array_soilmoisture_greater_1">
         <item>@string/desc_soilmoisture_greater_1_1</item>
         <item>@string/desc_soilmoisture_greater_1_2</item>
         <item>@string/desc_soilmoisture_greater_1_3</item>
     </string-array>
-
-    <string name="desc_general_coffe_1_1">Coffee plants should ideally be planted at a distance of 3 meters.  </string>
+    <!--Description for tutorial_general_coffe_1 Image -->
+    <string name="desc_general_coffe_1_1">Coffee plants should ideally be planted at a distance of 3 meters.</string>
     <string-array name="desc_array_general_coffe_1">
         <item>@string/desc_general_coffe_1_1</item>
     </string-array>
-
-    <string name="desc_general_coffe_2_1">Only red coffee cherries should be harvested. </string>
-    <string name="desc_general_coffe_2_2">Green, yellow and black fruits influence the taste of coffee negatively. </string>
+    <!--Description for tutorial_general_coffe_2 Image -->
+    <string name="desc_general_coffe_2_1">Only red coffee cherries should be harvested.</string>
+    <string name="desc_general_coffe_2_2">Green, yellow and black fruits influence the taste of coffee negatively.</string>
     <string-array name="desc_array_general_coffe_2">
         <item>@string/desc_general_coffe_2_1</item>
         <item>@string/desc_general_coffe_2_2</item>
     </string-array>
-
+    <!--Description for tutorial_general_coffe_3 Image -->
     <string name="desc_general_coffe_3_1">The ripe coffee cherries should be separated by hand with a
         slight twisting movement from the plants. </string>
     <string name="desc_general_coffe_3_2">Injuries to the fruit should be avoided.</string>
@@ -162,15 +169,13 @@
         <item>@string/desc_general_coffe_3_1</item>
         <item>@string/desc_general_coffe_3_2</item>
     </string-array>
-
+    <!--Description for tutorial_general_coffe_4 Image -->
     <string name="desc_general_coffe_4_1">The floor moisture can be determined with a floor gauge.</string>
     <string name="desc_general_coffe_4_2">To do this, the device is plugged into the ground and the measurement is started. </string>
     <string-array name="desc_array_general_coffe_4">
         <item>@string/desc_general_coffe_4_1</item>
         <item>@string/desc_general_coffe_4_2</item>
     </string-array>
-
-
 
     <!--Cropart spinner Strings-->
     <string name="crop_default">Crop art</string>
@@ -196,14 +201,5 @@
     </string-array>
 
     <string name="settings_menu_item">settings</string>
-    <string name="msg_no_data_available">No data available!</string>
-    <string name="msg_add_location">Please add location!</string>
-    <string name="msg_entry_deleted">Entry deleted</string>
-    <string name="msg_entry_not_found">Entry not found</string>
-    <string name="msg_data_saved">Data saved</string>
-    <string name="msg_no_changes">No changes</string>
-    <string name="msg_collaborator_added">Collaborator added</string>
-    <string name="msg_collaborator_removed">Collaborator removed</string>
-
 
 </resources>

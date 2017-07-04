@@ -60,13 +60,14 @@ public class Contracts {
     /*
     * Id der Eigenschaft für Tutorial
     * */
-    public static final int PROPERTY_SOIL_MOISTURE = 0;
-    public static final int PROPERTY_AIR_TEMP = 1;
-    public static final int PROPERTY_SOIL_TEMP = 2;
-    public static final int PROPERTY_AIR_HUMIDITY = 3;
-    public static final int PROPERTY_PH = 4;
-    public static final int PROPERTY_SOIL_TYPE = 5;
-    public static final int PROPERTY_HEIGHT= 6;
+    public static final int PROPERTY_SOIL_MOISTURE = 1;
+    public static final int PROPERTY_AIR_TEMP = 2;
+    public static final int PROPERTY_SOIL_TEMP = 3;
+    public static final int PROPERTY_AIR_HUMIDITY = 4;
+    public static final int PROPERTY_PH = 5;
+    public static final int PROPERTY_SOIL_TYPE = 6;
+    public static final int PROPERTY_HEIGHT= 7;
+    public static final int PROPERTY_GENERAL= 8;
 
     private TextToSpeech speaker;
 
@@ -92,7 +93,8 @@ public class Contracts {
     }
 
     public void speak(String textToSpeak){
-        speaker.setPitch((float)0.8);
+        //Speed
+        speaker.setSpeechRate((float)0.8);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             speaker.speak(textToSpeak, TextToSpeech.QUEUE_FLUSH, null, null);
         }else{

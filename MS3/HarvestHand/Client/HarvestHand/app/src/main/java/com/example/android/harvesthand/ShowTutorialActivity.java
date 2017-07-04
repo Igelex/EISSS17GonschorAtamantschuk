@@ -16,9 +16,14 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.android.harvesthand.Contracts.CROP_ID_BANANA;
+import static com.example.android.harvesthand.Contracts.CROP_ID_CACAO;
+import static com.example.android.harvesthand.Contracts.CROP_ID_CAFFE;
+import static com.example.android.harvesthand.R.array.desc_array_general_coffe_2;
+
 public class ShowTutorialActivity extends AppCompatActivity {
     private String norm;
-    private int status, waterReq, propertyId, deviation, currentValue;
+    private int status, waterReq, propertyId, deviation, currentValue, cropId;
     private static final int GREATER = 2;
     private Contracts contracts;
     private LinearLayout container;
@@ -39,6 +44,11 @@ public class ShowTutorialActivity extends AppCompatActivity {
         contracts = new Contracts(speaker);
         container = (LinearLayout) findViewById(R.id.show_container);
 
+        currentValueEar = (ImageButton) findViewById(R.id.show_current_value_ear);
+        CircleImageView currentValueCircleImg = (CircleImageView) findViewById(R.id.show_current_value_circle);
+        currentValueText = (TextView) findViewById(R.id.show_current_value);
+        View divider = (View) findViewById(R.id.show_divider);
+
         // Lese daten von der EntryTutorialActivity
         Intent intent = getIntent();
         if (intent != null) {
@@ -51,15 +61,19 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 if (intent.hasExtra("water_require")) {
                     waterReq = intent.getIntExtra("water_require", 0);
                 }
+                if (intent.hasExtra("crop_id")) {
+                    cropId = intent.getIntExtra("crop_id", 0);
+                    currentValueEar.setVisibility(View.GONE);
+                    currentValueCircleImg.setVisibility(View.GONE);
+                    currentValueText.setVisibility(View.GONE);
+                    divider.setVisibility(View.GONE);
+                }
                 //Liste, in der die Tutorials generiert werden
                 recyclerView = (RecyclerView) findViewById(R.id.show_list);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setHasFixedSize(true);
 
-                currentValueEar = (ImageButton) findViewById(R.id.show_current_value_ear);
-
-                currentValueText = (TextView) findViewById(R.id.show_current_value);
                 currentValueText.setText(String.valueOf(currentValue));
 
                 ImageButton closeButton = (ImageButton) findViewById(R.id.show_close_imb);
@@ -83,40 +97,53 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     /**
-     * Als erstet wird nach der @propertyId entschieden, welche Anbauempfehlung(Tutorial) angezeigt
+     * Als erstet wird nach der @propertyId entschieden, Anbauempfehlung (Tutorial) zu welcher Eigenschaft xangezeigt
      * werden muss
      */
     private void switchProperty() {
         switch (propertyId) {
-            case 0:
-                switchStatus("soilmoisture", String.valueOf(waterReq));
+            case 1:
+                switchStatus("soilmoisture");
                 speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_soilmoisture));
                 break;
-            case 1:
-                switchStatus("airtemp", "");
+            case 2:
+                switchStatus("airtemp");
                 speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_airtemp));
                 break;
             /*Werden nicht implementiert, nur zwei obere Beispiele
-            case 2:
+            case 3:
                 switchStatus("soilttemp");
                 speak();
                 break;
-            case 3:
+            case 4:
                 switchStatus("airhumidity");
                 speak();
                 break;
-            case 4:
+            case 5:
                 switchStatus("ph");
                 speak();
                 break;
-            case 5:
+            case 6:
                 switchStatus("soiltype");
                 speak();
                 break;
-            case 6:
+            case 7:
                 switchStatus("height");
                 speak();
                 break;*/
+            case 8:
+                switch (cropId){
+                    case CROP_ID_CAFFE:
+                        switchStatus("coffe");
+                        break;
+                    case CROP_ID_CACAO:
+                        switchStatus("cacao");
+                        break;
+                    case CROP_ID_BANANA:
+                        switchStatus("banana");
+                        break;
+                }
+                break;
         }
     }
 
@@ -124,13 +151,32 @@ public class ShowTutorialActivity extends AppCompatActivity {
      * in switchStatus werden die passenden Images in drawables abhängig vom @status gesucht.
      *@param property - ist die Eigenschaft eines Eintrags, für die ein Tutorial erstellt werden muss(z.B. airtemp)
      * in drawables wird nach dem vorher definiertem Namen des Images gesucht.
-     *Alle Namen müssen nach bestimtem Muster gebildet werden(z.B "tutorial_soilmoisture_greater_1);
+     *Alle Namen müssen nach bestimtem Muster gebildet werden(z.B "tutorial_soilmoisture_less_2);
      * Zur einer @property kann es mehrere Images/Animation/videos geben. Images/Animation/videos zur einem
      * @property werden am ende des Namens mit einem @i Identifikator bezeichnet.
      */
-    private void switchStatus(String property, String optional) {
+    private void switchStatus(String property) {
         String water = "";
-        if (status == GREATER) {
+        if (cropId > 0){
+            try {
+                //Alle images aus drawable(nicht perfomat)
+                Field[] drawables = R.drawable.class.getFields();
+                int i = 1;//Identifikator
+                //Images für @property nach Namen suchen
+                for (Field f : drawables) {
+                    if (f.getName().matches("tutorial_general_" + property + "_(.*)")) {
+                        //Bei der Übereinstimmung Image und zugehörgie Description der Liste
+                        //hinzufügen
+                        tutorialList.add(new Tutorial(f.getInt(null), norm,
+                                getDescriptionStrings("desc_array_general_" + property + "_" + i)));
+                        i++;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if (status == GREATER) {
             try {
                 //Alle images aus drawable(nicht perfomat)
                 Field[] drawables = R.drawable.class.getFields();
@@ -141,7 +187,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
                         //Bei der Übereinstimmung Image und zugehörgie Description der Liste
                         //hinzufügen
                         tutorialList.add(new Tutorial(f.getInt(null), norm,
-                                getDescriptionStrings("desc_array_" + property + "_greater_" + i) + optional));
+                                getDescriptionStrings("desc_array_" + property + "_greater_" + i)));
                         i++;
                     }
                 }
@@ -156,7 +202,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 for (Field f : drawables) {
                     if (f.getName().matches("tutorial_" + property + "_less(.*)")) {
                         tutorialList.add(new Tutorial(f.getInt(null), norm,
-                                getDescriptionStrings("desc_array_" + property + "_less_" + i) + optional));
+                                getDescriptionStrings("desc_array_" + property + "_less_" + i)));
                         i++;
                     }
                 }
@@ -168,39 +214,27 @@ public class ShowTutorialActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void generalcoffe(String optional ) {
-        //Alle images aus drawable(nicht perfomat)
-        Field[] drawables = R.drawable.class.getFields();
-        int i = 1;//Identifikator
-        //Images für @property nach Namen suchen
-        for (Field f : drawables) {
-            if (f.getName().matches("general_coffe")) {
-                //Bei der Übereinstimmung Image und zugehörgie Description der Liste
-                //hinzufügen
-                try {
-                    tutorialList.add(new Tutorial(f.getInt(null), norm,
-                            getDescriptionStrings("desc_array_general_coffe" + i) + optional));
-                } catch (IllegalAccessException e1) {
-                    e1.printStackTrace();
-                }
-                i++;
-            }
-        }
-    }
-
     /**
      * Sucht nach dem Array von Strings zu einem Image
      * @param arrayName - array-Name, wird von switchStatus() übergeben.
      * @return - string, description eines Images, wird vorgelesen.
      */
     private String getDescriptionStrings(String arrayName) {
+        String water = "";
         String currentString = "";
+        if (waterReq > 0){
+            water = String.valueOf(waterReq/10);
+        }
         try {
             //Suche array nach Namen
             String[] strings = getResources().getStringArray(this.getResources().getIdentifier(arrayName, "array",
                     this.getPackageName()));
             // Bilde ein String aus mehreren Strings
             for (String s : strings) {
+                if (s.contains("pots")){
+                    currentString = water + s;
+                    return currentString;
+                }
                 currentString += s;
             }
             return currentString;
@@ -241,6 +275,8 @@ public class ShowTutorialActivity extends AppCompatActivity {
             @Override
             //Vorlese Text wird zusammengesetzt(Z.b Current value of + Air Temp + is + 25)
             public void onClick(View view) {
+                //Speed
+                speaker.setSpeechRate((float)0.8);
                 speaker.speak(getString(R.string.show_current_value_of) + property + getString(R.string.show_current_value_is)
                         + currentValue, TextToSpeech.QUEUE_FLUSH, null);
             }

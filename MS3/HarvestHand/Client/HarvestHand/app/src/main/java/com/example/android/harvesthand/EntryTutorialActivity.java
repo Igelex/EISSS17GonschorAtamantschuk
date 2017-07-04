@@ -375,10 +375,12 @@ public class EntryTutorialActivity extends AppCompatActivity {
         //für Tutorial werden für jeweilige Eigenschaft relevante Daten übergeben
         //@airTemp
         startTutorial(soilMoistureImg, soilMoistureNorm, soilMoistureStatus, soilMoistureCurrentValue,
-                PROPERTY_SOIL_MOISTURE, waterRequire, soilMoistureDeviation);
+                PROPERTY_SOIL_MOISTURE, waterRequire, soilMoistureDeviation, 0);
         //@soilMoisture
         startTutorial(airTempImg, airTempNorm, airTempStatus, airTempCurrentValue, PROPERTY_AIR_TEMP,
-                0, airTepmDeviation);
+                0, airTepmDeviation, 0);
+        //Allgemeine Anbauempfehlung zur bestimmten Pflanze
+        startTutorial(cropImg, null, 0, 0, PROPERTY_GENERAL, 0, 0, cropID);
         /*        .
         .
         .
@@ -388,17 +390,17 @@ public class EntryTutorialActivity extends AppCompatActivity {
 
     /**
      * Hier wird ShowTutorialActivity gestartet, die die Tutorials präsentiert
-     * @param button- CircleImage, die angeklickt wurde
-     * @param norm - Norm-Wert der jeweiligen Eingenschaft
-     * @param status - status der jeweiligen Eingenschaft(LESS, GRAETER, NORM)
+     * @param button- CircleImage, das angeklickt wurde
+     * @param norm - Norm-Wert der jeweiligen Eigenschaft
+     * @param status - status der jeweiligen Eigenschaft(LESS, GRAETER, NORM)
      * @param currentValue - aktueller Wert der jeweiligen Eingenschaft
-     * @param propertyId - id der jeweiligen Eingenschaft (PROPERTY_SOIL_MOISTURE, ...)
+     * @param propertyId - id der jeweiligen Eigenschaft (PROPERTY_SOIL_MOISTURE, ...)
      * @param waterReq - Wasserverbrauch, falls vorhanden
-     * @param deviation - die Abweichung von Norm
+     * @param deviation - die Abweichung von Norm in prozent
      */
     private void startTutorial(ImageView button, final String norm, final int status,
                                final int currentValue, final int propertyId, final int waterReq,
-                               final int deviation) {
+                               final int deviation, final int cropId) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -410,6 +412,9 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 intent.putExtra("deviation", deviation);
                 if (waterReq != 0){
                     intent.putExtra("water_require", waterReq);
+                }
+                if (cropId != 0){
+                    intent.putExtra("crop_id", cropId);
                 }
                 startActivity(intent);
             }

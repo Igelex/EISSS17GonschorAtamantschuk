@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
@@ -17,12 +18,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static android.R.id.list;
+import static android.media.CamcorderProfile.get;
 
 
 /**
  * Code von https://github.com/lopspower/HFRecyclerView
  */
-public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
+public class TutorialRecyclerAdapter extends HFRecyclerView<Tutorial> {
 
     ArrayList<Tutorial> arrayList = new ArrayList<>();
     Context context;
@@ -44,6 +46,8 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
                 @Override
                 public void onClick(View view) {
                     //Description zum Image wird Vorgelesen
+                    //Speed
+                    speaker.setSpeechRate((float) 0.8);
                     speaker.speak(arrayList.get(position).getmDescription(), TextToSpeech.QUEUE_FLUSH, null);
                 }
             });
@@ -54,16 +58,21 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
             try {
                 if (position == arrayList.size()) {
                     // Norm-Value der Eigenschaft wird Vorgelesen
-                    footerViewHolder.normText.setText(arrayList.get(0).getmNorm());
-                    footerViewHolder.normEar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            speaker.speak( context.getString(R.string.show_should_be_value) +
-                                    arrayList.get(0).getmNorm(), TextToSpeech.QUEUE_FLUSH, null);
-                        }
-                    });
+                    if (arrayList.get(0).getmNorm() == null) {
+                        footerViewHolder.container.setVisibility(View.GONE);
+                    } else {
+                        footerViewHolder.normText.setText(arrayList.get(0).getmNorm());
+                        footerViewHolder.normEar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                speaker.speak(context.getString(R.string.show_should_be_value) +
+                                        arrayList.get(0).getmNorm(), TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                        });
+                    }
+
                 }
-            }catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 Log.e("Tutorial list", "" + e);
             }
 
@@ -110,15 +119,18 @@ public class TutorialRecyclerAdapter extends HFRecyclerView <Tutorial> {
     class FooterViewHolder extends RecyclerView.ViewHolder {
         TextView normText;
         ImageButton normEar;
+        LinearLayout container;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
             normText = itemView.findViewById(R.id.footer_norm_value);
             normEar = itemView.findViewById(R.id.footer_norm_value_ear);
+            container = itemView.findViewById(R.id.footer_container);
         }
     }
     //endregion
 
-    public void setTextToSpeech (){
+    public void setTextToSpeech() {
         speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
