@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="hfrecyclerview-1.0.0">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/4b8f7db98e3b9f40e058db4cc0ee45849a4f53cf/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/4b8f7db98e3b9f40e058db4cc0ee45849a4f53cf/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.mikhaellopez/hfrecyclerview/1.0.0/d65e0be1f085422583a32e8f36e66906a8ab3f91/hfrecyclerview-1.0.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
