@@ -97,7 +97,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     /**
-     * Als erstet wird nach der @propertyId entschieden, Anbauempfehlung (Tutorial) zu welcher Eigenschaft xangezeigt
+     * Als erstet wird nach der @propertyId entschieden, Anbauempfehlung (Tutorial) zu welcher Eigenschaft angezeigt
      * werden muss
      */
     private void switchProperty() {
@@ -194,7 +194,6 @@ public class ShowTutorialActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         } else {
             try {
                 Field[] drawables = R.drawable.class.getFields();

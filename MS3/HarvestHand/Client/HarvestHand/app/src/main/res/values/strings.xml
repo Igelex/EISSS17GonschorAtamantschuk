@@ -149,11 +149,19 @@
         <item>@string/desc_soilmoisture_greater_1_2</item>
         <item>@string/desc_soilmoisture_greater_1_3</item>
     </string-array>
+
+    <!--Description for tutorial_soilmoisture_greater_2 Image -->
+    <string name="desc_soilmoisture_greater_2_1">pots of water is required weekly for your Field</string>
+    <string-array name="desc_array_soilmoisture_greater_2">
+        <item>@string/desc_soilmoisture_greater_2_1</item>
+    </string-array>
+
     <!--Description for tutorial_general_coffe_1 Image -->
     <string name="desc_general_coffe_1_1">Coffee plants should ideally be planted at a distance of 3 meters.</string>
     <string-array name="desc_array_general_coffe_1">
         <item>@string/desc_general_coffe_1_1</item>
     </string-array>
+
     <!--Description for tutorial_general_coffe_2 Image -->
     <string name="desc_general_coffe_2_1">Only red coffee cherries should be harvested.</string>
     <string name="desc_general_coffe_2_2">Green, yellow and black fruits influence the taste of coffee negatively.</string>
@@ -161,6 +169,7 @@
         <item>@string/desc_general_coffe_2_1</item>
         <item>@string/desc_general_coffe_2_2</item>
     </string-array>
+
     <!--Description for tutorial_general_coffe_3 Image -->
     <string name="desc_general_coffe_3_1">The ripe coffee cherries should be separated by hand with a
         slight twisting movement from the plants. </string>
@@ -169,6 +178,7 @@
         <item>@string/desc_general_coffe_3_1</item>
         <item>@string/desc_general_coffe_3_2</item>
     </string-array>
+
     <!--Description for tutorial_general_coffe_4 Image -->
     <string name="desc_general_coffe_4_1">The floor moisture can be determined with a floor gauge.</string>
     <string name="desc_general_coffe_4_2">To do this, the device is plugged into the ground and the measurement is started. </string>
@@ -194,10 +204,12 @@
     <string name="soil_default">Soil art</string>
     <string name="soil_sand">Sand</string>
     <string name="soil_clay">Clay</string>
+    <string name="soil_humus">Humus</string>
     <string-array name="soil_spinner_array">
         <item>@string/soil_default</item>
         <item>@string/soil_sand</item>
         <item>@string/soil_clay</item>
+        <item>@string/soil_humus</item>
     </string-array>
 
     <string name="settings_menu_item">settings</string>

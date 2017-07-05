@@ -243,6 +243,9 @@ public class EntryTutorialActivity extends AppCompatActivity {
             case 2:
                 soilImg.setImageResource(R.drawable.soil_1_clay_img);
                 break;
+            case 3:
+                soilImg.setImageResource(R.drawable.soil_3_humus_img);
+                break;
             /*...*/
         }
     }

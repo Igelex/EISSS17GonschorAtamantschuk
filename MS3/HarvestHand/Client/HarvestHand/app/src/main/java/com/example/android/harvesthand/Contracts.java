@@ -56,6 +56,7 @@ public class Contracts {
     * */
     public static final int SOIL_ID_SAND = 1;
     public static final int SOIL_ID_CLAY= 2;/*...*/
+    public static final int SOIL_ID_HUMUS= 3;/*...*/
 
     /*
     * Id der Eigenschaft für Tutorial

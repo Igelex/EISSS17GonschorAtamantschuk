@@ -18,7 +18,7 @@
     },
     "soil": {
       "name": "tief/humusreich",
-      "id": 0
+      "id": 3
     },
     "soil_temp": {
       "max": 26,
@@ -54,7 +54,7 @@
     },
     "soil": {
       "name": "tief/humusreich",
-      "id": 1
+      "id": 3
     },
     "soil_temp": {
       "max": 26,
@@ -90,7 +90,7 @@
     },
     "soil": {
       "name": "humusreich",
-      "id": 2
+      "id": 3
     },
     "soil_temp": {
       "max": 25,

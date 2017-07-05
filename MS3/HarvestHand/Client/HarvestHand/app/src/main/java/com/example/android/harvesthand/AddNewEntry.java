@@ -531,6 +531,9 @@ public class AddNewEntry extends AppCompatActivity {
                     case 2:
                         soilId = SOIL_ID_CLAY;
                         break;
+                    case 3:
+                        soilId = SOIL_ID_HUMUS;
+                        break;
                     default:
                         soilId = DEFAULT_SELECTION;
                         break;
