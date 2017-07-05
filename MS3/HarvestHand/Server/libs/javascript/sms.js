@@ -2,14 +2,14 @@
  * Created by franz on 04.07.2017.
  */
 
-var websms = require("../websmscom");
+var websms = require('websmscom');
 var username = 'your_username';
 var password = 'your_password';
 var gatewayUrl = 'https://api.websms.com/';
 var recipientAddressList = ['4367612345678'];
 var unicodeMessageText   = 'Test'
 var maxSmsPerMessage     = 1;
-var isTest               = false; // true: do not send sms but test interface
+var isTest               = true; // true: do not send sms but test interface
 
 function main(){
 var myClient = new websms.Client(gatewayUrl, username, password);
@@ -54,5 +54,5 @@ function creationFailedCallback(errorObj, incompleteMessageObject) {
     console.log("\n---- creationFailedCallback function called with errorObj:\n", errorObj);
     console.log("incompleteMessageObject:", incompleteMessageObject);
 };
-main();
+//main();
 

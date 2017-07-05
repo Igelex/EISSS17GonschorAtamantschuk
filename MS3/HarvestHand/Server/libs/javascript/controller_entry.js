@@ -53,7 +53,7 @@ module.exports.getEntries = function (req, res) {
                 else {
                     /*Status 204 macht hier mehr Sinn(no content), Androids Volley Framework interpretiert aber status 204 und als
                      Time out error*/
-                    res.status(200).type('application/json').send({});
+                    res.status(200).type('application/json').send([]);
                 }
             }
         })

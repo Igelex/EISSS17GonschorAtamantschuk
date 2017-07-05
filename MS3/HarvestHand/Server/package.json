@@ -26,6 +26,7 @@
     "mongoose": "^4.9.10",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "websmscom": "^1.0.2"
   }
 }
