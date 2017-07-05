@@ -77,9 +77,9 @@ public class ListAdapter extends ArrayAdapter<Entry> {
         //TextViews in der Liste mit Inhalt füllen
         entryName.setText(currentEntry.getEntryName());
         entryLocation.setText(currentEntry.getLocation());
-        entryArea.setText(String.valueOf(currentEntry.getArea()));
+        entryArea.setText(String.valueOf(currentEntry.getArea()) + " " + mContext.getString(R.string.add_entry_m_squared));
 
-        if (userType == 1) {
+        if (userType == USER_TYPE_ILLITERATE) {
             speaker = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
                 @Override
                 public void onInit(int status) {
@@ -88,6 +88,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                     }
                 }
             });
+            //Inhalt des Listeneintrags wird vogelesen
             final ImageButton earButton = listView.findViewById(R.id.item_speak_icon);
             earButton.setVisibility(View.VISIBLE);
             earButton.setOnClickListener(new View.OnClickListener() {
@@ -97,8 +98,7 @@ public class ListAdapter extends ArrayAdapter<Entry> {
                             + mContext.getString(R.string.item_speaktext_comma) +
                             mContext.getString(R.string.item_speaktext_location) + entryLocation.getText().toString()
                             + mContext.getString(R.string.item_speaktext_comma) +
-                            mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString()
-                            + mContext.getString(R.string.add_entry_m_squared));
+                            mContext.getString(R.string.item_speaktext_area) + entryArea.getText().toString());
                 }
             });
         } else {

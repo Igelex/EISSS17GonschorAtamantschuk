@@ -282,11 +282,11 @@ public class ShowTutorialActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
         if (speaker != null) {
             speaker.stop();
             speaker.shutdown();
         }
-        super.onStop();
+        super.onPause();
     }
 }

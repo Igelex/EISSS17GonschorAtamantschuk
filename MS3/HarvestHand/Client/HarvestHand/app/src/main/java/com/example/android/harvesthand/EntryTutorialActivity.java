@@ -306,8 +306,8 @@ public class EntryTutorialActivity extends AppCompatActivity {
      */
     private void setTextView() {
         location.setText(entryLocationCity);
-        height.setText(String.valueOf(heightCurrentValue) + getString(R.string.add_entry_meter));
-        mature.setText(String.valueOf(matureMonth) + getString(R.string.tutorial_month));
+        height.setText(String.valueOf(heightCurrentValue) + " " + getString(R.string.add_entry_meter));
+        mature.setText(String.valueOf(matureMonth) + " " + getString(R.string.tutorial_month));
         airTemp.setText(airTempCurrentValue + celsius);
         airMoisture.setText(String.valueOf(airMoistureCurrentValue));
         ph.setText(String.valueOf(phCurrentValue));
