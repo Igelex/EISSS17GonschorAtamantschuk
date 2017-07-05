@@ -21,21 +21,21 @@ var entrySchema = mongoose.Schema({
     * Properties
     */
     location: {
-        name: String,
-        countryISOCode: String,
-        city: String
+        name: {type: String, required: true},
+        countryISOCode: {type: String, required: true},
+        city: {type: String, required: true}
     },
     /*Fläche in m2*/
-    area: Number,
+    area: {type: Number, required: true},
     /*Art des Bodens*/
-    soil: Number,
-    air_temp: Number,
-    soil_temp: Number,
-    soil_moisture: Number,
-    air_humidity: Number,
-    ph_value: Number,
+    soil_id: {type: Number, required: true},
+    air_temp: {type: Number, required: true},
+    soil_temp: {type: Number, required: true},
+    soil_moisture: {type: Number, required: true},
+    air_humidity: {type: Number, required: true},
+    ph_value: {type: Number, required: true},
     /*Anbauhöhe über dem Meerspiegel*/
-    height_meter: Number
+    height_meter: {type: Number, required: true}
 
 });
 

@@ -4,7 +4,7 @@
 var Norm = require('../models_mongoose/norms'),
     fs = require('fs');
 
-//Norm Daten werden eingelesen und in der DB gespeichert
+//Norm Daten werden aus dem File eingelesen und in der DB gespeichert
 module.exports.addNorm = function () {
     fs.readFile('crops_norms.json', 'utf8', function (err, data) {
         if (err){
@@ -17,15 +17,15 @@ module.exports.addNorm = function () {
                 if (err) {
                     console.error('Error, already exist');
                 } else {
-                    console.log('Norm saved: ' + result[1].name);
+                    console.log('Norm saved: ' + result[i].name);
                 }
             });
         }
     });
 };
-
+//For debugging
 module.exports.getNormById = function (req, res) {
-    Norm.findOne({art_id: req.params.id}, function (err, result) {
+    Norm.findOne({crop_id: req.params.id}, function (err, result) {
         if (err) {
             res.status(500).type('text').send('DB error :' + err);
         } else {
@@ -33,7 +33,7 @@ module.exports.getNormById = function (req, res) {
         }
     });
 };
-
+//For debugging
 module.exports.deleteNorm = function (req, res) {
     Norm.findByIdAndRemove(req.params.id, function (err, result) {
         console.info(result);
@@ -43,7 +43,7 @@ module.exports.deleteNorm = function (req, res) {
             if (result) {
                 res.status(200).type('text').send('Norm with id: ' + result._id + ' successful deleted');
             } else {
-                res.status(200).type('text').send('Norm with id: ' + req.params.id + ' not found');
+                res.status(204).type('text').send();
             }
         }
 
@@ -78,11 +78,11 @@ module.exports.getAllNorms = function (req, res) {
             console.log(err);
             res.status(500).type('text').send('DB error :' + err);
         } else {
-            if (Object.keys(result).length > 0) {
+            if (result) {
                 res.status(200).send(result);
             }
             else {
-                res.status(200).send('No Norms found');
+                res.status(204).send();
             }
         }
     })

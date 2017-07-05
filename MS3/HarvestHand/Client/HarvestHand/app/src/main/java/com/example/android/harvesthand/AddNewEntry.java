@@ -157,8 +157,8 @@ public class AddNewEntry extends AppCompatActivity {
                 //Enter wird angecklickt
                 if (keyEvent.getAction() == KeyEvent.ACTION_DOWN)
                     if (i == KeyEvent.KEYCODE_ENTER) {
-                        //Reauest, suche den User in DB
-                        request.requestData(AddNewEntry.this, Request.Method.GET, progBar, container, buildURL(),
+                        //Request, suche den User in DB
+                        request.requestData(AddNewEntry.this, Request.Method.GET, collabPb, container, buildURL(),
                                 null, new ServerCallback() {
                                     @Override
                                     public void onSuccess(JSONObject result) {
@@ -466,7 +466,7 @@ public class AddNewEntry extends AppCompatActivity {
                 entryObject.put("tutorial_id", "");
             }
             entryObject.put("crop_id", cropId);
-            entryObject.put("soil", soilId);
+            entryObject.put("soil_id", soilId);
             entryObject.put("location", locationObject);
 
         } catch (JSONException e) {
@@ -714,7 +714,7 @@ public class AddNewEntry extends AppCompatActivity {
                                 tutorialId = response.getString("tutorial_id");
                                 ownerId = response.getString("owner_id");
                                 int cropId = response.getInt("crop_id");
-                                int soilType = response.getInt("soil");
+                                int soilType = response.getInt("soil_id");
                                 int airTemp = response.getInt("air_temp");
                                 int airHumidity = response.getInt("air_humidity");
                                 int soilTemp = response.getInt("soil_temp");

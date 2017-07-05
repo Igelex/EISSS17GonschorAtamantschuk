@@ -34,7 +34,8 @@ require('./libs/javascript/passport');
 //all environments
 app.set('port', process.env.PORT || port);
 app.use(bodyParser.json());
-app.use(cookieParser());
+//Session und Passport werden nicht benutzt
+/*app.use(cookieParser());
 app.use(session({
     secret: 'my secret',
     resave: false,
@@ -43,8 +44,7 @@ app.use(session({
 }));
 app.use(flash());
 app.use(passport.initialize());
-app.use(passport.session());
-
+app.use(passport.session());*/
 
 app.use(function (req, res, next) {
     res.set('X-Powered-By', 'HarvestHand');

@@ -5,7 +5,6 @@ var controller_tutorial = require('./controller_tutorial'),
     http = require('http'),
     weather = require('./weather'),
     Norm = require('../models_mongoose/norms'),
-    weekPrecipitation = 0,
     entry,
     currentNorm
     NORM = 0, //flag, wenn daten von der Norm nicht abweichen
@@ -61,7 +60,7 @@ var newTutorial = {
 //Analysiert Daten eines Eintrags, wird beim erstellen des Eintrags aufgerufen
 /*Standardwerte werden aus der Datenbank geholt*/
 module.exports.analyseData = function (currentEntry) {
-    /*Standardwerte werden aus der Datenbank geholt*/
+    /*Standardwerte(Norms) bestimmter PFlanze werden aus der Datenbank geholt*/
     Norm.findOne({
             crop_id: currentEntry.crop_id
         },
@@ -72,7 +71,12 @@ module.exports.analyseData = function (currentEntry) {
                 if (norm) {
                     currentNorm = norm;
                     entry = currentEntry;
-                    fetchWeatherData(entry.location.countryISOCode, entry.location.city);
+                    /**
+                     * Als nächstes wird der Niderschlag für eine Woche requested in dem Modul 'weather'
+                     * @param entry.location.countryISOCode - DE, SN...
+                     * @param entry.location.city - die Stadt
+                     */
+                    weather.getPrecipitationForWeek(entry.location.countryISOCode, entry.location.city);
                 }
                 else {
                     console.error("Cant save Tutorila, NORM is: " + currentNorm);
@@ -82,15 +86,13 @@ module.exports.analyseData = function (currentEntry) {
         });
 };
 
-function fetchWeatherData(countryISOCode, city) {
-    weather.getPrecipitationForWeek(countryISOCode, city);
-}
 
-/*Vergleicht Daten des Eitrags mit den dazugehörigen Normen, für jeden wert wird flag gesetzt und die Abweichnung in
- prozent berechnet*/
+/**
+ * Vergleicht Daten des Eitrags mit den dazugehörigen Normen, für jeden wert wird flag gesetzt und die Abweichnung in
+ * prozent berechnet, die Funktion wird im Modul 'weather' aufgerufen, nachdem die Wetterdaten abgefragt wurden
+ * @param weekPrecipitation - Wochenniederschlag
+ */
 module.exports.analyseValues = function (weekPrecipitation) {
-
-    console.log('Percip in AnalyseValues: ' + weekPrecipitation);
     /*Air temperature Analyse*/
     if (entry.air_temp < currentNorm.air_temp.min) {
         newTutorial.air_temp.deviation = calculateDeviation(currentNorm.air_temp.min, entry.air_temp);
@@ -105,7 +107,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
     newTutorial.air_temp.currentValue = entry.air_temp;
     newTutorial.air_temp.norm = currentNorm.air_temp.min + "-" + currentNorm.air_temp.max;
 
-    /*Air moisture Analyse*/
+    /*Air humidity Analyse*/
     if (entry.air_humidity < currentNorm.air_humidity.min) {
         newTutorial.air_humidity.deviation = calculateDeviation(currentNorm.air_humidity.min, entry.air_humidity);
         newTutorial.air_humidity.status = LESS;
@@ -161,13 +163,13 @@ module.exports.analyseValues = function (weekPrecipitation) {
     newTutorial.ph_value.currentValue = entry.ph_value;
     newTutorial.ph_value.norm = currentNorm.ph_value;
 
-    /*Bodentyp Anylyse*/
-    if (entry.soil != currentNorm.soil.id) {
+    /*Bodentyp Analyse*/
+    if (entry.soil_id != currentNorm.soil.id) {
         newTutorial.soil.status = LESS;
     } else {
         newTutorial.soil.status = NORM;
     }
-    newTutorial.soil.currentValue = entry.soil;
+    newTutorial.soil.currentValue = entry.soil_id;
     newTutorial.soil.norm = currentNorm.soil.id;
 
     if (entry.soil_moisture < currentNorm.soil_moisture.min) {
@@ -187,8 +189,15 @@ module.exports.analyseValues = function (weekPrecipitation) {
 
     console.log("New Tutorial erstellt: " + newTutorial.air_humidity.currentValue);
     controller_tutorial.addTutorial(newTutorial, entry._id);
-}
+};
 
+/**
+ * Berechnet um wieviel Prozent @b ist kleiner als @a. @a ist 100%.(Beispiel: @a = 50 =100%, @b ist 30, also 60% von @a,
+ * heisst die @b ist um 100-60=40 kleiner als @a, demensprechend ist die Abweichung 40%)
+ * @param a - größere Zahl, Abweichnug von dieser Zahl wird berechnet
+ * @param b - kleinere Zahl
+ * @returns {int} - abgerundete Abweichungszahl(z.B. 40)
+ */
 function calculateDeviation(a, b) {
     return ((a - b) / a * 100).toFixed(0);
 

@@ -3,7 +3,8 @@
  */
 var mongoose = require('mongoose');
 
-//Tutorial collection zum speichern der Anleitungen
+/*Tutorial collection zum speichern der Anleitungen, zur jeder eingenschaft werden der Status(GREATER,LESS,NORM),
+prozentuelle Abweichung von der Norm, aktueller Wert und der gewünschte Wert(@norm), und optionale Werte gespeichert*/
 
 var tutorialSchema = mongoose.Schema({
     air_temp: {

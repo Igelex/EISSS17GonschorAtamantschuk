@@ -22,7 +22,11 @@ module.exports.addEntry = function (req, res) {
     });
 };
 
-//Alle Entries anzeigen eisen Users anzeigen
+/**
+ * Es werden alle Entries Angezeigt, in denen ein User als Owner und als Collaborator eingetragen ist
+ * @param req
+ * @param res
+ */
 module.exports.getEntries = function (req, res) {
     console.log("Get Entries owner_id: " + req.query.owner_id);
     console.log("Get Entries collab_id: " + req.query.collab_id);
@@ -30,6 +34,7 @@ module.exports.getEntries = function (req, res) {
             $or: [{owner_id: req.query.owner_id}, {collaborators_id: req.query.collab_id}]
         },
         {
+            //Projektion
             "entry_name": true,
             "art_id": true,
             "area": true,
@@ -46,7 +51,9 @@ module.exports.getEntries = function (req, res) {
                     res.status(200).type('application/json').send(result);
                 }
                 else {
-                    res.status(200).type('application/json').send([]);
+                    /*Status 204 macht hier mehr Sinn(no content), Androids Volley Framework interpretiert aber status 204 und als
+                     Time out error*/
+                    res.status(200).type('application/json').send({});
                 }
             }
         })
@@ -63,13 +70,13 @@ module.exports.getEntryById = function (req, res) {
                 res.status(200).type('application/json').send(result);
             }
             else {
-                res.status(204).type('application/json').send();
+                res.status(200).type('application/json').send();
             }
         }
     });
 };
 
-//Wenn daten analysiert und Tutorial erstellt, wird die @tutorial_id im Entry aktualisiert
+//Wenn daten analysiert und Tutorial erstellt, wird die @tutorial_id des Entrys aktualisiert
 module.exports.updateEntryTutorialId = function (id, tutorial_id) {
     Entry.findByIdAndUpdate(id, {tutorial_id: tutorial_id}, function (err, result) {
         if (err) {
@@ -84,7 +91,9 @@ module.exports.updateEntryTutorialId = function (id, tutorial_id) {
 
     });
 };
-
+/**
+ * Daten Aktualisieren
+ */
 module.exports.updateEntry = function (req, res) {
     console.error('IN update Entry...........');
     Entry.findByIdAndUpdate(req.params.id, req.body, function (err, result) {
@@ -93,16 +102,17 @@ module.exports.updateEntry = function (req, res) {
             res.status(500).type('application/json').send({msg: "DB error: " + err, res: false});
         } else {
             if (result) {
-                console.error('UPdated entry tutorial: ');
+                //Erst wird das Tutorial gelöscht
                 controller_tutorial.deleteTutorial(result.tutorial_id);
+                //@res gibt Auskunft darüber, ob die Aktion erfolgreich war
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + result._id + ' updated',
                     res: true
                 });
-                console.error("Ready to analyze: ")
+                console.error("Ready to analyze: ");
+                //Die Bodenanalyse wird mit den aktualisierten Daten durchgeführt
                 analyzer.analyseData(result);
             } else {
-                console.error('Entry tutorial_id not updated');
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + req.params.id + ' not found',
                     res: false
@@ -112,15 +122,20 @@ module.exports.updateEntry = function (req, res) {
 
     });
 };
-
+/**
+ * Eintrag löschen
+ * @param req
+ * @param res
+ */
 module.exports.deleteEntry = function (req, res) {
     Entry.findByIdAndRemove(req.params.id, function (err, result) {
-        console.info(result);
         if (err) {
             res.status(500).type('application/json').send({msg: "DB error: " + err, res: false});
         } else {
             if (result) {
+                //zugehöriges Tutorial wird ebenfalls gelöscht
                 controller_tutorial.deleteTutorial(result.tutorial_id);
+                //@res gibt Auskunft darüber, ob die Aktion erfolgreich war
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + result._id + ' successfully deleted',
                     res: true

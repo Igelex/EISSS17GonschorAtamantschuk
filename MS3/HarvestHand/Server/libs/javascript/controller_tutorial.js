@@ -18,7 +18,7 @@ module.exports.addTutorial = function (tutorial, entry_id) {
     });
 };
 
-//Zum Eintrag Passendes Tutorial wird gefunden
+//Zum Eintrag passendes Tutorial wird gesucht
 module.exports.getTutorialById = function (req, res) {
     Tutorial.findById(req.params.id, function (err, result) {
         if (err) {
@@ -34,7 +34,10 @@ module.exports.getTutorialById = function (req, res) {
         }
     });
 };
-
+/**
+ * Tutorial löschen
+ * @param id - @tutorial_id des Entrys, welchem Tutorial zugehört
+ */
 module.exports.deleteTutorial = function (id) {
     console.log("DELETE Tutorial ID: " + id);
     Tutorial.findByIdAndRemove(id, function (err, result) {
@@ -52,14 +55,14 @@ module.exports.deleteTutorial = function (id) {
     });
 };
 
-//debugging
+//For debugging
 module.exports.getAllTutorials = function (req, res) {
     Tutorial.find().exec(function (err, result) {
         if (err) {
             console.log(err);
             res.status(500).type('text').send('DB error :' + err);
         } else {
-            if (Object.keys(result).length > 0) {
+            if (result) {
                 res.status(200).type('application/json').send(result);
             }
             else {

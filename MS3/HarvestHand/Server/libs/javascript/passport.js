@@ -1,6 +1,4 @@
-/**
- * Created by Pastuh on 18.05.2017.
- */
+/* WIRD NICHT BENUTZT
 var passport = require('passport'),
     express = require('express'),
     LocalStrategy = require('passport-local').Strategy,
@@ -11,7 +9,6 @@ passport.use(new LocalStrategy({
         passwordField: null
     },
     function (phone_number, done) {
-        console.log('phone_number: ' + phone_number);
         User.findOne({'phone_number': phone_number}, function (err, user) {
             if (err) {
                 return done(err);
@@ -36,3 +33,4 @@ passport.deserializeUser(function (id, done) {
         done(err, user);
     });
 });
+*/
