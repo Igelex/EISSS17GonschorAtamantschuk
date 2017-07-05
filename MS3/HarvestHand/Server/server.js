@@ -15,6 +15,7 @@ var express = require('express'),
     controller_tutorial = require('./libs/javascript/controller_tutorial'),
     controller_user = require('./libs/javascript/controller_user'),
     weather = require('./libs/javascript/weather'),
+    sms = require('./libs/javascript/sms'),
     port = 3001;
 
 /*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
@@ -56,8 +57,8 @@ app.get('/', function (req, res) {
     res.send('Hallo, World!!!');
 });
 
-app.get("/weather", weather.getAirTemp);
-
+app.get('/weather', weather.getAirTemp);
+app.get('/sms');
 //////////////////////////Users
 
 app.post('/signup', controller_user.registerUser);
