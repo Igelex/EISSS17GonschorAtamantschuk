@@ -19,7 +19,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static com.example.android.harvesthand.Contracts.CROP_ID_BANANA;
 import static com.example.android.harvesthand.Contracts.CROP_ID_CACAO;
 import static com.example.android.harvesthand.Contracts.CROP_ID_CAFFE;
-import static com.example.android.harvesthand.R.array.desc_array_general_coffe_2;
 
 public class ShowTutorialActivity extends AppCompatActivity {
     private String norm;
@@ -47,7 +46,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
         currentValueEar = (ImageButton) findViewById(R.id.show_current_value_ear);
         CircleImageView currentValueCircleImg = (CircleImageView) findViewById(R.id.show_current_value_circle);
         currentValueText = (TextView) findViewById(R.id.show_current_value);
-        View divider = (View) findViewById(R.id.show_divider);
+        View divider = findViewById(R.id.show_divider);
 
         // Lese daten von der EntryTutorialActivity
         Intent intent = getIntent();

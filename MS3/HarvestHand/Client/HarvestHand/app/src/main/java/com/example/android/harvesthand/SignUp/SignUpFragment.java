@@ -35,17 +35,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.android.harvesthand.Contracts.BASE_URL;
-import static com.example.android.harvesthand.Contracts.URL_BASE_SIGNUP;
-import static com.example.android.harvesthand.Contracts.USER_ID;
-import static com.example.android.harvesthand.Contracts.USER_NUMBER;
-import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS;
-import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS_ID;
-import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS_NUMBER;
-import static com.example.android.harvesthand.Contracts.USER_SHARED_PREFS_TYPE;
-import static com.example.android.harvesthand.Contracts.USER_TYPE_ILLITERATE;
-import static com.example.android.harvesthand.Contracts.USER_TYPE_LITERATE;
-
+import static com.example.android.harvesthand.Contracts.*;
 
 /**
  * A simple {@link Fragment} subclass.

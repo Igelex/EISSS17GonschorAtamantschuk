@@ -7,7 +7,6 @@ package com.example.android.harvesthand;
 public class Tutorial {
     private int mImageId;
     private String mDescription;
-    private String mOptional;
     private String mNorm;
 
     public Tutorial(int mImageId, String norm, String description) {

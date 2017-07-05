@@ -1,7 +1,6 @@
 package com.example.android.harvesthand.SignUp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;

@@ -17,10 +17,6 @@ import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static android.R.id.list;
-import static android.media.CamcorderProfile.get;
-
-
 /**
  * Code von https://github.com/lopspower/HFRecyclerView
  */
