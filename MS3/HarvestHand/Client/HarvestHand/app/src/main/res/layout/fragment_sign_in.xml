@@ -1,43 +1,44 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/colorPrimary"
-    tools:context="com.example.android.harvesthand.SignUp.SignInFragment"
-    android:paddingTop="16dp">
+    android:orientation="vertical"
+    android:paddingTop="16dp"
+    tools:context="com.example.android.harvesthand.SignUp.SignInFragment">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/inputlayout_pass"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/TextInputLayout"
-        app:counterEnabled="true"
-        app:counterMaxLength="6">
+        android:theme="@style/TextInputLayout">
 
         <EditText
             android:id="@+id/signin_input_number"
             style="@style/inputsStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_phone_white_24dp"
+            android:drawablePadding="16dp"
             android:ems="10"
             android:hint="@string/input_your_number"
             android:inputType="textPassword" />
 
-        <Button
-            android:id="@+id/signin_button"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/colorAccent"
-            android:text="@string/signin"
-            android:textColor="@android:color/white"
-            tools:targetApi="lollipop" />
 
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/signin_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="@color/colorAccent"
+        android:text="@string/signin"
+        android:textColor="@android:color/white"
+        tools:targetApi="lollipop" />
 
 
 </LinearLayout>

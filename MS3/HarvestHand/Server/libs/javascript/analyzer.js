@@ -93,6 +93,7 @@ module.exports.analyseData = function (currentEntry) {
  * @param weekPrecipitation - Wochenniederschlag
  */
 module.exports.analyseValues = function (weekPrecipitation) {
+
     /*Air temperature Analyse*/
     if (entry.air_temp < currentNorm.air_temp.min) {
         newTutorial.air_temp.deviation = calculateDeviation(currentNorm.air_temp.min, entry.air_temp);
@@ -187,7 +188,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
     newTutorial.soil_moisture.water_requirements = currentNorm.water_requirements * entry.area - weekPrecipitation;
     newTutorial.mature_after_month = currentNorm.mature_after_month;
 
-    console.log("New Tutorial erstellt: " + newTutorial.air_humidity.currentValue);
+    console.log("New Tutorial erstellt... ");
     controller_tutorial.addTutorial(newTutorial, entry._id);
 };
 

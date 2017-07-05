@@ -35,7 +35,9 @@ public class Contracts {
     public static final int USER_TYPE_ILLITERATE = 1;
     public static final int USER_TYPE_LITERATE = 0;
     public static final String USER_SHARED_PREFS_NUMBER = "phone_number";
-
+    /*
+    Id und Telefonnummer des Benutzers werden global gespeichert
+     */
     public static String USER_ID = "";
     public static String USER_NUMBER = "";
 

@@ -17,7 +17,7 @@ module.exports.addNorm = function () {
                 if (err) {
                     console.error('Error, already exist');
                 } else {
-                    console.log('Norm saved: ' + result[i].name);
+                    console.log('Norm saved ');
                 }
             });
         }

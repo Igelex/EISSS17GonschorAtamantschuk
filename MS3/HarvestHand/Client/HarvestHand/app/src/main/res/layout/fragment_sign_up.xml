@@ -24,6 +24,7 @@
                 style="@style/inputsStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_phone_white_24dp"
                 android:ems="10"
                 android:hint="@string/input_your_number"
                 android:inputType="textPassword" />
@@ -54,10 +55,10 @@
             android:id="@+id/bt_signup"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="1dp"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/signup"
             android:textColor="@android:color/white" />

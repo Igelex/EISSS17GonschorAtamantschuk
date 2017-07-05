@@ -104,14 +104,16 @@ module.exports.updateEntry = function (req, res) {
             if (result) {
                 //Erst wird das Tutorial gelöscht
                 controller_tutorial.deleteTutorial(result.tutorial_id);
+
+                console.info("Ready to analyze... ");
+                //Die Bodenanalyse wird mit den aktualisierten Daten durchgeführt
+                analyzer.analyseData(req.body);
+
                 //@res gibt Auskunft darüber, ob die Aktion erfolgreich war
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + result._id + ' updated',
                     res: true
                 });
-                console.error("Ready to analyze: ");
-                //Die Bodenanalyse wird mit den aktualisierten Daten durchgeführt
-                analyzer.analyseData(result);
             } else {
                 res.status(200).type('application/json').send({
                     msg: 'Entry with id: ' + req.params.id + ' not found',

@@ -29,7 +29,7 @@ module.exports.getTutorialById = function (req, res) {
                 res.status(200).type('application/json').send(result);
             }
             else {
-                res.status(204).type('text').send('No Tutorial found');
+                res.status(202).type('text').send({});
             }
         }
     });
@@ -41,14 +41,13 @@ module.exports.getTutorialById = function (req, res) {
 module.exports.deleteTutorial = function (id) {
     console.log("DELETE Tutorial ID: " + id);
     Tutorial.findByIdAndRemove(id, function (err, result) {
-        console.info(result);
         if (err) {
             console.log("DELETE: Tutorial: " + err);
         } else {
             if (result) {
                 console.log("DELETE: Tutorial deleted with ID: " + result._id);
             } else {
-                console.log("DELETE: Tutorial not found with ID: " + result._id);
+                console.log("DELETE: Tutorial not found with ID: " + id);
             }
         }
 

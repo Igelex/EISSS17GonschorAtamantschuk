@@ -174,6 +174,10 @@ public class AddNewEntry extends AppCompatActivity {
                                                     Toast.makeText(AddNewEntry.this,
                                                             getString(R.string.msg_collaborator_added),
                                                             Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    contracts.showSnackbar(container,
+                                                            getString(R.string.msg_user_not_found),
+                                                    true, false);
                                                 }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -452,6 +456,11 @@ public class AddNewEntry extends AppCompatActivity {
             entryObject.put("height_meter", Integer.valueOf(heightEdit.getText().toString().trim()));
             entryObject.put("collaborators_id", new JSONArray(listCollabsIdsArray));
             entryObject.put("collaborators_number", new JSONArray(listCollabsNumbersArray));
+
+            if (entryId != null) {
+                //wenn Update modus
+                entryObject.put("_id", entryId);
+            }
 
             if (ownerId != null) {
                 //wenn Update modus

@@ -15,7 +15,7 @@ module.exports.getPrecipitationForWeek = function (countryISOCode, city) {
     //Die Request-Url
     var requestUrl = 'http://api.wunderground.com/api/' + key + '/forecast10day/q/' + countryISOCode + '/'
         + city + '.json';
-    console.log('Send request...');
+    console.log('Send weather request...');
     //Sende Request
     request(requestUrl, function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -37,17 +37,16 @@ module.exports.getPrecipitationForWeek = function (countryISOCode, city) {
                     console.log('Precipitation week : ' + weekPrecipitation);
                     //Die Bodenanalyse wird weiter durchgeführt
                     analyzer.analyseValues(weekPrecipitation);
-                }catch (e){
+                }catch (e) {
                     console.error("JSON ERROR in Precipitation: " + e);
-                } finally {
-                    //Auch im Fall, dass keine Wetterdane vorhanden, sollte die Bodenanalyse weiter durchgeführt werden
-                    analyzer.analyseValues(weekPrecipitation);
                 }
             } else {
+                //Auch im Fall, dass keine Wetterdane vorhanden, sollte die Bodenanalyse weiter durchgeführt werden
                 console.log('No weatherdata : ' + response);
                 analyzer.analyseValues(weekPrecipitation);
             }
         } else {
+            //Auch im Fall, dass keine Wetterdane vorhanden, sollte die Bodenanalyse weiter durchgeführt werden
             console.log(error, response.statusCode, body);
             analyzer.analyseValues(weekPrecipitation);
         }
