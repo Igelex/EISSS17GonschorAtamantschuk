@@ -152,7 +152,7 @@
 
                     <TextView
                         android:id="@+id/details_text_crop"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
@@ -160,7 +160,7 @@
 
                     <TextView
                         android:id="@+id/details_crop"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Coffee"
@@ -176,7 +176,7 @@
 
                     <TextView
                         android:id="@+id/details_text_soil"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_weight="1"
@@ -184,7 +184,7 @@
 
                     <TextView
                         android:id="@+id/details_soil"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
                         android:layout_weight="1"
