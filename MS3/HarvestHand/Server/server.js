@@ -18,7 +18,7 @@ var express = require('express'),
     sms = require('./libs/javascript/sms'),
     port = 3001;
 
-/*Ablauf: POST Entry --> analyzer --> GET Norms --> analyseValues --> save Tutorial
+/*Ablauf: POST Entry --> analyzer --> GET Norms --> GET weather --> analyseValues --> save Tutorial
  *--> update @tutorial_id in Entry */
 
 //Check DB Connection
