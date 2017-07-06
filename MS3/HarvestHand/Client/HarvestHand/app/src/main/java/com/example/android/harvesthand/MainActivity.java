@@ -311,10 +311,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("entry_id", currentEq.getEntryId());
                     intent.putExtra("entry_location_city", currentEq.getLocation());
                     intent.putExtra("entry_name", currentEq.getEntryName());
-                    Log.i("Intent name", currentEq.getEntryName());
                     intent.putExtra("entry_area", currentEq.getArea());
                     intent.putExtra("tutorial_id", currentEq.getTutorialId());
-                    Log.i("Intent tutorial_id", currentEq.getTutorialId());
                     intent.putExtra("crop_id", currentEq.getCropId());
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivity(intent);

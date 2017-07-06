@@ -94,17 +94,25 @@ module.exports.analyseData = function (currentEntry) {
  */
 module.exports.analyseValues = function (weekPrecipitation) {
 
+    /*aktueller Wert jeder Eigenschaft wird mit dem Norm-Wert abgeglichen, um Abweichungen zu ermitteln*/
+
     /*Air temperature Analyse*/
+    //Überprüfen ob der Wert kleiner ist als die Norm
     if (entry.air_temp < currentNorm.air_temp.min) {
+        //Prozentuelle abweichung wird Berechnet
         newTutorial.air_temp.deviation = calculateDeviation(currentNorm.air_temp.min, entry.air_temp);
         newTutorial.air_temp.status = LESS;
+        //Überprüfen ob der Wert größer ist als die Norm
     } else if (entry.air_temp > currentNorm.air_temp.max) {
+        //Prozentuelle abweichung wird Berechnet
         newTutorial.air_temp.deviation = calculateDeviation(entry.air_temp, currentNorm.air_temp.max);
         newTutorial.air_temp.status = GREATER;
+        //Anderfalls ist der Wert in Ordnung
     } else {
         newTutorial.air_temp.deviation = 0;
         newTutorial.air_temp.status = NORM
     }
+    //aktueller und gewünschter Werte werden gespeichert
     newTutorial.air_temp.currentValue = entry.air_temp;
     newTutorial.air_temp.norm = currentNorm.air_temp.min + "-" + currentNorm.air_temp.max;
 
@@ -164,6 +172,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
     newTutorial.ph_value.currentValue = entry.ph_value;
     newTutorial.ph_value.norm = currentNorm.ph_value;
 
+    //Wird ermittelt, ob der Bodentype passend ist
     /*Bodentyp Analyse*/
     if (entry.soil_id != currentNorm.soil.id) {
         newTutorial.soil.status = LESS;
@@ -185,6 +194,8 @@ module.exports.analyseValues = function (weekPrecipitation) {
     }
     newTutorial.soil_moisture.currentValue = entry.soil_moisture;
     newTutorial.soil_moisture.norm = currentNorm.soil_moisture.min + "-" + currentNorm.soil_moisture.max;
+    /*Zu Bodenfeuchtigkeit wird dazu die empfohlen wöchentliche Wassermenge zum Gießen berechnet */
+    //Wasserverbrauch der Pflanze pro m^2 * Fläche - Niederschlag = wöchentliche Wassermenge
     newTutorial.soil_moisture.water_requirements = currentNorm.water_requirements * entry.area - weekPrecipitation;
     newTutorial.mature_after_month = currentNorm.mature_after_month;
 
