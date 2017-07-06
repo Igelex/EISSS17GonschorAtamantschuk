@@ -189,13 +189,13 @@
 
     <!--Cropart spinner Strings-->
     <string name="crop_default">Crop art</string>
-    <string name="crop_caffe">Caffe</string>
+    <string name="crop_coffe">Coffe</string>
     <string name="crop_cacao">Cacao</string>
     <string name="crop_banana">Banana</string>
 
     <string-array name="crop_spinner_array">
         <item>@string/crop_default</item>
-        <item>@string/crop_caffe</item>
+        <item>@string/crop_coffe</item>
         <item>@string/crop_cacao</item>
         <item>@string/crop_banana</item>
     </string-array>

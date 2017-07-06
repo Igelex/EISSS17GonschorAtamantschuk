@@ -61,7 +61,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
         if (networkInfo != null && networkInfo.isConnected()) {
 
             InitTTS tts = new InitTTS(this);
-            speaker = tts.initTTS();
+            speaker = tts.initSpeaker();
             contracts = new Contracts(speaker);
 
             //Hol entry-Daten von der Parent-Activity

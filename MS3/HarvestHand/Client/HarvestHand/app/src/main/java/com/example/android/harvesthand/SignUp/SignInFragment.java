@@ -88,7 +88,7 @@ public class SignInFragment extends Fragment {
      */
     public void sendSignInRequest() {
         InitTTS tts = new InitTTS(getContext());
-        speaker = tts.initTTS();
+        speaker = tts.initSpeaker();
         final Contracts contracts = new Contracts(speaker);
         //Phone_number im Body wird gesendet
         Map<String, String> params = new HashMap<>();

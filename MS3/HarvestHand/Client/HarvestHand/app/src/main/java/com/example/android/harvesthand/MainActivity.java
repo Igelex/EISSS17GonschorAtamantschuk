@@ -51,10 +51,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView entryList;
     private ListAdapter adapter;
     private SharedPreferences sPrefUser, sPrefIp;
-    private View dialogView;
     private Contracts contracts;
     private RelativeLayout emptyView;
-    private TextToSpeech speaker;
+    InitTTS tts = new InitTTS(this);
 
 
     @Override
@@ -68,8 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             //Initialisiere TextToSpeech
-            InitTTS tts = new InitTTS(this);
-            speaker = tts.initTTS();
+            TextToSpeech speaker = tts.initSpeaker();
             contracts = new Contracts(speaker);
 
             container = findViewById(R.id.entries_relativelayout);
@@ -296,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Entry currentEq = adapter.getItem(position);
-                //Fals User Analphabet ist, wird er direkt zum Tutorial navigiert
+                //Fals User Analphabet ist, wird er direkt zur EntryTutorialActivity navigiert
                 if (sPrefUser.getInt(USER_SHARED_PREFS_TYPE, -1) == USER_TYPE_ILLITERATE) {
                     //Bestimmte daten werden übergeben
                     Intent intent = new Intent(MainActivity.this, EntryTutorialActivity.class);
@@ -309,7 +307,18 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 } else {
-                    startActivity(new Intent(MainActivity.this, EntryDetails.class));
+                    Intent intent = new Intent(MainActivity.this, EntryDetails.class);
+                    intent.putExtra("entry_id", currentEq.getEntryId());
+                    intent.putExtra("entry_location_city", currentEq.getLocation());
+                    intent.putExtra("entry_name", currentEq.getEntryName());
+                    Log.i("Intent name", currentEq.getEntryName());
+                    intent.putExtra("entry_area", currentEq.getArea());
+                    intent.putExtra("tutorial_id", currentEq.getTutorialId());
+                    Log.i("Intent tutorial_id", currentEq.getTutorialId());
+                    intent.putExtra("crop_id", currentEq.getCropId());
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
                 }
             }
         });
@@ -321,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void showIPdialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        dialogView = getLayoutInflater().inflate(R.layout.ipaddress_custom_dialog, null);
+        View dialogView = getLayoutInflater().inflate(R.layout.ipaddress_custom_dialog, null);
         final EditText mIp = dialogView.findViewById(R.id.input_enter_ip);
 
         if (sPrefIp.getString(IP_SP_IP, null) == null) {
@@ -393,13 +402,11 @@ public class MainActivity extends AppCompatActivity {
         Log.i("URI: ", CURRENT_ENTRIES_URL);
         return CURRENT_ENTRIES_URL;
     }
+
     @Override
-    protected void onDestroy() {
-        if (speaker != null) {
-            speaker.stop();
-            speaker.shutdown();
-        }
-        super.onDestroy();
+    protected void onPause() {
+        tts.stopSpeaker();
+        super.onPause();
     }
 }
 

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorMainBackgroud"
-    tools:context="com.example.android.harvesthand.AddNewEntry">
+    tools:context="com.example.android.harvesthand.AddNewEntry"
+    android:id="@+id/details_container">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,12 +33,13 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/details_item_image"
+                        android:id="@+id/details_crop_circle"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_centerVertical="true"
@@ -53,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
                         android:layout_marginTop="10dp"
-                        android:layout_toRightOf="@id/details_item_image"
+                        android:layout_toRightOf="@id/details_crop_circle"
                         android:maxLines="1"
                         android:text="Name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
@@ -66,7 +68,7 @@
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="8dp"
                         android:layout_marginRight="16dp"
-                        android:layout_toRightOf="@+id/details_item_image">
+                        android:layout_toRightOf="@+id/details_crop_circle">
 
                         <ImageView
                             android:id="@+id/details_location_icon"
@@ -101,7 +103,9 @@
                             android:layout_marginLeft="8dp"
                             android:text="100 ha"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
                     </LinearLayout>
+
                 </RelativeLayout>
 
                 <TextView
@@ -117,6 +121,7 @@
                     android:textColor="@color/wallet_holo_blue_light" />
 
             </LinearLayout>
+
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -132,99 +137,292 @@
             app:cardCornerRadius="2dp"
             app:cardElevation="4dp">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/details_text_crop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
                         android:text="@string/text_crop" />
-
-                    <TextView
-                        android:id="@+id/details_text_soil"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:text="@string/text_soil" />
-
-                    <TextView
-                        android:id="@+id/details_text_soil_temp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginTop="7dp"
-                        android:text="@string/text_soil_temp" />
-
-                    <TextView
-                        android:id="@+id/details_text_soil_moisture"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/text_soil_moisture" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/details_crop"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_weight="1"
                         android:text="Coffee"
                         android:textColor="@android:color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_text_soil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="1"
+                        android:text="@string/text_soil" />
 
                     <TextView
                         android:id="@+id/details_soil"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+
+                        android:layout_weight="1"
                         android:text="Sand"
                         android:textColor="@android:color/black" />
 
-                    <TextView
-                        android:id="@+id/details_soil_temp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:background="@drawable/circle"
-                        android:gravity="center"
-                        android:text="22"
-                        android:textColor="@android:color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/details_soil_moisture"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/details_text_air_temp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:background="@drawable/circle"
-                        android:gravity="center"
-                        android:text="43%"
-                        android:textColor="@android:color/white" />
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/property_airtemp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/details_airtemp_circle"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/circle"
+                            app:civ_border_color="@android:color/darker_gray"
+                            app:civ_border_width="2dp" />
+
+                        <TextView
+                            android:id="@+id/details_air_temp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
+                            android:text="25"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_text_air_humidity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/property_airhumidity" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/details_airhumidity_circle"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/circle"
+                            app:civ_border_color="@android:color/darker_gray"
+                            app:civ_border_width="2dp" />
+
+                        <TextView
+                            android:id="@+id/details_air_humidity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
+                            android:text="25%"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_text_soil_temp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/text_soil_temp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/details_soiltemp_circle"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true"
+                            android:src="@drawable/circle"
+                            app:civ_border_color="@android:color/darker_gray"
+                            app:civ_border_width="2dp" />
+
+                        <TextView
+                            android:id="@+id/details_soil_temp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="14dp"
+                            android:layout_marginStart="14dp"
+                            android:text="22"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_text_soil_moisture"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/text_soil_moisture" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/details_soilmoisture_circle"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/circle"
+                            app:civ_border_color="@android:color/darker_gray"
+                            app:civ_border_width="2dp" />
+
+                        <TextView
+                            android:id="@+id/details_soil_moisture"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginStart="12dp"
+                            android:text="43%"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/details_text_ph"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="@string/property_ph" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/details_ph_circle"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/circle"
+                            app:civ_border_color="@android:color/darker_gray"
+                            app:civ_border_width="2dp" />
+
+                        <TextView
+                            android:id="@+id/details_ph"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="21dp"
+                            android:layout_marginStart="21dp"
+                            android:text="5"
+                            android:textColor="@android:color/white" />
+
+                    </RelativeLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-
         </android.support.v7.widget.CardView>
-
 
     </LinearLayout>
 </ScrollView>

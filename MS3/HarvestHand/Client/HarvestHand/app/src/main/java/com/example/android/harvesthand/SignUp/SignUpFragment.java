@@ -60,7 +60,7 @@ public class SignUpFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
 
         InitTTS tts = new InitTTS(getContext());
-        speaker = tts.initTTS();
+        speaker = tts.initSpeaker();
         contracts = new Contracts(speaker);
 
         // Inflate the layout for this fragment

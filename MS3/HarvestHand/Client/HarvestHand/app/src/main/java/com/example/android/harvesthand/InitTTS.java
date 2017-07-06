@@ -22,7 +22,7 @@ public class InitTTS {
         this.context = context;
     }
 
-    public TextToSpeech initTTS() {
+    public TextToSpeech initSpeaker() {
         speaker = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
@@ -38,5 +38,12 @@ public class InitTTS {
             }
         });
         return speaker;
+    }
+
+    public void stopSpeaker(){
+        if (speaker != null){
+            speaker.stop();
+            speaker.shutdown();
+        }
     }
 }

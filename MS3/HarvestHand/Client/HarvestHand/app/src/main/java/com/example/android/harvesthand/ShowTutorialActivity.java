@@ -32,14 +32,14 @@ public class ShowTutorialActivity extends AppCompatActivity {
     TutorialRecyclerAdapter adapter;
     TextToSpeech speaker;
     ImageButton currentValueEar;
+    InitTTS tts = new InitTTS(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_tutorial);
 
-        InitTTS tts = new InitTTS(this);
-        speaker = tts.initTTS();
+        speaker = tts.initSpeaker();
         contracts = new Contracts(speaker);
         container = (LinearLayout) findViewById(R.id.show_container);
 
@@ -283,10 +283,11 @@ public class ShowTutorialActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        if (speaker != null) {
+        tts.stopSpeaker();
+        /*if (speaker != null) {
             speaker.stop();
             speaker.shutdown();
-        }
+        }*/
         super.onPause();
     }
 }
