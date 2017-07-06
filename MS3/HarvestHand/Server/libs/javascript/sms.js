@@ -3,27 +3,30 @@
  */
 
 var websms = require('websmscom');
-var username = 'your_username';
-var password = 'your_password';
-var gatewayUrl = 'https://api.websms.com/';
-var recipientAddressList = ['4367612345678'];
-var unicodeMessageText   = 'Test'
+var username = 'franziska.gonschor@web.de';
+var password = 'theisss17';
+var gatewayUrl =  'oms:https://gateway.sms.at/oms/?UserID=franziska.gonschor@web.de';
+var recipientAddressList = ['4917696217295'];
+var unicodeMessageText   = 'Test';
 var maxSmsPerMessage     = 1;
 var isTest               = true; // true: do not send sms but test interface
 
 function main(){
 var myClient = new websms.Client(gatewayUrl, username, password);
-    var myMessage;
+var requestUrl = 'https://franziska.gonschor@web.de:theisss17@api.websms.com/rest/smsmessaging/simple?recipientAddressList=4917696217295&messageContent=hello%20world!&test=true';
+console.log('Send sms request\n', unicodeMessageText);
+var myMessage;
     try {
-        myMessage = new websms.TextMessage(recipientAddressList,
-            unicodeMessageText, creationFailedCallback);
-    } catch (e) {
+       myMessage = new websms.TextMessage(recipientAddressList,
+           unicodeMessageText, creationFailedCallback);
+   } catch (e) {
         console.log('Caught message creation error: ', e.message);
-        console.log('Stacktrace: ', e.stack);
-        return;
+      console.log('Stacktrace: ', e.stack);
+       return;
     }  myClient.send(myMessage, maxSmsPerMessage, isTest, transferredCallback,
-        notTransferredCallback);
-};
+        notTransferredCallback)
+}
+
 function transferredCallback(apiResponse, messageObject) {
     console.log("\n---- transferredCallback function called with ApiResponse:", apiResponse);
     console.log('\n---- Related messageObject:\n', messageObject);
@@ -31,7 +34,7 @@ function transferredCallback(apiResponse, messageObject) {
     var statusMessage   = apiResponse.statusMessage;
     var transferId      = apiResponse.transferId;
     var clientMessageId = apiResponse.clientMessageId;
-};
+}
 function notTransferredCallback(errorObj, messageObject){
     console.log("\n---- notTransferredCallback function called.\n");
     if (errorObj.cause === 'parameter' ||
@@ -44,15 +47,14 @@ function notTransferredCallback(errorObj, messageObject){
         // statusCode and statusMessage are readable,
         // see API docs for codes
         var apiResponse = errorObj.apiResponse;
-        var statusCode    = apiResponse.statusCode;
-        var statusMessage = apiResponse.statusMessage;
-        console.log('\n---- apiResponse:\n', apiResponse);
+       var statusCode    = apiResponse.statusCode;
+       var statusMessage = apiResponse.statusMessage;
+       console.log('\n---- apiResponse:\n', apiResponse);
     }
-    console.log('\n---- Related messageObject:\n', messageObject);
-};
+   console.log('\n---- Related messageObject:\n', messageObject);
+}
 function creationFailedCallback(errorObj, incompleteMessageObject) {
     console.log("\n---- creationFailedCallback function called with errorObj:\n", errorObj);
     console.log("incompleteMessageObject:", incompleteMessageObject);
-};
-//main();
-
+}
+main();
