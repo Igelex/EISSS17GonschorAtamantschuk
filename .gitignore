@@ -77,7 +77,7 @@ node_modules
 # Mongodb Directorys
 MS1/Prototype/Server/db
 MS2/Prototype/Server/db
-MS3/HarvestHand/Server/db
+MS3/HarvestHand/Server/dbtest
 
 #idea
 MS1/Prototype/Server/.idea
