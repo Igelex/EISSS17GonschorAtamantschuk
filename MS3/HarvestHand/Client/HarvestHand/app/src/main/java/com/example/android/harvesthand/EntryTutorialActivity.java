@@ -33,7 +33,7 @@ import static com.example.android.harvesthand.Contracts.*;
 public class EntryTutorialActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
-    private String entryId, tutorialID, entryLocationCity, entryName;
+    private String entryId, tutorialID, entryLocationCity, entryName, cropName;
     private String airTempNorm, airMoistureNorm, soilMoistureNorm, soilTempNorm, phNorm, heightNorm;
     private int cropID, airTempStatus, airTepmDeviation, airTempCurrentValue;
     private int airMoistureStatus, airMoistureDeviation, airMoistureCurrentValue;
@@ -182,6 +182,8 @@ public class EntryTutorialActivity extends AppCompatActivity {
                         heightDeviation = heightObject.getInt("deviation");
                         heightNorm = heightObject.getString("norm");
                         matureMonth = response.getInt("mature_after_month");
+
+                        cropName = response.getString("crop_name");
 
                         //Helpermethods werde aufgerufen
                         setTextView();
@@ -415,6 +417,7 @@ public class EntryTutorialActivity extends AppCompatActivity {
                 }
                 if (cropId != 0){
                     intent.putExtra("crop_id", cropId);
+                    intent.putExtra("crop_name", cropName);
                 }
                 startActivity(intent);
             }

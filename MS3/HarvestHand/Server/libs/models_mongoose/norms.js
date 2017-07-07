@@ -8,8 +8,8 @@ var mongoose = require('mongoose');
 
 var normsSchema = mongoose.Schema({
     crop_id: {type: Number, unique: true},
-    name: [String],
-    family: String,
+    crop_name: String,
+    crop_family: String,
     air_temp: {
         max: Number,
         min: Number

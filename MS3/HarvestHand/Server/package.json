@@ -1,5 +1,5 @@
 {
-  "name": "harvesthand",
+  "crop_name": "harvesthand",
   "version": "1.0.0",
   "description": "HarvestHand EISSS17 Projekt",
   "main": "server.js",

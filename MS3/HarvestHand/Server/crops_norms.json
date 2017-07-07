@@ -1,8 +1,8 @@
 [
   {
     "crop_id": 1,
-    "name": "Caffe",
-    "family": "Rötegewächse",
+    "crop_name": "coffe",
+    "crop_family": "Rötegewächse",
     "air_temp": {
       "max": 26,
       "min": 8
@@ -13,11 +13,11 @@
     },
     "water_requirements": 35,
     "fertilizer": {
-      "name": "",
+      "crop_name": "",
       "id": 0
     },
     "soil": {
-      "name": "tief/humusreich",
+      "crop_name": "tief/humusreich",
       "id": 3
     },
     "soil_temp": {
@@ -37,8 +37,8 @@
   },
   {
     "crop_id": 2,
-    "name": "Kakao",
-    "family": "Malvengewächse",
+    "crop_name": "cacao",
+    "crop_family": "Malvengewächse",
     "air_temp": {
       "max": 25,
       "min": 20
@@ -49,11 +49,11 @@
     },
     "water_requirements": 40,
     "fertilizer": {
-      "name": "",
+      "crop_name": "",
       "id": 1
     },
     "soil": {
-      "name": "tief/humusreich",
+      "crop_name": "tief/humusreich",
       "id": 3
     },
     "soil_temp": {
@@ -73,8 +73,8 @@
   },
   {
     "crop_id": 3,
-    "name": "Banane",
-    "family": "Bananenartige",
+    "crop_name": "banana",
+    "crop_family": "Bananenartige",
     "air_temp": {
       "max": 25,
       "min": 1
@@ -85,11 +85,11 @@
     },
     "water_requirements": 43,
     "fertilizer": {
-      "name": "",
+      "crop_name": "",
       "id": 2
     },
     "soil": {
-      "name": "humusreich",
+      "crop_name": "humusreich",
       "id": 3
     },
     "soil_temp": {

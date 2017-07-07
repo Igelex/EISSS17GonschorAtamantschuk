@@ -19,13 +19,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import static com.example.android.harvesthand.Contracts.CROP_ID_BANANA;
 import static com.example.android.harvesthand.Contracts.CROP_ID_CACAO;
 import static com.example.android.harvesthand.Contracts.CROP_ID_CAFFE;
+import static com.example.android.harvesthand.Contracts.PROPERTY_AIR_TEMP;
+import static com.example.android.harvesthand.Contracts.PROPERTY_GENERAL;
+import static com.example.android.harvesthand.Contracts.PROPERTY_SOIL_MOISTURE;
 
 public class ShowTutorialActivity extends AppCompatActivity {
-    private String norm;
-    private int status, waterReq, propertyId, deviation, currentValue, cropId;
+    private String norm, cropName;
+    private int status;
+    private int waterReq;
+    private int propertyId;
+    private int currentValue;
+    private int cropId;
     private static final int GREATER = 2;
-    private Contracts contracts;
-    private LinearLayout container;
     TextView currentValueText;
     private ArrayList<Tutorial> tutorialList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -40,8 +45,8 @@ public class ShowTutorialActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_tutorial);
 
         speaker = tts.initSpeaker();
-        contracts = new Contracts(speaker);
-        container = (LinearLayout) findViewById(R.id.show_container);
+        Contracts contracts = new Contracts(speaker);
+        LinearLayout container = (LinearLayout) findViewById(R.id.show_container);
 
         currentValueEar = (ImageButton) findViewById(R.id.show_current_value_ear);
         CircleImageView currentValueCircleImg = (CircleImageView) findViewById(R.id.show_current_value_circle);
@@ -56,12 +61,13 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 status = intent.getIntExtra("status", -1);
                 currentValue = intent.getIntExtra("currentValue", -1);
                 propertyId = intent.getIntExtra("property", -1);
-                deviation = intent.getIntExtra("deviation", -1);
+                int deviation = intent.getIntExtra("deviation", -1);
                 if (intent.hasExtra("water_require")) {
                     waterReq = intent.getIntExtra("water_require", 0);
                 }
                 if (intent.hasExtra("crop_id")) {
                     cropId = intent.getIntExtra("crop_id", 0);
+                    cropName = intent.getStringExtra("crop_name");
                     currentValueEar.setVisibility(View.GONE);
                     currentValueCircleImg.setVisibility(View.GONE);
                     currentValueText.setVisibility(View.GONE);
@@ -101,47 +107,38 @@ public class ShowTutorialActivity extends AppCompatActivity {
      */
     private void switchProperty() {
         switch (propertyId) {
-            case 1:
+            case PROPERTY_SOIL_MOISTURE:
                 switchStatus("soilmoisture");
                 speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_soilmoisture));
                 break;
-            case 2:
+            case PROPERTY_AIR_TEMP:
                 switchStatus("airtemp");
                 speak(currentValueEar, String.valueOf(currentValue), getString(R.string.property_airtemp));
                 break;
             /*Werden nicht implementiert, nur zwei obere Beispiele
-            case 3:
+            case PROPERTY_SOIL_TEMP:
                 switchStatus("soilttemp");
                 speak();
                 break;
-            case 4:
+            case PROPERTY_AIR_HUMIDITY:
                 switchStatus("airhumidity");
                 speak();
                 break;
-            case 5:
+            case PROPERTY_PH:
                 switchStatus("ph");
                 speak();
                 break;
-            case 6:
+            case PROPERTY_SOIL_TYPE:
                 switchStatus("soiltype");
                 speak();
                 break;
-            case 7:
+            case PROPERTY_HEIGHT:
                 switchStatus("height");
                 speak();
                 break;*/
-            case 8:
-                switch (cropId){
-                    case CROP_ID_CAFFE:
-                        switchStatus("coffe");
-                        break;
-                    case CROP_ID_CACAO:
-                        switchStatus("cacao");
-                        break;
-                    case CROP_ID_BANANA:
-                        switchStatus("banana");
-                        break;
-                }
+            case PROPERTY_GENERAL:
+                //Allgemeien Anbauempfehlung zur bestimmten Pflanze
+                switchStatus(cropName);
                 break;
         }
     }
@@ -155,7 +152,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
      * @property werden am ende des Namens mit einem @i Identifikator bezeichnet.
      */
     private void switchStatus(String property) {
-        String water = "";
+        //Allgemeien Anbauempfehlung zur bestimmten Pflanze
         if (cropId > 0){
             try {
                 //Alle images aus drawable(nicht perfomat)
@@ -175,6 +172,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        //Für den Fall, dass der Wert die Norm übersteigt
         else if (status == GREATER) {
             try {
                 //Alle images aus drawable(nicht perfomat)
@@ -224,11 +222,12 @@ public class ShowTutorialActivity extends AppCompatActivity {
             water = String.valueOf(waterReq/10);
         }
         try {
-            //Suche array nach Namen
+            //Suche String-array in /values/strings nach Namen
             String[] strings = getResources().getStringArray(this.getResources().getIdentifier(arrayName, "array",
                     this.getPackageName()));
             // Bilde ein String aus mehreren Strings
             for (String s : strings) {
+                //Fals es um Bodenfeuchtigkeit geht, wird die empfohlene Wassermenge an String angehängt
                 if (s.contains("pots")){
                     currentString = water + s;
                     return currentString;
@@ -264,7 +263,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
 
     /**
      * Vorlesefunktion, aktuelle Eigenschaft und derer Wert werden vorgelesen
-     * @param currentEar   - ImageButton
+     * @param currentEar   - ImageButton, der angeklickt wird
      * @param currentValue - aktueller Wert der Eigenschaft
      * @param property     - aktuelle Eigenschaft
      */
@@ -283,11 +282,7 @@ public class ShowTutorialActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        tts.stopSpeaker();
-        /*if (speaker != null) {
-            speaker.stop();
-            speaker.shutdown();
-        }*/
+        tts.stopSpeaker( );
         super.onPause();
     }
 }

@@ -57,4 +57,4 @@ function creationFailedCallback(errorObj, incompleteMessageObject) {
     console.log("\n---- creationFailedCallback function called with errorObj:\n", errorObj);
     console.log("incompleteMessageObject:", incompleteMessageObject);
 }
-main();
+//main();

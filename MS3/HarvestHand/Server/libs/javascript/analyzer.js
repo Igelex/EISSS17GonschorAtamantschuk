@@ -6,12 +6,13 @@ var controller_tutorial = require('./controller_tutorial'),
     weather = require('./weather'),
     Norm = require('../models_mongoose/norms'),
     entry,
-    currentNorm
+    currentNorm,
     NORM = 0, //flag, wenn daten von der Norm nicht abweichen
     LESS = 1, //flag, wenn daten kleiner als die Norm
     GREATER = 2; //flag, wenn daten größer als die Norm
 
 var newTutorial = {
+    crop_name: String,
     air_temp: {
         status: Number,
         deviation: Number,
@@ -198,6 +199,7 @@ module.exports.analyseValues = function (weekPrecipitation) {
     //Wasserverbrauch der Pflanze pro m^2 * Fläche - Niederschlag = wöchentliche Wassermenge
     newTutorial.soil_moisture.water_requirements = currentNorm.water_requirements * entry.area - weekPrecipitation;
     newTutorial.mature_after_month = currentNorm.mature_after_month;
+    newTutorial.crop_name = currentNorm.crop_name;
 
     console.log("New Tutorial erstellt... ");
     controller_tutorial.addTutorial(newTutorial, entry._id);

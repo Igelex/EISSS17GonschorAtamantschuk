@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 prozentuelle Abweichung von der Norm, aktueller Wert und der gewünschte Wert(@norm), und optionale Werte gespeichert*/
 
 var tutorialSchema = mongoose.Schema({
+    crop_name: String,
     air_temp: {
         status: Number,
         deviation: Number,
