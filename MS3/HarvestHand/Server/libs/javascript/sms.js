@@ -34,7 +34,7 @@ function main(){
        }
 
     })}
-    main()
+    //main()
 
 
         /*  http.request(url, function (res) {
