@@ -168,6 +168,18 @@ public class ShowTutorialActivity extends AppCompatActivity {
                         i++;
                     }
                 }
+
+                Field[] videos = R.raw.class.getFields();
+                for (Field f : videos) {
+                    if (f.getName().matches("tutorial_general_" + property + "_(.*)")) {
+                        //Bei der Übereinstimmung Image und zugehörgie Description der Liste
+                        //hinzufügen
+                        tutorialList.add(new Tutorial(f.getInt(null), norm,
+                                getDescriptionStrings("desc_array_general_" + property + "_" + i), true));
+                        i++;
+                    }
+                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -188,6 +200,17 @@ public class ShowTutorialActivity extends AppCompatActivity {
                         i++;
                     }
                 }
+
+                Field[] videos = R.raw.class.getFields();
+                for (Field f : videos) {
+                    if (f.getName().matches("tutorial_" + property + "_greater(.*)")) {
+                        //Bei der Übereinstimmung Image und zugehörgie Description der Liste
+                        //hinzufügen
+                        tutorialList.add(new Tutorial(f.getInt(null), norm,
+                                getDescriptionStrings("desc_array_" + property + "_greater_" + i), true));
+                        i++;
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -199,6 +222,17 @@ public class ShowTutorialActivity extends AppCompatActivity {
                     if (f.getName().matches("tutorial_" + property + "_less(.*)")) {
                         tutorialList.add(new Tutorial(f.getInt(null), norm,
                                 getDescriptionStrings("desc_array_" + property + "_less_" + i)));
+                        i++;
+                    }
+                }
+
+                Field[] videos = R.raw.class.getFields();
+                for (Field f : videos) {
+                    if (f.getName().matches("tutorial_" + property + "_less(.*)")) {
+                        //Bei der Übereinstimmung Image und zugehörgie Description der Liste
+                        //hinzufügen
+                        tutorialList.add(new Tutorial(f.getInt(null), norm,
+                                getDescriptionStrings("desc_array_" + property + "_less_" + i), true));
                         i++;
                     }
                 }

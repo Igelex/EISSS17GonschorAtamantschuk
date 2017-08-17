@@ -1,6 +1,7 @@
 package com.example.android.harvesthand;
 
 import android.content.Context;
+import android.net.Uri;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.mikhaellopez.hfrecyclerview.HFRecyclerView;
 
@@ -49,6 +51,23 @@ public class TutorialRecyclerAdapter extends HFRecyclerView<Tutorial> {
             });
         } else if (holder instanceof HeaderViewHolder) {
 
+        } else if (holder instanceof ItemVideoViewHolder) {
+            final ItemVideoViewHolder itemViewHolder = (ItemVideoViewHolder) holder;
+            //Image und jeweilige Description werden gesetzt
+
+            itemViewHolder.video.setVideoURI(Uri.parse("android.resource://com.example.android.harvesthand/" + R.raw.tutorial_general_coffe_1));
+            itemViewHolder.descriptionEyeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Description zum Image wird Vorgelesen
+                    //Speed
+                    if(itemViewHolder.video.isPlaying()) {
+                        itemViewHolder.video.pause();
+                    } else {
+                        itemViewHolder.video.start();
+                    }
+                }
+            });
         } else if (holder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
             try {
@@ -80,7 +99,10 @@ public class TutorialRecyclerAdapter extends HFRecyclerView<Tutorial> {
     protected RecyclerView.ViewHolder getItemView(LayoutInflater inflater, ViewGroup parent) {
         context = parent.getContext();
         setTextToSpeech();
-        return new ItemViewHolder(inflater.inflate(R.layout.tutorial_item, parent, false));
+        if(!this.arrayList.get(parent.getChildCount()).isVideo())
+            return new ItemViewHolder(inflater.inflate(R.layout.tutorial_item, parent, false));
+        else
+            return new ItemVideoViewHolder(inflater.inflate(R.layout.tutorial_video_item, parent, false));
     }
 
     @Override
@@ -95,6 +117,20 @@ public class TutorialRecyclerAdapter extends HFRecyclerView<Tutorial> {
     //endregion
 
     //region ViewHolder Header and Footer
+    class ItemVideoViewHolder extends RecyclerView.ViewHolder {
+        VideoView video;
+        ImageButton descriptionEyeButton;
+
+        public ItemVideoViewHolder(View itemView) {
+            super(itemView);
+            video = itemView.findViewById(R.id.show_item_video);
+            descriptionEyeButton = itemView.findViewById(R.id.footer_item_eye);
+        }
+
+
+    }
+
+    //region ViewHolder Header and Footer
     class ItemViewHolder extends RecyclerView.ViewHolder {
         ImageView img;
         ImageButton descriptionEarButton;
@@ -103,6 +139,7 @@ public class TutorialRecyclerAdapter extends HFRecyclerView<Tutorial> {
             super(itemView);
             img = itemView.findViewById(R.id.show_item_image);
             descriptionEarButton = itemView.findViewById(R.id.footer_item_ear);
+
         }
     }
 

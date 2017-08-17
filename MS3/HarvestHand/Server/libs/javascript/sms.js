@@ -1,7 +1,7 @@
 /**
  * Created by franz on 04.07.2017.
  */
-
+/*
 var websms = require('websmscom');
 var username = 'franziska.gonschor@web.de';
 var password = 'theisss17';

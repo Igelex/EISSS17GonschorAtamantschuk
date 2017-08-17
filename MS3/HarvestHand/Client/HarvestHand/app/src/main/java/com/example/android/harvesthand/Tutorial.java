@@ -8,11 +8,20 @@ public class Tutorial {
     private int mImageId;
     private String mDescription;
     private String mNorm;
+    private boolean video;
 
     public Tutorial(int mImageId, String norm, String description) {
         this.mImageId = mImageId;
         this.mNorm = norm;
         this.mDescription = description;
+        this.video = false;
+    }
+
+    public Tutorial(int mImageId, String norm, String description, boolean video) {
+        this.mImageId = mImageId;
+        this.mNorm = norm;
+        this.mDescription = description;
+        this.video = video;
     }
 
     public int getmImageId() {
@@ -39,5 +48,5 @@ public class Tutorial {
         this.mDescription = mDescription;
     }
 
-
+    public boolean isVideo() { return this.video; }
 }
