@@ -44,6 +44,7 @@ import static com.example.android.harvesthand.Contracts.*;
 public class MainActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = MainActivity.class.getName();
+    public static MainActivity main;
     private ArrayList<Entry> entryArrayList = new ArrayList<>();
     private View container;
     private static String CURRENT_ENTRIES_URL;
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        main = this;
         /*Check Internetconnection*/
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();

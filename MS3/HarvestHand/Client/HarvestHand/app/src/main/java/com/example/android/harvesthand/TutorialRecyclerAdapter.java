@@ -55,7 +55,8 @@ public class TutorialRecyclerAdapter extends HFRecyclerView<Tutorial> {
             final ItemVideoViewHolder itemViewHolder = (ItemVideoViewHolder) holder;
             //Image und jeweilige Description werden gesetzt
 
-            itemViewHolder.video.setVideoURI(Uri.parse("android.resource://com.example.android.harvesthand/" + R.raw.tutorial_general_coffe_1));
+            int id = arrayList.get(position).getmImageId();
+            itemViewHolder.video.setVideoURI(Uri.parse("android.resource://com.example.android.harvesthand/" + id));
             itemViewHolder.descriptionEyeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
