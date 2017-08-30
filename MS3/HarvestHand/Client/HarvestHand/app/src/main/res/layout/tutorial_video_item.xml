@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tutorial_video_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,7 +33,8 @@
             style="@style/img_button"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            card_view:srcCompat="@drawable/ear_hearing" />
+            android:tint="@color/cardview_dark_background"
+            card_view:srcCompat="@drawable/eye" />
 
     </LinearLayout>
 
