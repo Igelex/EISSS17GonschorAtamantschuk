@@ -18,7 +18,9 @@
         <VideoView
             android:id="@+id/show_item_video"
             android:layout_width="match_parent"
-            android:layout_height="150dp" />
+            android:layout_height="150dp"
+            android:layout_gravity="center" />
+
 
         <View
             android:layout_width="match_parent"
